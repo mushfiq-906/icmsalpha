@@ -138,9 +138,7 @@ public class ChangeAnalysis {
                 String prevPath = getFullPath(prevRevision, filePath);
 
                 try {
-                    ProcessBuilder pb = new ProcessBuilder(
-                            "diff",
-                            prevPath, currPath);
+                    ProcessBuilder pb = PlatformSupport.createDiffProcessBuilder(prevPath, currPath);
                     pb.redirectErrorStream(true);
                     Process process = pb.start();
 
@@ -189,13 +187,7 @@ public class ChangeAnalysis {
     }
 
     private String parseFilePath(String fullPath) {
-        int revisionIndex = fullPath.indexOf("Revision_");
-        if (revisionIndex != -1) {
-            int pathStartIndex = fullPath.indexOf('/', revisionIndex);
-            if (pathStartIndex != -1)
-                return fullPath.substring(pathStartIndex + 1);
-        }
-        return fullPath;
+        return PlatformSupport.stripRevisionPrefix(fullPath);
     }
 
 }

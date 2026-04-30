@@ -11,6 +11,7 @@ package com.mycompany.icmsalpha;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,12 +65,15 @@ public class MethodExtractor {
         // System.out.println("CTAGS Parsing completed");
         // System.out.println("Initiate method parsing");
 
+        if (!new File(tagsOutputFile).exists()) {
+            System.err.println("Skipping method parsing because ctags did not generate: " + tagsOutputFile);
+            return;
+        }
+
         runTagFileParser1(this.extension);
     }
 
     public void runProcess() {
-        String ctagsPath = "/opt/homebrew/bin/ctags"; // Universal Ctags (Homebrew) - must use absolute path
-
         // Ensure output directory exists before running ctags
         java.io.File tagsFile = new java.io.File(tagsOutputFile);
         tagsFile.getParentFile().mkdirs();
@@ -78,13 +82,9 @@ public class MethodExtractor {
         java.io.File outputFile = new java.io.File(outputPath);
         outputFile.getParentFile().mkdirs();
 
-        // using universal ctags --fields=+ne -R --languages=
-        String command = ctagsPath + " --quiet --fields=+n -R --languages=" + language + " -o " + tagsOutputFile + " "
-                + revisionPath;
-
         try {
-            // Create ProcessBuilder
-            ProcessBuilder pb = new ProcessBuilder(command.split("\\s+"));
+            ProcessBuilder pb = new ProcessBuilder(
+                    PlatformSupport.buildCtagsCommand(language, tagsOutputFile, revisionPath));
             pb.inheritIO(); // Redirects the subprocess's standard input, output, and error streams to the
                             // Java process
 
@@ -93,6 +93,9 @@ public class MethodExtractor {
 
             // Wait for the process to finish
             int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                System.err.println("ctags exited with code " + exitCode);
+            }
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

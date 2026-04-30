@@ -54,7 +54,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
         getEndRev = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -265,13 +264,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Export ML Dataset");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         jButton4.setText("Export Evolution Dataset");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,8 +285,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(85, Short.MAX_VALUE)));
@@ -309,9 +299,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 45,
@@ -420,23 +407,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            print("Exporting ML Dataset for all clone types...");
-            MLDatasetExporter exporter = new MLDatasetExporter(startRev, endRev, granularity);
-            exporter.exportAll();
-            print("ML Dataset export complete!");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "ML Dataset exported successfully!\nFiles: Type1.csv, Type2.csv, Type3.csv",
-                    "Export Complete", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException ex) {
-            Logger.getLogger(CloneGenealogy.class.getName()).log(Level.SEVERE, null, ex);
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Export failed: " + ex.getMessage(),
-                    "Export Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             print("Exporting Evolution Dataset for clone type " + type + "...");
@@ -508,7 +478,6 @@ public class CloneGenealogy extends javax.swing.JFrame {
     private javax.swing.JRadioButton getType3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

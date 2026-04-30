@@ -24,6 +24,13 @@ public class CloneGenealogyAnalysis {
     AccessPoint ap = new AccessPoint();
     CommonParameters cp = new CommonParameters();
 
+    /**
+     * Exponential decay rate for time-decay weighted coupling strength.
+     * Higher lambda = faster decay of old events. Tune between 0.01 and 0.05.
+     */
+    private static final double DECAY_LAMBDA = 0.03;
+    private static final int    WCS_RECENT_WINDOW = 10; // revision window for short-term coupling
+
     // Path to commit logs (searches common relative locations)
     private final List<String> commitSearchPaths = Arrays.asList(
             "./commit_logs.txt",
@@ -631,6 +638,13 @@ public class CloneGenealogyAnalysis {
                         pair.gcid1Authors = String.join("; ", gcid1Authors);
                         pair.gcid2Authors = String.join("; ", gcid2Authors);
 
+                        // Time-decay weighted coupling features
+                        pair.weightedCouplingStrength = computeWeightedCouplingStrength(
+                                h1, h2, pairStartRev, pairEndRev);
+                        pair.couplingTrend = computeCouplingTrend(h1, h2, pairStartRev, pairEndRev);
+                        pair.lastCoChangeAge = lastCoChangeAge(h1, h2, pairEndRev);
+                        pair.lastSoloChangeAge = lastSoloChangeAge(h1, h2, pairEndRev);
+
                         pairs.add(pair);
                     }
                 }
@@ -641,13 +655,26 @@ public class CloneGenealogyAnalysis {
         String pairOutputPath = cp.getGenealogyPath(cChoice, granularity).replace(".csv", "_pairs.csv");
         BufferedWriter bw = new BufferedWriter(new FileWriter(pairOutputPath));
 
+        // Load method info for pairs CSV enrichment
+        Map<Integer, CloneMethodInfo> pairMethodInfo = loadMethodInfoFromGlobalCloneInfo();
+
         bw.write(
                 "pairId,cloneType,granularity,classId,clone1_gcid,clone2_gcid,clone1_addedRev,clone2_addedRev," +
                         "clone1_deletedRev,clone2_deletedRev,clone1_lifespan,clone2_lifespan," +
                         "co_change,gcid1_independent_change,gcid2_independent_change,similarity," +
-                        "filepath1,filepath2,file_distance,gcid1_authors,gcid2_authors\n");
+                        "filepath1,filepath2,file_distance,gcid1_authors,gcid2_authors," +
+                        "weighted_coupling_strength,coupling_trend,last_co_change_age,last_solo_change_age," +
+                        "method_name1,method_signature1,method_name2,method_signature2\n");
 
         for (ClonePair pair : pairs) {
+            // Look up method info for each clone in this pair
+            CloneMethodInfo mi1 = pairMethodInfo.get(pair.clone1_gcid);
+            CloneMethodInfo mi2 = pairMethodInfo.get(pair.clone2_gcid);
+            String pMn1  = (mi1 != null && mi1.methodName      != null) ? mi1.methodName      : "NULL";
+            String pMs1  = (mi1 != null && mi1.methodSignature != null) ? mi1.methodSignature : "NULL";
+            String pMn2  = (mi2 != null && mi2.methodName      != null) ? mi2.methodName      : "NULL";
+            String pMs2  = (mi2 != null && mi2.methodSignature != null) ? mi2.methodSignature : "NULL";
+
             bw.write(
                     pair.pairId + "," +
                             cChoice + "," +
@@ -669,7 +696,15 @@ public class CloneGenealogyAnalysis {
                             quote(pair.filepath2) + "," +
                             pair.fileDistance + "," +
                             quote(pair.gcid1Authors) + "," +
-                            quote(pair.gcid2Authors) +
+                            quote(pair.gcid2Authors) + "," +
+                            String.format("%.4f", pair.weightedCouplingStrength) + "," +
+                            String.format("%.4f", pair.couplingTrend) + "," +
+                            pair.lastCoChangeAge + "," +
+                            pair.lastSoloChangeAge + "," +
+                            quote(pMn1) + "," +
+                            quote(pMs1) + "," +
+                            quote(pMn2) + "," +
+                            quote(pMs2) +
                             "\n");
         }
 
@@ -729,7 +764,7 @@ public class CloneGenealogyAnalysis {
         int clone2_deletedRev;
         int clone1_lifespan;
         int clone2_lifespan;
-        // New fields for enhanced analysis
+        // Raw co-change counts
         int coChange;
         int gcid1IndependentChange;
         int gcid2IndependentChange;
@@ -739,6 +774,11 @@ public class CloneGenealogyAnalysis {
         int fileDistance;
         String gcid1Authors;
         String gcid2Authors;
+        // Time-decay weighted coupling features
+        double weightedCouplingStrength; // WCS at end of pair lifetime
+        double couplingTrend;            // recent_WCS - early_WCS (negative = decoupling)
+        int lastCoChangeAge;             // revisions since last co-change (-1 if never)
+        int lastSoloChangeAge;           // revisions since last solo change (-1 if never)
     }
 
     // ============== EVOLUTION FORECASTING DATASET EXPORT ==============
@@ -766,6 +806,28 @@ public class CloneGenealogyAnalysis {
         // Method info for each gcid
         String methodName1, methodSignature1;
         String methodName2, methodSignature2;
+        // Time-decay weighted coupling features (as of this revision)
+        double weightedCouplingStrength;
+        int lastCoChangeAge;   // revisions since last co-change up to this rev (-1 if never)
+        int lastSoloChangeAge; // revisions since last solo change up to this rev (-1 if never)
+        double couplingTrend;              // WCS(recent half) - WCS(early half); negative = decoupling
+        double wcsRecent;                  // WCS over last WCS_RECENT_WINDOW revisions only
+        int soloEventsAfterLastCoChange;   // solo changes (either clone) since last co-change
+        // Binary ML-ready flags (derived from raw strings)
+        int sameFile;   // 1 if filepath1 == filepath2
+        int sameAuthor; // 1 if author1 == author2
+        int sameMethod; // 1 if both clones are in the same method (non-null matching names)
+        // --- NEW PROCESS METRICS ---
+        int noc1, noc2;               // Number of Changes per clone
+        int fileAge1, fileAge2;        // Clone lifetime in revisions
+        int churn1, churn2;            // True lines changed inside clone region
+        // --- NEW OWNERSHIP METRICS ---
+        int distinctAuthors1, distinctAuthors2;
+        double majorAuthorProp1, majorAuthorProp2; // TCO proportion
+        int minorAuthorCount1, minorAuthorCount2;  // Authors with < 5% of commits
+        // --- WIES + TARGET LABEL ---
+        double wies;                      // Weighted Independent Evolution Score = 1 - WCS
+        int will_independently_evolve;    // 1 if wies > 0.5, else 0
     }
 
     /**
@@ -853,6 +915,9 @@ public class CloneGenealogyAnalysis {
         }
 
         System.out.println("Total unique clones found: " + cloneInfoMap.size());
+
+        // Step 1b: Compute process + ownership metrics (uses historyMap + revAuthorMap)
+        computeProcessAndOwnershipMetrics(historyMap, revAuthorMap, gcidToFilename);
 
         // Step 2: Group clones by classId to identify pairs
         Map<Integer, List<Integer>> classToClonesMap = new HashMap<>();
@@ -965,6 +1030,49 @@ public class CloneGenealogyAnalysis {
                                 rec.methodName2 = methodInfo2 != null ? methodInfo2.methodName : "NULL";
                                 rec.methodSignature2 = methodInfo2 != null ? methodInfo2.methodSignature : "NULL";
 
+                                // Time-decay weighted coupling (as of this revision)
+                                rec.weightedCouplingStrength = computeWeightedCouplingStrength(
+                                        h1, h2, pairStartRev, rev);
+                                rec.lastCoChangeAge = lastCoChangeAge(h1, h2, rev);
+                                rec.lastSoloChangeAge = lastSoloChangeAge(h1, h2, rev);
+
+                                // Decoupling signals
+                                int midRev = pairStartRev + (rev - pairStartRev) / 2;
+                                if (rev - pairStartRev >= 2) {
+                                    double earlyWCS  = computeWeightedCouplingStrength(h1, h2, pairStartRev, midRev);
+                                    double recentWCS = computeWeightedCouplingStrength(h1, h2, midRev + 1, rev);
+                                    rec.couplingTrend = recentWCS - earlyWCS;
+                                } else {
+                                    rec.couplingTrend = 0.0;
+                                }
+                                rec.wcsRecent = computeWeightedCouplingStrength(
+                                        h1, h2, Math.max(pairStartRev, rev - WCS_RECENT_WINDOW), rev);
+                                rec.soloEventsAfterLastCoChange = countSoloAfterLastCoChange(h1, h2, rev);
+
+                                // Binary ML flags derived from raw string fields
+                                rec.sameFile = rec.filepath1.equals(rec.filepath2) ? 1 : 0;
+                                String a1 = rec.author1 != null ? rec.author1 : "";
+                                String a2 = rec.author2 != null ? rec.author2 : "";
+                                rec.sameAuthor = a1.equals(a2) && !a1.isEmpty() ? 1 : 0;
+                                String mn1 = (methodInfo1 != null && methodInfo1.methodName != null) ? methodInfo1.methodName : "";
+                                String mn2 = (methodInfo2 != null && methodInfo2.methodName != null) ? methodInfo2.methodName : "";
+                                rec.sameMethod = (!mn1.isEmpty() && mn1.equals(mn2)) ? 1 : 0;
+
+                                // --- Process metrics per clone (from CloneHistory) ---
+                                rec.noc1     = h1.noc;     rec.noc2     = h2.noc;
+                                rec.fileAge1 = h1.fileAge; rec.fileAge2 = h2.fileAge;
+                                rec.churn1   = h1.churn;   rec.churn2   = h2.churn;
+
+                                // --- Ownership metrics per clone ---
+                                rec.distinctAuthors1    = h1.distinctAuthors;       rec.distinctAuthors2    = h2.distinctAuthors;
+                                rec.majorAuthorProp1    = h1.majorAuthorProportion; rec.majorAuthorProp2    = h2.majorAuthorProportion;
+                                rec.minorAuthorCount1   = h1.minorAuthorCount;      rec.minorAuthorCount2   = h2.minorAuthorCount;
+
+                                // --- WIES (time-decay weighted independent evolution score) ---
+                                // WIES = 1 - WCS: recent independent changes outweigh older co-changes
+                                rec.wies = 1.0 - rec.weightedCouplingStrength;
+                                rec.will_independently_evolve = rec.wies > 0.5 ? 1 : 0;
+
                                 records.add(rec);
                             }
                         }
@@ -989,15 +1097,24 @@ public class CloneGenealogyAnalysis {
                 .replace(".csv", "_evolution_dataset.csv");
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputPath))) {
-            // Write header
+            // Write header — 35 columns (20 original + 14 new + 1 target label)
             bw.write("Revision,gcid1,gcid2,classid,co_change_count,gcid1_independent_change_count," +
-                    "gcid2_independent_change_count,filepath1,filepath2,author1,author2,similarity," +
+                    "gcid2_independent_change_count,same_file,same_author,same_method,similarity," +
                     "clone_type,nlines1,nlines2,depth,class_size,is_spcp," +
-                    "method_name1,method_signature1,method_name2,method_signature2\n");
+                    "weighted_coupling_strength,last_co_change_age,last_solo_change_age," +
+                    "coupling_trend,wcs_recent,solo_events_after_last_cochange," +
+                    "noc1,noc2,file_age1,file_age2,churn1,churn2," +
+                    "distinct_authors1,distinct_authors2," +
+                    "major_author_prop1,major_author_prop2," +
+                    "minor_author_count1,minor_author_count2," +
+                    "wies,will_independently_evolve\n");
 
             // Write records
             for (EvolutionRecord rec : records) {
-                bw.write(String.format("%d,%d,%d,%d,%d,%d,%d,%s,%s,%s,%s,%d,%s,%d,%d,%d,%d,%d,%s,%s,%s,%s\n",
+                bw.write(String.format(
+                        "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%.4f,%d,%d," +
+                        "%.4f,%.4f,%d," +
+                        "%d,%d,%d,%d,%d,%d,%d,%d,%.4f,%.4f,%d,%d,%.4f,%d\n",
                         rec.revision,
                         rec.gcid1,
                         rec.gcid2,
@@ -1005,10 +1122,9 @@ public class CloneGenealogyAnalysis {
                         rec.coChangeCount,
                         rec.gcid1IndependentCount,
                         rec.gcid2IndependentCount,
-                        quote(rec.filepath1),
-                        quote(rec.filepath2),
-                        quote(rec.author1),
-                        quote(rec.author2),
+                        rec.sameFile,
+                        rec.sameAuthor,
+                        rec.sameMethod,
                         rec.similarity,
                         rec.cloneType,
                         rec.nlines1,
@@ -1016,16 +1132,155 @@ public class CloneGenealogyAnalysis {
                         rec.depth,
                         rec.classSize,
                         rec.isSPCP ? 1 : 0,
-                        quote(rec.methodName1),
-                        quote(rec.methodSignature1),
-                        quote(rec.methodName2),
-                        quote(rec.methodSignature2)));
+                        rec.weightedCouplingStrength,
+                        rec.lastCoChangeAge,
+                        rec.lastSoloChangeAge,
+                        // decoupling signals
+                        rec.couplingTrend,
+                        rec.wcsRecent,
+                        rec.soloEventsAfterLastCoChange,
+                        // new process metrics
+                        rec.noc1,
+                        rec.noc2,
+                        rec.fileAge1,
+                        rec.fileAge2,
+                        rec.churn1,
+                        rec.churn2,
+                        // new ownership metrics
+                        rec.distinctAuthors1,
+                        rec.distinctAuthors2,
+                        rec.majorAuthorProp1,
+                        rec.majorAuthorProp2,
+                        rec.minorAuthorCount1,
+                        rec.minorAuthorCount2,
+                        // WIES + target label
+                        rec.wies,
+                        rec.will_independently_evolve));
             }
         }
 
         System.out.println("=== Evolution Dataset Export Complete ===");
         System.out.println("Output file: " + outputPath);
         System.out.println("Total records: " + records.size());
+    }
+
+    // ============== PROCESS & OWNERSHIP METRIC HELPERS ==============
+
+    /**
+     * Parse a ChangeInfo revision file and compute lines-changed per source file.
+     *
+     * File format (pipe-delimited):
+     *   lineNum | prevRev | prevFile | prevLineRange | changeType(c/a/d) | currRev | currFile | currLineRange | fixType
+     *
+     * We sum the line-span of each currLineRange hunk to get total churn per file.
+     *
+     * @param rev  revision number whose ChangeInfo file to read
+     * @return Map from bare filename (e.g. "asp.c") to total lines changed
+     */
+    private Map<String, Integer> buildChurnMap(int rev) {
+        Map<String, Integer> churnByFile = new HashMap<>();
+        String path = cp.getChangeRevisionInfoPath(rev);
+        File f = new File(path);
+        if (!f.exists()) {
+            return churnByFile; // no ChangeInfo for this revision — churn stays 0
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                // Split on " | " (space-pipe-space)
+                String[] parts = line.split("\\s*\\|\\s*");
+                // Expected minimum: lineNum | prevRev | prevFile | prevRange | type | currRev | currFile | currRange
+                if (parts.length < 8) continue;
+                String currFile = parts[6].trim(); // e.g. "Revision_461/sql.c"
+                String currRange = parts[7].trim(); // e.g. "957,1051" or "290"
+                // Extract bare filename
+                String bareName = extractFileName(currFile);
+                // Parse line span: "start,end" or just "start"
+                int lines = 1;
+                if (currRange.contains(",")) {
+                    String[] rp = currRange.split(",");
+                    try {
+                        int lo = Integer.parseInt(rp[0].trim());
+                        int hi = Integer.parseInt(rp[1].trim());
+                        lines = Math.abs(hi - lo) + 1;
+                    } catch (NumberFormatException ignored) { }
+                }
+                churnByFile.merge(bareName, lines, Integer::sum);
+            }
+        } catch (IOException e) {
+            System.out.println("Warning: could not read ChangeInfo for rev " + rev + ": " + e.getMessage());
+        }
+        return churnByFile;
+    }
+
+    /**
+     * Compute process and ownership metrics for every CloneHistory entry and
+     * store the results directly in the CloneHistory fields.
+     *
+     * Metrics computed:
+     *   - noc               = changeRevs.size()
+     *   - fileAge           = endRev - addedInRev
+     *   - churn             = sum of lines changed in the clone's file across all changeRevs
+     *   - distinctAuthors   = |{unique authors at changeRevs}|
+     *   - majorAuthorProportion = (commits by top author) / noc
+     *   - minorAuthorCount  = authors contributing < 5% of commits
+     *
+     * @param historyMap     gcid → CloneHistory
+     * @param revAuthorMap   revision → author string
+     * @param gcidToFilename gcid → bare filename (e.g. "asp.c")
+     */
+    private void computeProcessAndOwnershipMetrics(
+            Map<Integer, CloneHistory> historyMap,
+            Map<Integer, String> revAuthorMap,
+            Map<Integer, String> gcidToFilename) {
+
+        // Cache churn maps to avoid re-reading the same file for multiple clones
+        Map<Integer, Map<String, Integer>> churnCache = new HashMap<>();
+
+        for (Map.Entry<Integer, CloneHistory> entry : historyMap.entrySet()) {
+            int gcid = entry.getKey();
+            CloneHistory h = entry.getValue();
+
+            // --- Process metrics ---
+            h.noc     = h.changeRevs.size();
+            h.fileAge = h.endRev - h.addedInRev;
+
+            // Churn: sum lines changed in this clone's file across its changeRevs
+            String fname = gcidToFilename.getOrDefault(gcid, "");
+            int totalChurn = 0;
+            for (int rev : h.changeRevs) {
+                Map<String, Integer> cm = churnCache.computeIfAbsent(rev, this::buildChurnMap);
+                totalChurn += cm.getOrDefault(fname, 0);
+            }
+            h.churn = totalChurn;
+
+            // --- Ownership metrics ---
+            // Collect author frequency across changeRevs
+            Map<String, Integer> authorCount = new HashMap<>();
+            for (int rev : h.changeRevs) {
+                String author = revAuthorMap.getOrDefault(rev, "UNKNOWN");
+                authorCount.merge(author, 1, Integer::sum);
+            }
+
+            h.distinctAuthors = authorCount.size();
+
+            if (h.noc == 0) {
+                h.majorAuthorProportion = 0.0;
+                h.minorAuthorCount      = 0;
+            } else {
+                int maxContrib = authorCount.values().stream().mapToInt(Integer::intValue).max().orElse(0);
+                h.majorAuthorProportion = (double) maxContrib / h.noc;
+
+                double threshold = 0.05 * h.noc; // < 5 % of commits
+                h.minorAuthorCount = (int) authorCount.values().stream()
+                        .filter(c -> c < threshold)
+                        .count();
+            }
+        }
+
+        System.out.println("Process + ownership metrics computed for " + historyMap.size() + " clones");
     }
 
     /**
@@ -1107,6 +1362,115 @@ public class CloneGenealogyAnalysis {
 
         System.out.println("Loaded method info for " + result.size() + " clones");
         return result;
+    }
+
+    /**
+     * Compute exponential time-decay weighted coupling strength (WCS) for a clone pair.
+     *
+     * WCS = Σ W(co-change events up to maxRev) / Σ W(all change events up to maxRev)
+     * where W(event) = e^(-DECAY_LAMBDA * (maxRev - eventRevision))
+     *
+     * Returns 0.0 if there are no changes in the window.
+     *
+     * @param h1     CloneHistory of the first clone
+     * @param h2     CloneHistory of the second clone
+     * @param maxRev upper bound of revision window (typically current or last revision)
+     * @param minRev lower bound of revision window (use 0 to include everything)
+     */
+    private double computeWeightedCouplingStrength(CloneHistory h1, CloneHistory h2,
+            int minRev, int maxRev) {
+        double coChangeWeight = 0.0;
+        double totalWeight = 0.0;
+
+        // Collect all revisions where either clone changed
+        Set<Integer> allChangeRevs = new HashSet<>();
+        allChangeRevs.addAll(h1.changeRevs);
+        allChangeRevs.addAll(h2.changeRevs);
+
+        for (int rev : allChangeRevs) {
+            if (rev < minRev || rev > maxRev) continue;
+
+            int age = maxRev - rev;
+            double w = Math.exp(-DECAY_LAMBDA * age);
+
+            boolean c1Changed = h1.changeRevs.contains(rev);
+            boolean c2Changed = h2.changeRevs.contains(rev);
+
+            if (c1Changed && c2Changed) {
+                coChangeWeight += w; // co-change: counts toward numerator
+            }
+            totalWeight += w; // any change counts toward denominator
+        }
+
+        return totalWeight == 0.0 ? 0.0 : coChangeWeight / totalWeight;
+    }
+
+    /**
+     * Compute coupling trend: WCS in the first half of pair lifetime vs second half.
+     * Negative value means coupling is weakening (decoupling trend).
+     */
+    private double computeCouplingTrend(CloneHistory h1, CloneHistory h2,
+            int pairStartRev, int pairEndRev) {
+        if (pairEndRev <= pairStartRev) return 0.0;
+        int midRev = pairStartRev + (pairEndRev - pairStartRev) / 2;
+        double earlyWCS = computeWeightedCouplingStrength(h1, h2, pairStartRev, midRev);
+        double recentWCS = computeWeightedCouplingStrength(h1, h2, midRev + 1, pairEndRev);
+        return recentWCS - earlyWCS;
+    }
+
+    /**
+     * Returns the age (in revisions) of the last co-change event up to maxRev,
+     * or -1 if there was no co-change.
+     */
+    private int lastCoChangeAge(CloneHistory h1, CloneHistory h2, int maxRev) {
+        int lastCoRev = -1;
+        for (int rev : h1.changeRevs) {
+            if (rev <= maxRev && h2.changeRevs.contains(rev)) {
+                lastCoRev = Math.max(lastCoRev, rev);
+            }
+        }
+        return lastCoRev == -1 ? -1 : maxRev - lastCoRev;
+    }
+
+    /**
+     * Returns the age of the most recent solo change (either clone changed alone) up to maxRev,
+     * or -1 if no solo change ever occurred.
+     */
+    private int lastSoloChangeAge(CloneHistory h1, CloneHistory h2, int maxRev) {
+        int lastSoloRev = -1;
+        for (int rev : h1.changeRevs) {
+            if (rev <= maxRev && !h2.changeRevs.contains(rev)) {
+                lastSoloRev = Math.max(lastSoloRev, rev);
+            }
+        }
+        for (int rev : h2.changeRevs) {
+            if (rev <= maxRev && !h1.changeRevs.contains(rev)) {
+                lastSoloRev = Math.max(lastSoloRev, rev);
+            }
+        }
+        return lastSoloRev == -1 ? -1 : maxRev - lastSoloRev;
+    }
+
+    /**
+     * Count solo change events (either clone changed alone) that occurred strictly
+     * after the last co-change up to maxRev. If there was never a co-change, counts
+     * all solo events up to maxRev.
+     */
+    private int countSoloAfterLastCoChange(CloneHistory h1, CloneHistory h2, int maxRev) {
+        int lastCoRev = -1;
+        for (int rev : h1.changeRevs) {
+            if (rev <= maxRev && h2.changeRevs.contains(rev)) {
+                lastCoRev = Math.max(lastCoRev, rev);
+            }
+        }
+        int count = 0;
+        for (int rev : h1.changeRevs) {
+            if (rev <= maxRev && rev > lastCoRev && !h2.changeRevs.contains(rev)) count++;
+        }
+        for (int rev : h2.changeRevs) {
+            if (rev <= maxRev && rev > lastCoRev && !h1.changeRevs.contains(rev)) count++;
+        }
+        return count;
     }
 
     /**

@@ -2,7 +2,12 @@
 package com.mycompany.icmsalpha;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,10 +17,14 @@ import java.util.Map;
 public class Utility {
 
     public void RunBash(String url, String download_path) {
+        Path scriptPath = Paths.get("Scripts", "git_script.sh").toAbsolutePath().normalize();
+        if (!Files.exists(scriptPath)) {
+            System.err.println("Script not found: " + scriptPath);
+            return;
+        }
+
         try {
-            // Execute shell script using bash command
-            String[] command = { "Bash", "Scripts/git_script.sh", url, download_path };
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            ProcessBuilder processBuilder = new ProcessBuilder(buildBashCommand(scriptPath, url, download_path));
             Process process = processBuilder.start();
 
             // Wait for the process to finish
@@ -30,6 +39,22 @@ public class Utility {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<String> buildBashCommand(Path scriptPath, String url, String downloadPath) {
+        List<String> command = new ArrayList<>();
+
+        if (PlatformSupport.isWindows()) {
+            Path gitBash = Paths.get("C:\\Program Files\\Git\\bin\\bash.exe");
+            command.add(Files.exists(gitBash) ? gitBash.toString() : "bash");
+        } else {
+            command.add("bash");
+        }
+
+        command.add(scriptPath.toString());
+        command.add(url);
+        command.add(downloadPath);
+        return command;
     }
      
     public void Print(){

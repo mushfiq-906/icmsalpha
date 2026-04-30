@@ -418,13 +418,7 @@ public class AdvancedChangeAnalysis {
             return "";
 
         try {
-            int revisionIndex = fullPath.indexOf("Revision_");
-            if (revisionIndex != -1) {
-                int pathStartIndex = fullPath.indexOf('/', revisionIndex);
-                if (pathStartIndex != -1) {
-                    return fullPath.substring(pathStartIndex + 1);
-                }
-            }
+            return PlatformSupport.stripRevisionPrefix(fullPath);
         } catch (Exception e) {
             print("Warning: Could not parse file path: " + fullPath);
         }
@@ -504,10 +498,7 @@ public class AdvancedChangeAnalysis {
         List<ChangeRecord> changes = new ArrayList<>();
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(
-                    "diff",
-                    prevPath.toString(),
-                    currPath.toString());
+            ProcessBuilder pb = PlatformSupport.createDiffProcessBuilder(prevPath.toString(), currPath.toString());
             pb.redirectErrorStream(true);
             Process process = pb.start();
 

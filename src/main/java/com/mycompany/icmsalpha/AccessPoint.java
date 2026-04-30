@@ -69,6 +69,14 @@ class CloneHistory {
     List<Integer> latePropagationRevs = new ArrayList<>(); // revisions where late propagation occurred
     int coChangeCount; // number of revisions where clone changed with peers
     int independentChangeCount; // number of revisions where clone changed alone
+    // Process metrics (computed post-lifecycle by computeProcessAndOwnershipMetrics)
+    int noc;            // Number of Changes = changeRevs.size()
+    int fileAge;        // Lifetime in revisions = endRev - addedInRev
+    int churn;          // True lines changed in clone region (from ChangeInfo diff hunks)
+    // Ownership metrics (computed from revAuthorMap + changeRevs)
+    int distinctAuthors;             // # unique authors who committed changes to this clone
+    double majorAuthorProportion;    // TCO: fraction of commits by top author (0.0 – 1.0)
+    int minorAuthorCount;            // # authors contributing < 5% of total commits
 }
 
 class Buggy {
@@ -218,6 +226,14 @@ public class AccessPoint {
                         method.methodId = Integer.parseInt(parts[6].trim());
                     }
                     method.globalMethodId = method.methodId;
+                    if (parts.length > 9) {
+                        // New format includes globalMethodId at index 9
+                        try {
+                            method.globalMethodId = Integer.parseInt(parts[9].trim());
+                        } catch (NumberFormatException e) {
+                            // fallback to methodId
+                        }
+                    }
                     methodSet.add(method); // HashSet will prevent duplicates
                 }
             }
@@ -244,19 +260,27 @@ public class AccessPoint {
                     method.methodName = parts[1].trim();
                     method.signature = parts[2].trim();
                     // New column order: package_name and class_name come before src
-                    if (parts.length > 8) {
+                    if (parts.length >= 9) {
                         method.packageName = parts[3].trim();
                         method.className = parts[4].trim();
                         method.filePath = parts[5].trim();
                         method.startLine = Integer.parseInt(parts[6].trim());
                         method.endLine = Integer.parseInt(parts[7].trim());
                         method.methodId = Integer.parseInt(parts[8].trim());
-                    } else {
-                        // Fallback for old format
+                        if (parts.length > 9) {
+                            method.globalMethodId = Integer.parseInt(parts[9].trim());
+                        } else {
+                            method.globalMethodId = method.methodId;
+                        }
+                    } else if (parts.length > 7) {
+                        // Fallback for old format without package/class
                         method.filePath = parts[3].trim();
                         method.startLine = Integer.parseInt(parts[4].trim());
                         method.endLine = Integer.parseInt(parts[5].trim());
                         method.methodId = Integer.parseInt(parts[6].trim());
+                        method.globalMethodId = Integer.parseInt(parts[7].trim());
+                    } else {
+                        method.globalMethodId = method.methodId; // fallback
                     }
 
                     methodSet.add(method); // HashSet will prevent duplicates
@@ -374,6 +398,13 @@ public class AccessPoint {
 
         try {
             File inputFile = new File(xmlFilePath);
+            if (!inputFile.exists() || inputFile.length() == 0) {
+                System.out.println("Skipping revision " + revision + ": XML file missing or empty: " + xmlFilePath);
+                try (FileWriter fw = new FileWriter(cloneFolderPath)) {
+                    fw.write("Revision | filePath | changeType | StartLine | EndLine | Nlines | cloneId | classId | Similarity\n");
+                }
+                return;
+            }
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);

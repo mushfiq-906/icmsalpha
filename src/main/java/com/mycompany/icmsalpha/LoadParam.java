@@ -34,14 +34,35 @@ public class LoadParam {
 
     private void loadParams() {
         try (BufferedReader reader = new BufferedReader(new FileReader(PARAM_FILE))) {
-            rootDir = reader.readLine();
-            cloneDir = reader.readLine();
+            rootDir = normalizeParamValue(reader.readLine());
+            cloneDir = normalizeParamValue(reader.readLine());
             startRevision = reader.readLine();
             endRevision = reader.readLine();
             lanExtension = reader.readLine();
+            warnIfMacPathOnWindows("Code Dir", rootDir);
+            warnIfMacPathOnWindows("Clone Dir", cloneDir);
 
         } catch (IOException e) {
             // File doesn't exist or error reading, ignore and continue
+        }
+    }
+
+    private String normalizeParamValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return value.trim();
+    }
+
+    private void warnIfMacPathOnWindows(String label, String path) {
+        if (!PlatformSupport.isWindows() || path == null || path.isBlank()) {
+            return;
+        }
+
+        if (path.startsWith("/Volumes/") || path.startsWith("/Users/") || path.startsWith("/opt/")) {
+            System.out.println("Warning: " + label
+                    + " in param.txt still points to a macOS path. Update it to a Windows path before running the analysis: "
+                    + path);
         }
     }
 
