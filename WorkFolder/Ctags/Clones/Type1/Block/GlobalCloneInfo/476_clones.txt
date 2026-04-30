@@ -1,33 +1,30 @@
-globalCloneId | filePath | StartLine | EndLine | classId | globalMethodId | method_name | methodStart | methodEnd
-1 | Revision_476/asp.c | 74 | 89 | 1 | 158 | findAspTags | 42 | 198
-2 | Revision_476/asp.c | 97 | 112 | 1 | 158 | findAspTags | 42 | 198
-13 | Revision_476/eiffel.c | 367 | 376 | 2 | 457 | skipToCharacter | 366 | 376
-14 | Revision_476/sql.c | 412 | 419 | 2 | 736 | skipToCharacter | 411 | 419
-24 | Revision_476/jscript.c | 273 | 280 | 2 | 602 | skipToCharacter | 272 | 280
-15 | Revision_476/eiffel.c | 660 | 664 | 3 | 415 | readToken | 614 | 745
-16 | Revision_476/sql.c | 517 | 521 | 3 | 734 | readToken | 464 | 599
-29 | Revision_476/jscript.c | 199 | 203 | 4 | 582 | deleteToken | 198 | 203
-30 | Revision_476/sql.c | 356 | 360 | 4 | 701 | deleteToken | 355 | 360
-31 | Revision_476/jscript.c | 231 | 247 | 5 | 713 | makeJsTag | 226 | 248
-32 | Revision_476/sql.c | 388 | 404 | 5 | 588 | makeSqlTag | 383 | 405
-33 | Revision_476/jscript.c | 283 | 298 | 6 | 596 | parseString | 282 | 298
-34 | Revision_476/sql.c | 422 | 437 | 6 | 728 | parseString | 421 | 437
-35 | Revision_476/jscript.c | 304 | 315 | 7 | 591 | parseIdentifier | 303 | 315
-36 | Revision_476/sql.c | 442 | 453 | 7 | 728 | parseIdentifier | 441 | 453
-49 | Revision_476/jscript.c | 360 | 390 | 8 | 600 | readToken | 317 | 408
-50 | Revision_476/sql.c | 545 | 575 | 8 | 734 | readToken | 464 | 599
-51 | Revision_476/jscript.c | 435 | 465 | 9 | 601 | skipArgumentList | 434 | 465
-26 | Revision_476/sql.c | 653 | 684 | 9 | 735 | skipArgumentList | 652 | 684
-41 | Revision_476/jscript.c | 478 | 485 | 10 | 696 | addToScope | 477 | 485
-42 | Revision_476/sql.c | 618 | 625 | 10 | 697 | addToScope | 617 | 625
-45 | Revision_476/jscript.c | 614 | 623 | 11 | 724 | parseLoop | 546 | 625
-46 | Revision_476/sql.c | 830 | 850 | 11 | 593 | parseRecord | 787 | 852
-17 | Revision_476/python.c | 107 | 111 | 12 | 612 | skipSpace | 106 | 111
-19 | Revision_476/erlang.c | 58 | 62 | 12 | 566 | skipSpace | 57 | 62
-18 | Revision_476/sml.c | 84 | 88 | 12 | 619 | skipSpace | 83 | 88
-20 | Revision_476/python.c | 115 | 124 | 13 | 719 | parseIdentifier | 114 | 124
-21 | Revision_476/erlang.c | 66 | 75 | 13 | NULL | NULL | NULL | NULL
-11 | Revision_476/routines.c | 287 | 294 | 14 | 570 | struppercmp | 286 | 294
-8 | Revision_476/readtags.c | 106 | 113 | 14 | 528 | struppercmp | 105 | 113
-12 | Revision_476/routines.c | 297 | 304 | 15 | 528 | strnuppercmp | 296 | 304
-10 | Revision_476/readtags.c | 116 | 123 | 15 | 528 | strnuppercmp | 115 | 123
+globalCloneId | filePath | StartLine | EndLine | classId | globalMethodId | method_name | method_signature | methodStart | methodEnd | package_name | class_name
+1 | Revision_476/asp.c | 74 | 89 | 1 | 156 | findAspTags | static void findAspTags (void) | 42 | 198 |  | asp
+2 | Revision_476/asp.c | 97 | 112 | 1 | 156 | findAspTags | static void findAspTags (void) | 42 | 198 |  | asp
+13 | Revision_476/erlang.c | 58 | 62 | 2 | 173 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 57 | 62 |  | erlang
+12 | Revision_476/sml.c | 84 | 88 | 2 | 173 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 83 | 88 |  | sml
+11 | Revision_476/python.c | 107 | 111 | 2 | 173 | skipSpace | static const char *skipSpace (const char *cp) | 106 | 111 |  | python
+14 | Revision_476/erlang.c | 66 | 75 | 3 | NULL | NULL | NULL | NULL | NULL |  | 
+15 | Revision_476/python.c | 115 | 124 | 3 | 328 | parseIdentifier | static const char *parseIdentifier (const char *cp, vString *const identifier) | 114 | 124 |  | python
+20 | Revision_476/jscript.c | 199 | 203 | 4 | 122 | deleteToken | static void deleteToken (tokenInfo *const token) | 198 | 203 |  | jscript
+21 | Revision_476/sql.c | 356 | 360 | 4 | 122 | deleteToken | static void deleteToken (tokenInfo *const token) | 355 | 360 |  | sql
+22 | Revision_476/jscript.c | 231 | 247 | 5 | 635 | makeJsTag | static void makeJsTag (tokenInfo *const token, const jsKind kind) | 226 | 248 |  | jscript
+23 | Revision_476/sql.c | 388 | 404 | 5 | 559 | makeSqlTag | static void makeSqlTag (tokenInfo *const token, const sqlKind kind) | 383 | 405 |  | sql
+24 | Revision_476/jscript.c | 273 | 280 | 6 | 449 | skipToCharacter | static int skipToCharacter (const int c) | 272 | 280 |  | jscript
+25 | Revision_476/sql.c | 412 | 419 | 6 | 449 | skipToCharacter | static int skipToCharacter (const int c) | 411 | 419 |  | sql
+26 | Revision_476/jscript.c | 283 | 298 | 7 | 352 | parseString | static void parseString (vString *const string, const int delimiter) | 282 | 298 |  | jscript
+27 | Revision_476/sql.c | 422 | 437 | 7 | 352 | parseString | static void parseString (vString *const string, const int delimiter) | 421 | 437 |  | sql
+28 | Revision_476/jscript.c | 304 | 315 | 8 | 329 | parseIdentifier | static void parseIdentifier (vString *const string, const int firstChar) | 303 | 315 |  | jscript
+29 | Revision_476/sql.c | 442 | 453 | 8 | 329 | parseIdentifier | static void parseIdentifier (vString *const string, const int firstChar) | 441 | 453 |  | sql
+42 | Revision_476/jscript.c | 360 | 390 | 9 | 408 | readToken | static void readToken (tokenInfo *const token) | 317 | 408 |  | jscript
+43 | Revision_476/sql.c | 545 | 575 | 9 | 408 | readToken | static void readToken (tokenInfo *const token) | 464 | 599 |  | sql
+44 | Revision_476/jscript.c | 435 | 465 | 10 | 567 | skipArgumentList | static void skipArgumentList (tokenInfo *const token) | 434 | 465 |  | jscript
+17 | Revision_476/sql.c | 653 | 684 | 10 | 567 | skipArgumentList | static void skipArgumentList (tokenInfo *const token) | 652 | 684 |  | sql
+34 | Revision_476/jscript.c | 478 | 485 | 11 | 628 | addToScope | static void addToScope (tokenInfo* const token, vString* const extra) | 477 | 485 |  | jscript
+35 | Revision_476/sql.c | 618 | 625 | 11 | 628 | addToScope | static void addToScope (tokenInfo* const token, vString* const extra) | 617 | 625 |  | sql
+38 | Revision_476/jscript.c | 614 | 623 | 12 | 644 | parseLoop | static void parseLoop (tokenInfo *const token) | 546 | 625 |  | jscript
+39 | Revision_476/sql.c | 830 | 850 | 12 | 562 | parseRecord | static void parseRecord (tokenInfo *const token) | 787 | 852 |  | sql
+6 | Revision_476/readtags.c | 106 | 113 | 13 | 460 | struppercmp | static int struppercmp (const char *s1, const char *s2) | 105 | 113 |  | readtags
+9 | Revision_476/routines.c | 287 | 294 | 13 | 460 | struppercmp | extern int struppercmp (const char *s1, const char *s2) | 286 | 294 |  | routines
+8 | Revision_476/readtags.c | 116 | 123 | 14 | 460 | strnuppercmp | static int strnuppercmp (const char *s1, const char *s2, size_t n) | 115 | 123 |  | readtags
+10 | Revision_476/routines.c | 297 | 304 | 14 | 460 | strnuppercmp | extern int strnuppercmp (const char *s1, const char *s2, size_t n) | 296 | 304 |  | routines

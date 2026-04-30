@@ -1,318 +1,178 @@
-globalCloneId | filePath | StartLine | EndLine | classId | globalMethodId | method_name | method_signature | methodStart | methodEnd
-1 | Revision_347/lisp.c | 91 | 97 | 1 | 169 | findLispTags | static void findLispTags (void) | 80 | 124
-2 | Revision_347/lisp.c | 112 | 118 | 1 | 169 | findLispTags | static void findLispTags (void) | 80 | 124
-3 | Revision_347/lisp.c | 127 | 137 | 2 | 14 | LispParser | extern parserDefinition* LispParser (void) | 126 | 137
-13 | Revision_347/python.c | 213 | 221 | 2 | 19 | PythonParser | extern parserDefinition *PythonParser (void) | 212 | 221
-12 | Revision_347/c.c | 2641 | 2650 | 2 | 603 | VeraParser | extern parserDefinition* VeraParser (void) | 2640 | 2650
-15 | Revision_347/c.c | 2629 | 2638 | 2 | 10 | JavaParser | extern parserDefinition* JavaParser (void) | 2628 | 2638
-9 | Revision_347/eiffel.c | 1222 | 1231 | 2 | 8 | EiffelParser | extern parserDefinition* EiffelParser (void) | 1221 | 1231
-315 | Revision_347/c.c | 2617 | 2626 | 2 | 10 | CsharpParser | extern parserDefinition* CsharpParser (void) | 2616 | 2626
-8 | Revision_347/c.c | 2599 | 2614 | 2 | 7 | CppParser | extern parserDefinition* CppParser (void) | 2598 | 2614
-330 | Revision_347/c.c | 2587 | 2596 | 2 | 5 | CParser | extern parserDefinition* CParser (void) | 2586 | 2596
-283 | Revision_347/verilog.c | 324 | 333 | 2 | 571 | VerilogParser | extern parserDefinition* VerilogParser (void) | 323 | 333
-296 | Revision_347/sql.c | 672 | 681 | 2 | 579 | SqlParser | extern parserDefinition* SqlParser (void) | 671 | 681
-7 | Revision_347/perl.c | 109 | 117 | 2 | 17 | PerlParser | extern parserDefinition* PerlParser (void) | 108 | 117
-18 | Revision_347/tcl.c | 106 | 114 | 2 | 25 | TclParser | extern parserDefinition* TclParser (void) | 105 | 114
-21 | Revision_347/fortran.c | 2180 | 2195 | 2 | 9 | FortranParser | extern parserDefinition* FortranParser (void) | 2179 | 2195
-22 | Revision_347/php.c | 125 | 133 | 2 | 18 | PhpParser | extern parserDefinition* PhpParser (void) | 124 | 133
-17 | Revision_347/sh.c | 102 | 112 | 2 | 23 | ShParser | extern parserDefinition* ShParser (void) | 101 | 112
-20 | Revision_347/vim.c | 168 | 176 | 2 | 26 | VimParser | extern parserDefinition* VimParser (void) | 167 | 176
-4 | Revision_347/asp.c | 181 | 189 | 2 | 2 | AspParser | extern parserDefinition* AspParser (void) | 180 | 189
-16 | Revision_347/scheme.c | 99 | 109 | 2 | 22 | SchemeParser | extern parserDefinition* SchemeParser (void) | 98 | 109
-340 | Revision_347/erlang.c | 179 | 187 | 2 | 615 | ErlangParser | extern parserDefinition *ErlangParser (void) | 178 | 187
-10 | Revision_347/awk.c | 71 | 79 | 2 | 3 | AwkParser | extern parserDefinition* AwkParser () | 70 | 79
-14 | Revision_347/pascal.c | 255 | 263 | 2 | 16 | PascalParser | extern parserDefinition* PascalParser (void) | 254 | 263
-5 | Revision_347/beta.c | 313 | 321 | 2 | 4 | BetaParser | extern parserDefinition* BetaParser (void) | 312 | 321
-320 | Revision_347/cobol.c | 40 | 48 | 2 | 6 | CobolParser | extern parserDefinition* CobolParser () | 39 | 48
-243 | Revision_347/lua.c | 123 | 131 | 2 | 531 | LuaParser | extern parserDefinition* LuaParser (void) | 122 | 131
-19 | Revision_347/ruby.c | 167 | 175 | 2 | 21 | RubyParser | extern parserDefinition* RubyParser (void) | 166 | 175
-321 | Revision_347/sml.c | 192 | 200 | 2 | 607 | SmlParser | extern parserDefinition *SmlParser (void) | 191 | 200
-365 | Revision_347/html.c | 40 | 47 | 2 | 629 | HtmlParser | extern parserDefinition* HtmlParser (void) | 39 | 47
-274 | Revision_347/asm.c | 367 | 386 | 2 | 1 | AsmParser | extern parserDefinition* AsmParser (void) | 366 | 386
-25 | Revision_347/make.c | 91 | 101 | 2 | 15 | MakefileParser | extern parserDefinition* MakefileParser (void) | 90 | 101
-26 | Revision_347/rexx.c | 30 | 37 | 2 | 20 | RexxParser | extern parserDefinition* RexxParser (void) | 29 | 37
-24 | Revision_347/slang.c | 34 | 41 | 2 | 24 | SlangParser | extern parserDefinition* SlangParser (void) | 33 | 41
-23 | Revision_347/yacc.c | 31 | 38 | 2 | 27 | YaccParser | extern parserDefinition* YaccParser () | 30 | 38
-364 | Revision_347/jscript.c | 31 | 38 | 2 | 630 | JavaScriptParser | extern parserDefinition* JavaScriptParser (void) | 30 | 38
-27 | Revision_347/keyword.c | 107 | 116 | 2 | NULL | NULL | NULL | NULL | NULL
-29 | Revision_347/options.c | 528 | 533 | 2 | 78 | cArgRead | static void cArgRead (cookedArgs *const current) | 502 | 535
-158 | Revision_347/fortran.c | 413 | 425 | 2 | 300 | newToken | static tokenInfo *newToken (void) | 412 | 425
-30 | Revision_347/options.c | 621 | 627 | 2 | 69 | cArgForth | extern void cArgForth (cookedArgs* const current) | 608 | 629
-28 | Revision_347/c.c | 2052 | 2057 | 2 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-309 | Revision_347/sql.c | 205 | 213 | 2 | 589 | newToken | static tokenInfo *newToken (void) | 204 | 213
-157 | Revision_347/eiffel.c | 1176 | 1188 | 2 | 299 | newToken | static tokenInfo *newToken (void) | 1175 | 1188
-31 | Revision_347/c.c | 2081 | 2089 | 2 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-33 | Revision_347/asp.c | 70 | 89 | 3 | 158 | findAspTags | static void findAspTags (void) | 41 | 178
-34 | Revision_347/asp.c | 93 | 112 | 3 | 158 | findAspTags | static void findAspTags (void) | 41 | 178
-35 | Revision_347/asp.c | 116 | 132 | 4 | 158 | findAspTags | static void findAspTags (void) | 41 | 178
-42 | Revision_347/ruby.c | 79 | 94 | 4 | 177 | findRubyTags | static void findRubyTags (void) | 44 | 164
-42 | Revision_347/ruby.c | 96 | 111 | 4 | 177 | findRubyTags | static void findRubyTags (void) | 44 | 164
-159 | Revision_347/vim.c | 121 | 135 | 4 | 183 | findVimTags | static void findVimTags (void) | 70 | 165
-36 | Revision_347/asp.c | 136 | 151 | 4 | 158 | findAspTags | static void findAspTags (void) | 41 | 178
-36 | Revision_347/asp.c | 155 | 170 | 4 | 158 | findAspTags | static void findAspTags (void) | 41 | 178
-40 | Revision_347/php.c | 78 | 91 | 4 | 174 | findPhpTags | static void findPhpTags (void) | 44 | 122
-173 | Revision_347/php.c | 58 | 75 | 4 | 174 | findPhpTags | static void findPhpTags (void) | 44 | 122
-334 | Revision_347/vim.c | 95 | 110 | 4 | 183 | findVimTags | static void findVimTags (void) | 70 | 165
-160 | Revision_347/vim.c | 143 | 162 | 4 | 183 | findVimTags | static void findVimTags (void) | 70 | 165
-160 | Revision_347/vim.c | 114 | 136 | 4 | 183 | findVimTags | static void findVimTags (void) | 70 | 165
-43 | Revision_347/args.c | 85 | 92 | 5 | 305 | nextString | static char* nextString (const Arguments* const current, const char** const next) | 84 | 92
-44 | Revision_347/args.c | 159 | 166 | 5 | 304 | nextFileString | static char* nextFileString (const Arguments* const current, FILE* const fp) | 158 | 166
-322 | Revision_347/args.c | 144 | 148 | 6 | 303 | nextFileLine | static char* nextFileLine (FILE* const fp) | 123 | 156
-323 | Revision_347/sml.c | 174 | 178 | 6 | 609 | findSmlTags | static void findSmlTags (void) | 150 | 189
-212 | Revision_347/readtags.c | 699 | 703 | 6 | 171 | findNext | static tagResult findNext (tagFile *const file, tagEntry *const entry) | 688 | 705
-45 | Revision_347/args.c | 181 | 189 | 7 | 55 | argNewFromArgv | extern Arguments* argNewFromArgv (char* const* const argv) | 180 | 189
-46 | Revision_347/args.c | 202 | 210 | 7 | 57 | argNewFromLineFile | extern Arguments* argNewFromLineFile (FILE* const fp) | 201 | 210
-47 | Revision_347/args.c | 192 | 199 | 7 | 56 | argNewFromFile | extern Arguments* argNewFromFile (FILE* const fp) | 191 | 199
-48 | Revision_347/args.c | 265 | 271 | 8 | 52 | argDelete | extern void argDelete (Arguments* const current) | 264 | 271
-49 | Revision_347/options.c | 574 | 579 | 8 | 68 | cArgDelete | extern void cArgDelete (cookedArgs* const current) | 573 | 579
-50 | Revision_347/fortran.c | 891 | 896 | 8 | 82 | checkForLabel | static void checkForLabel (void) | 870 | 898
-51 | Revision_347/c.c | 509 | 515 | 9 | 123 | deleteToken | static void deleteToken (tokenInfo *const token) | 508 | 515
-52 | Revision_347/vstring.c | 67 | 74 | 9 | 507 | vStringDelete | extern void vStringDelete (vString *const string) | 66 | 74
-53 | Revision_347/c.c | 518 | 525 | 10 | 31 | accessString | static const char *accessString (const accessType access) | 517 | 525
-54 | Revision_347/c.c | 528 | 535 | 10 | 217 | implementationString | static const char *implementationString (const impType imp) | 527 | 535
-55 | Revision_347/c.c | 637 | 653 | 11 | 245 | isContextualKeyword | static boolean isContextualKeyword (const tokenInfo *const token) | 636 | 653
-56 | Revision_347/c.c | 1173 | 1187 | 11 | NULL | NULL | NULL | NULL | NULL
-60 | Revision_347/c.c | 1096 | 1114 | 11 | 268 | isValidTypeSpecifier | static boolean isValidTypeSpecifier (const declType declaration) | 1095 | 1114
-57 | Revision_347/c.c | 656 | 672 | 11 | 246 | isContextualStatement | static boolean isContextualStatement (const statementInfo *const st) | 655 | 672
-375 | Revision_347/fortran.c | 1124 | 1139 | 11 | 266 | isSubprogramPrefix | static boolean isSubprogramPrefix (tokenInfo *const token) | 1123 | 1139
-59 | Revision_347/fortran.c | 1860 | 1876 | 11 | 335 | parseImplicitPartStmt | static boolean parseImplicitPartStmt (tokenInfo *const token) | 1859 | 1876
-58 | Revision_347/fortran.c | 1101 | 1121 | 11 | 266 | isTypeSpec | static boolean isTypeSpec (tokenInfo *const token) | 1100 | 1121
-63 | Revision_347/c.c | 1099 | 1112 | 11 | 268 | isValidTypeSpecifier | static boolean isValidTypeSpecifier (const declType declaration) | 1095 | 1114
-57 | Revision_347/c.c | 659 | 670 | 11 | 246 | isContextualStatement | static boolean isContextualStatement (const statementInfo *const st) | 655 | 672
-61 | Revision_347/c.c | 2388 | 2407 | 11 | 295 | nest | static void nest (statementInfo *const st, const unsigned int nestLevel) | 2387 | 2407
-58 | Revision_347/fortran.c | 1104 | 1119 | 11 | 266 | isTypeSpec | static boolean isTypeSpec (tokenInfo *const token) | 1100 | 1121
-366 | Revision_347/fortran.c | 1777 | 1805 | 11 | 266 | isIgnoredDeclaration | static boolean isIgnoredDeclaration (tokenInfo *const token) | 1776 | 1805
-64 | Revision_347/c.c | 2390 | 2404 | 11 | 295 | nest | static void nest (statementInfo *const st, const unsigned int nestLevel) | 2387 | 2407
-65 | Revision_347/fortran.c | 1863 | 1874 | 11 | 335 | parseImplicitPartStmt | static boolean parseImplicitPartStmt (tokenInfo *const token) | 1859 | 1876
-248 | Revision_347/eiffel.c | 905 | 947 | 11 | 165 | findFeatureEnd | static void findFeatureEnd (tokenInfo *const token) | 882 | 951
-367 | Revision_347/fortran.c | 1577 | 1614 | 11 | 357 | parseSpecificationStmt | static boolean parseSpecificationStmt (tokenInfo *const token) | 1576 | 1614
-71 | Revision_347/c.c | 640 | 651 | 11 | 245 | isContextualKeyword | static boolean isContextualKeyword (const tokenInfo *const token) | 636 | 653
-72 | Revision_347/c.c | 689 | 709 | 12 | 221 | initMemberInfo | static void initMemberInfo (statementInfo *const st) | 684 | 712
-73 | Revision_347/c.c | 806 | 814 | 12 | 269 | javaTagKind | static javaKind javaTagKind (const tagType type) | 802 | 816
-337 | Revision_347/fortran.c | 1291 | 1301 | 12 | 614 | variableTagType | static tagType variableTagType (void) | 1287 | 1303
-74 | Revision_347/c.c | 719 | 725 | 13 | 419 | reinitStatement | static void reinitStatement (statementInfo *const st, const boolean partial) | 714 | 745
-75 | Revision_347/options.c | 467 | 474 | 13 | 355 | parseShortOption | static void parseShortOption (cookedArgs *const args) | 459 | 480
-76 | Revision_347/c.c | 748 | 752 | 14 | 224 | initStatement | static void initStatement (statementInfo *const st, statementInfo *const parent) | 747 | 752
-80 | Revision_347/c.c | 1976 | 1980 | 14 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-79 | Revision_347/fortran.c | 1903 | 1907 | 14 | 311 | parseBlockData | static void parseBlockData (tokenInfo *const token) | 1898 | 1918
-297 | Revision_347/sql.c | 500 | 504 | 14 | 594 | parseSimple | static void parseSimple (tokenInfo *const token, const sqlKind kind) | 499 | 504
-249 | Revision_347/eiffel.c | 673 | 677 | 14 | 415 | readToken | static void readToken (tokenInfo *const token) | 614 | 745
-87 | Revision_347/readtags.c | 144 | 148 | 14 | 211 | growString | static int growString (vstring *s) | 125 | 150
-86 | Revision_347/c.c | 2440 | 2444 | 14 | 481 | tagCheck | static void tagCheck (statementInfo *const st) | 2409 | 2471
-269 | Revision_347/eiffel.c | 963 | 967 | 14 | 398 | readFeatureName | static boolean readFeatureName (tokenInfo *const token) | 953 | 969
-269 | Revision_347/eiffel.c | 874 | 878 | 14 | 342 | parseLocal | static void parseLocal (tokenInfo *const token) | 857 | 880
-85 | Revision_347/fortran.c | 1332 | 1336 | 14 | 319 | parseEntityDecl | static void parseEntityDecl (tokenInfo *const token) | 1305 | 1340
-269 | Revision_347/eiffel.c | 1014 | 1018 | 14 | 325 | parseFeature | static boolean parseFeature (tokenInfo *const token) | 994 | 1023
-250 | Revision_347/eiffel.c | 660 | 664 | 14 | 415 | readToken | static void readToken (tokenInfo *const token) | 614 | 745
-300 | Revision_347/sql.c | 331 | 335 | 14 | 600 | readToken | static void readToken (tokenInfo *const token) | 296 | 399
-121 | Revision_347/c.c | 1664 | 1668 | 14 | 393 | processToken | static void processToken (tokenInfo *const token, statementInfo *const st) | 1602 | 1680
-373 | Revision_347/fortran.c | 1713 | 1717 | 14 | 339 | parseInterfaceBlock | static void parseInterfaceBlock (tokenInfo *const token) | 1690 | 1741
-244 | Revision_347/c.c | 2042 | 2049 | 14 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-98 | Revision_347/vstring.c | 35 | 40 | 14 | 512 | vStringResize | static void vStringResize (vString *const string, const size_t newSize) | 34 | 40
-331 | Revision_347/c.c | 1673 | 1677 | 14 | 393 | processToken | static void processToken (tokenInfo *const token, statementInfo *const st) | 1602 | 1680
-89 | Revision_347/options.c | 1034 | 1038 | 14 | 390 | processLanguageMap | static char* processLanguageMap (char* map) | 1012 | 1058
-91 | Revision_347/keyword.c | 185 | 189 | 14 | 184 | freeKeywordTable | extern void freeKeywordTable (void) | 174 | 193
-90 | Revision_347/readtags.c | 455 | 459 | 14 | 577 | initialize | static tagFile *initialize (const char *const filePath, tagFileInfo *const info) | 442 | 471
-84 | Revision_347/fortran.c | 1329 | 1337 | 14 | 319 | parseEntityDecl | static void parseEntityDecl (tokenInfo *const token) | 1305 | 1340
-85 | Revision_347/fortran.c | 1200 | 1204 | 14 | 364 | parseTypeSpec | static void parseTypeSpec (tokenInfo *const token) | 1152 | 1219
-79 | Revision_347/fortran.c | 1541 | 1546 | 14 | 363 | parseStructureStmt | static void parseStructureStmt (tokenInfo *const token) | 1519 | 1556
-94 | Revision_347/c.c | 2505 | 2510 | 14 | NULL | NULL | NULL | NULL | NULL
-19 | Revision_347/ruby.c | 136 | 140 | 14 | 177 | findRubyTags | static void findRubyTags (void) | 44 | 164
-95 | Revision_347/fortran.c | 589 | 593 | 14 | 204 | getLineType | static lineType getLineType (void) | 520 | 595
-151 | Revision_347/eiffel.c | 1033 | 1037 | 14 | 323 | parseExport | static void parseExport (tokenInfo *const token) | 1025 | 1040
-151 | Revision_347/eiffel.c | 848 | 853 | 14 | 323 | parseEntityType | static void parseEntityType (tokenInfo *const token) | 835 | 854
-125 | Revision_347/c.c | 2023 | 2027 | 14 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-126 | Revision_347/strlist.c | 134 | 138 | 14 | 474 | stringListDelete | extern void stringListDelete (stringList *const current) | 129 | 143
-79 | Revision_347/fortran.c | 1534 | 1539 | 14 | 363 | parseStructureStmt | static void parseStructureStmt (tokenInfo *const token) | 1519 | 1556
-101 | Revision_347/eiffel.c | 1069 | 1078 | 14 | 354 | parseRename | static void parseRename (tokenInfo *const token) | 1061 | 1084
-333 | Revision_347/options.c | 1674 | 1678 | 14 | 369 | previewFirstOption | extern void previewFirstOption (cookedArgs* const args) | 1666 | 1682
-127 | Revision_347/options.c | 669 | 673 | 14 | NULL | NULL | NULL | NULL | NULL
-128 | Revision_347/fortran.c | 995 | 999 | 14 | 416 | readToken | static void readToken (tokenInfo *const token) | 925 | 1042
-129 | Revision_347/options.c | 1213 | 1217 | 14 | 235 | installHeaderListDefaults | static void installHeaderListDefaults (void) | 1209 | 1218
-103 | Revision_347/c.c | 758 | 778 | 15 | 79 | cTagKind | static cKind cTagKind (const tagType type) | 757 | 778
-103 | Revision_347/c.c | 884 | 903 | 15 | 120 | declToTagType | static tagType declToTagType (const declType declaration) | 883 | 903
-316 | Revision_347/c.c | 818 | 837 | 15 | 605 | veraTagKind | static veraKind veraTagKind (const tagType type) { | 818 | 837
-332 | Revision_347/c.c | 781 | 800 | 15 | 268 | csharpTagKind | static csharpKind csharpTagKind (const tagType type) | 780 | 800
-73 | Revision_347/c.c | 803 | 816 | 16 | 269 | javaTagKind | static javaKind javaTagKind (const tagType type) | 802 | 816
-337 | Revision_347/fortran.c | 1288 | 1303 | 16 | 614 | variableTagType | static tagType variableTagType (void) | 1287 | 1303
-317 | Revision_347/c.c | 840 | 851 | 17 | 484 | tagName | static const char *tagName (const tagType type) | 839 | 851
-318 | Revision_347/c.c | 854 | 865 | 17 | 483 | tagLetter | static int tagLetter (const tagType type) | 853 | 865
-108 | Revision_347/c.c | 1297 | 1304 | 18 | 461 | skipToMatch | static void skipToMatch (const char *const pair) | 1282 | 1324
-109 | Revision_347/c.c | 1306 | 1313 | 18 | 461 | skipToMatch | static void skipToMatch (const char *const pair) | 1282 | 1324
-110 | Revision_347/c.c | 1327 | 1334 | 19 | 452 | skipParens | static void skipParens (void) | 1326 | 1334
-112 | Revision_347/fortran.c | 628 | 634 | 19 | 198 | getFixedFormChar | static int getFixedFormChar (void) | 597 | 686
-111 | Revision_347/c.c | 1337 | 1344 | 19 | NULL | NULL | NULL | NULL | NULL
-294 | Revision_347/c.c | 1393 | 1402 | 20 | 400 | readIdentifier | static void readIdentifier (tokenInfo *const token, const int firstChar) | 1384 | 1407
-295 | Revision_347/eiffel.c | 556 | 564 | 20 | NULL | NULL | NULL | NULL | NULL
-294 | Revision_347/c.c | 1396 | 1400 | 21 | 400 | readIdentifier | static void readIdentifier (tokenInfo *const token, const int firstChar) | 1384 | 1407
-90 | Revision_347/readtags.c | 503 | 507 | 21 | 405 | readNext | static tagResult readNext (tagFile *const file, tagEntry *const entry) | 495 | 509
-99 | Revision_347/readtags.c | 680 | 684 | 21 | NULL | NULL | NULL | NULL | NULL
-118 | Revision_347/c.c | 1717 | 1721 | 22 | 448 | skipMemIntializerList | static void skipMemIntializerList (tokenInfo *const token) | 1709 | 1734
-119 | Revision_347/eiffel.c | 419 | 423 | 22 | 346 | parseNumeric | static vString *parseNumeric (int c) | 409 | 435
-120 | Revision_347/fortran.c | 795 | 799 | 22 | 347 | parseNumeric | static vString *parseNumeric (int c) | 785 | 811
-121 | Revision_347/c.c | 1864 | 1868 | 23 | NULL | NULL | NULL | NULL | NULL
-122 | Revision_347/get.c | 588 | 592 | 23 | 102 | cppGetc | extern int cppGetc (void) | 528 | 651
-112 | Revision_347/fortran.c | 622 | 626 | 23 | 198 | getFixedFormChar | static int getFixedFormChar (void) | 597 | 686
-28 | Revision_347/c.c | 2004 | 2011 | 24 | 45 | analyzePostParens | static void analyzePostParens (statementInfo *const st, parenInfo *const info) | 1904 | 2243
-156 | Revision_347/eiffel.c | 1066 | 1079 | 24 | 354 | parseRename | static void parseRename (tokenInfo *const token) | 1061 | 1084
-94 | Revision_347/c.c | 2461 | 2466 | 25 | 481 | tagCheck | static void tagCheck (statementInfo *const st) | 2409 | 2471
-301 | Revision_347/sql.c | 523 | 528 | 25 | 595 | parseDeclare | static void parseDeclare (tokenInfo *const token, const boolean local) | 506 | 534
-130 | Revision_347/c.c | 2545 | 2554 | 26 | 67 | buildKeywordHash | static void buildKeywordHash (const langType language, unsigned int idx) | 2544 | 2554
-132 | Revision_347/fortran.c | 397 | 406 | 26 | 66 | buildFortranKeywordHash | static void buildFortranKeywordHash (void) | 396 | 406
-381 | Revision_347/verilog.c | 107 | 117 | 26 | 642 | initialize | static void initialize (const langType language) | 106 | 117
-288 | Revision_347/asm.c | 120 | 128 | 26 | 576 | buildAsmKeywordHash | static void buildAsmKeywordHash (void) | 119 | 128
-302 | Revision_347/sql.c | 193 | 202 | 26 | 581 | buildSqlKeywordHash | static void buildSqlKeywordHash (void) | 192 | 202
-131 | Revision_347/eiffel.c | 215 | 224 | 26 | 65 | buildEiffelKeywordHash | static void buildEiffelKeywordHash (void) | 214 | 224
-133 | Revision_347/eiffel.c | 287 | 301 | 27 | 282 | makeEiffelClassTag | static void makeEiffelClassTag (tokenInfo *const token) | 286 | 301
-303 | Revision_347/sql.c | 226 | 238 | 27 | 588 | makeSqlTag | static void makeSqlTag (tokenInfo *const token, const sqlKind kind) | 225 | 238
-134 | Revision_347/beta.c | 71 | 82 | 27 | 280 | makeBetaTag | static void makeBetaTag (const char* const name, const betaKind kind) | 70 | 82
-324 | Revision_347/sml.c | 73 | 79 | 27 | 611 | makeSmlTag | static void makeSmlTag (smlKind type, vString *name) | 72 | 79
-135 | Revision_347/parse.c | 46 | 57 | 27 | NULL | NULL | NULL | NULL | NULL
-303 | Revision_347/sql.c | 228 | 237 | 27 | 588 | makeSqlTag | static void makeSqlTag (tokenInfo *const token, const sqlKind kind) | 225 | 238
-136 | Revision_347/eiffel.c | 289 | 299 | 27 | 282 | makeEiffelClassTag | static void makeEiffelClassTag (tokenInfo *const token) | 286 | 301
-304 | Revision_347/eiffel.c | 367 | 376 | 28 | 457 | skipToCharacter | static int skipToCharacter (const int c) | 366 | 376
-305 | Revision_347/sql.c | 245 | 252 | 28 | 602 | skipToCharacter | static int skipToCharacter (const int c) | 244 | 252
-139 | Revision_347/eiffel.c | 382 | 407 | 29 | 337 | parseInteger | static vString *parseInteger (int c) | 381 | 407
-140 | Revision_347/fortran.c | 753 | 783 | 29 | 338 | parseInteger | static vString *parseInteger (int c) | 752 | 783
-141 | Revision_347/eiffel.c | 410 | 435 | 30 | 346 | parseNumeric | static vString *parseNumeric (int c) | 409 | 435
-142 | Revision_347/fortran.c | 786 | 811 | 30 | 347 | parseNumeric | static vString *parseNumeric (int c) | 785 | 811
-143 | Revision_347/eiffel.c | 547 | 551 | 31 | NULL | NULL | NULL | NULL | NULL
-383 | Revision_347/verilog.c | 141 | 145 | 31 | 648 | vGetc | static int vGetc (void) | 125 | 173
-145 | Revision_347/fortran.c | 974 | 978 | 31 | 416 | readToken | static void readToken (tokenInfo *const token) | 925 | 1042
-382 | Revision_347/verilog.c | 244 | 248 | 31 | NULL | NULL | NULL | NULL | NULL
-144 | Revision_347/fortran.c | 775 | 779 | 31 | 338 | parseInteger | static vString *parseInteger (int c) | 752 | 783
-114 | Revision_347/eiffel.c | 572 | 584 | 32 | 333 | parseIdentifier | static void parseIdentifier (vString *const string, const int firstChar) | 571 | 584
-306 | Revision_347/sql.c | 274 | 285 | 32 | 591 | parseIdentifier | static void parseIdentifier (vString *const string, const int firstChar) | 273 | 285
-116 | Revision_347/fortran.c | 840 | 851 | 32 | 334 | parseIdentifier | static void parseIdentifier (vString *const string, const int firstChar) | 839 | 851
-117 | Revision_347/eiffel.c | 587 | 599 | 32 | 329 | parseFreeOperator | static void parseFreeOperator (vString *const string, const int firstChar) | 586 | 599
-146 | Revision_347/eiffel.c | 602 | 612 | 33 | 46 | analyzeToken | static keywordId analyzeToken (vString *const name) | 601 | 612
-270 | Revision_347/asm.c | 131 | 140 | 33 | 575 | analyzeOperator | static opKeyword analyzeOperator (const vString *const op) | 130 | 140
-147 | Revision_347/fortran.c | 858 | 868 | 33 | 47 | analyzeToken | static keywordId analyzeToken (vString *const name) | 857 | 868
-349 | Revision_347/eiffel.c | 771 | 818 | 34 | 342 | parseGeneric | static void parseGeneric (tokenInfo *const token, boolean declaration __unused__) | 770 | 818
-350 | Revision_347/fortran.c | 1087 | 1098 | 34 | 451 | skipOverParens | static void skipOverParens (tokenInfo *const token) | 1086 | 1098
-251 | Revision_347/eiffel.c | 836 | 854 | 35 | 323 | parseEntityType | static void parseEntityType (tokenInfo *const token) | 835 | 854
-336 | Revision_347/fortran.c | 1369 | 1382 | 35 | 363 | parseTypeDeclarationStmt | static void parseTypeDeclarationStmt (tokenInfo *const token) | 1368 | 1382
-252 | Revision_347/eiffel.c | 858 | 880 | 35 | 342 | parseLocal | static void parseLocal (tokenInfo *const token) | 857 | 880
-253 | Revision_347/eiffel.c | 1008 | 1021 | 35 | 325 | parseFeature | static boolean parseFeature (tokenInfo *const token) | 994 | 1023
-337 | Revision_347/fortran.c | 1623 | 1631 | 35 | 315 | parseComponentDefStmt | static void parseComponentDefStmt (tokenInfo *const token) | 1622 | 1631
-307 | Revision_347/eiffel.c | 1113 | 1137 | 36 | 336 | parseInherit | static void parseInherit (tokenInfo *const token) | 1087 | 1139
-308 | Revision_347/sql.c | 470 | 495 | 36 | 599 | parseType | static void parseType (tokenInfo *const token) | 465 | 497
-362 | Revision_347/eiffel.c | 1191 | 1197 | 37 | 124 | deleteToken | static void deleteToken (tokenInfo *const token) | 1190 | 1197
-363 | Revision_347/fortran.c | 439 | 444 | 37 | 125 | deleteToken | static void deleteToken (tokenInfo *const token) | 436 | 445
-290 | Revision_347/vim.c | 56 | 60 | 38 | 442 | skipPrefix | static const unsigned char* skipPrefix (const unsigned char* name, int *scope) | 50 | 68
-291 | Revision_347/vim.c | 62 | 66 | 38 | 442 | skipPrefix | static const unsigned char* skipPrefix (const unsigned char* name, int *scope) | 50 | 68
-278 | Revision_347/python.c | 105 | 109 | 39 | 612 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 104 | 109
-325 | Revision_347/sml.c | 82 | 86 | 39 | 619 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 81 | 86
-280 | Revision_347/options.c | 955 | 960 | 39 | 454 | skipPastMap | static char* skipPastMap (char* p) | 954 | 960
-341 | Revision_347/erlang.c | 58 | 62 | 39 | 566 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 57 | 62
-292 | Revision_347/python.c | 113 | 122 | 40 | NULL | NULL | NULL | NULL | NULL
-293 | Revision_347/tcl.c | 44 | 54 | 40 | NULL | NULL | NULL | NULL | NULL
-342 | Revision_347/erlang.c | 66 | 75 | 40 | NULL | NULL | NULL | NULL | NULL
-343 | Revision_347/python.c | 145 | 150 | 41 | 565 | parseFunction | static void parseFunction (const unsigned char *cp, vString *const class) | 144 | 150
-346 | Revision_347/erlang.c | 108 | 113 | 41 | 623 | parseSimpleTag | static void parseSimpleTag (const unsigned char *cp, erlangKind kind) | 107 | 113
-344 | Revision_347/erlang.c | 116 | 121 | 41 | 621 | parseFunctionTag | static void parseFunctionTag (const unsigned char *cp, vString *const module) | 115 | 121
-344 | Revision_347/erlang.c | 97 | 105 | 41 | 622 | parseModuleTag | static void parseModuleTag (const unsigned char *cp, vString *const module) | 96 | 105
-377 | Revision_347/main.c | 260 | 267 | 41 | 418 | recurseIntoDirectory | static boolean recurseIntoDirectory (const char *const dirName) | 247 | 284
-376 | Revision_347/main.c | 179 | 185 | 41 | NULL | NULL | NULL | NULL | NULL
-326 | Revision_347/python.c | 172 | 181 | 42 | 175 | findPythonTags | static void findPythonTags (void) | 152 | 210
-327 | Revision_347/sml.c | 162 | 171 | 42 | 609 | findSmlTags | static void findSmlTags (void) | 150 | 189
-328 | Revision_347/python.c | 201 | 206 | 43 | 175 | findPythonTags | static void findPythonTags (void) | 152 | 210
-329 | Revision_347/sml.c | 180 | 185 | 43 | 609 | findSmlTags | static void findSmlTags (void) | 150 | 189
-163 | Revision_347/perl.c | 56 | 60 | 44 | NULL | NULL | NULL | NULL | NULL
-164 | Revision_347/pascal.c | 133 | 137 | 44 | NULL | NULL | NULL | NULL | NULL
-281 | Revision_347/sort.c | 123 | 128 | 45 | 567 | compareTagsFolded | static int compareTagsFolded(const void *const one, const void *const two) | 122 | 128
-282 | Revision_347/sort.c | 131 | 136 | 45 | 94 | compareTags | static int compareTags (const void *const one, const void *const two) | 130 | 136
-165 | Revision_347/strlist.c | 32 | 38 | 46 | 475 | stringListNew | extern stringList *stringListNew (void) | 31 | 38
-166 | Revision_347/vstring.c | 77 | 87 | 46 | 508 | vStringNew | extern vString *vStringNew (void) | 76 | 87
-167 | Revision_347/strlist.c | 147 | 154 | 47 | NULL | NULL | NULL | NULL | NULL
-168 | Revision_347/strlist.c | 158 | 165 | 47 | NULL | NULL | NULL | NULL | NULL
-169 | Revision_347/strlist.c | 169 | 176 | 47 | NULL | NULL | NULL | NULL | NULL
-319 | Revision_347/pascal.c | 149 | 153 | 48 | NULL | NULL | NULL | NULL | NULL
-171 | Revision_347/pascal.c | 183 | 189 | 48 | NULL | NULL | NULL | NULL | NULL
-170 | Revision_347/pascal.c | 175 | 181 | 48 | NULL | NULL | NULL | NULL | NULL
-174 | Revision_347/get.c | 297 | 309 | 49 | 281 | makeDefineTag | static void makeDefineTag (const char *const name) | 291 | 310
-176 | Revision_347/read.c | 214 | 225 | 49 | 341 | parseLineDirective | static boolean parseLineDirective (void) | 171 | 231
-175 | Revision_347/parse.c | 557 | 571 | 49 | 285 | makeFileTag | static void makeFileTag (const char *const fileName) | 556 | 571
-177 | Revision_347/get.c | 461 | 472 | 50 | 450 | skipOverCplusComment | static int skipOverCplusComment (void) | 460 | 472
-178 | Revision_347/get.c | 478 | 489 | 50 | 459 | skipToEndOfString | static int skipToEndOfString (void) | 477 | 489
-180 | Revision_347/get.c | 535 | 540 | 51 | 102 | cppGetc | extern int cppGetc (void) | 528 | 651
-181 | Revision_347/read.c | 415 | 419 | 51 | 542 | fileGetc | extern int fileGetc (void) | 406 | 441
-354 | Revision_347/main.c | 126 | 139 | 52 | 248 | isDestinationStdout | extern boolean isDestinationStdout (void) | 125 | 139
-355 | Revision_347/options.c | 394 | 399 | 52 | 624 | filesRequired | extern boolean filesRequired (void) | 393 | 399
-254 | Revision_347/routines.c | 228 | 235 | 53 | 136 | eMalloc | extern void *eMalloc (const size_t size) | 227 | 235
-255 | Revision_347/routines.c | 238 | 245 | 53 | 134 | eCalloc | extern void *eCalloc (const size_t count, const size_t size) | 237 | 245
-256 | Revision_347/routines.c | 279 | 286 | 54 | 570 | struppercmp | extern int struppercmp (const char *s1, const char *s2) | 278 | 286
-257 | Revision_347/routines.c | 289 | 296 | 54 | 528 | strnuppercmp | extern int strnuppercmp (const char *s1, const char *s2, size_t n) | 288 | 296
-123 | Revision_347/readtags.c | 116 | 123 | 54 | 528 | strnuppercmp | static int strnuppercmp (const char *s1, const char *s2, size_t n) | 115 | 123
-238 | Revision_347/readtags.c | 106 | 113 | 54 | 528 | struppercmp | static int struppercmp (const char *s1, const char *s2) | 105 | 113
-258 | Revision_347/routines.c | 313 | 317 | 55 | 138 | eStrdup | extern char* eStrdup (const char* str) | 312 | 317
-188 | Revision_347/vstring.c | 125 | 129 | 55 | 510 | vStringNewInit | extern vString *vStringNewInit (const char *const s) | 124 | 129
-189 | Revision_347/vstring.c | 118 | 122 | 55 | 509 | vStringNewCopy | extern vString *vStringNewCopy (vString *const string) | 117 | 122
-259 | Revision_347/routines.c | 320 | 326 | 56 | 496 | toLowerString | extern void toLowerString (char* str) | 319 | 326
-260 | Revision_347/routines.c | 329 | 335 | 56 | 497 | toUpperString | extern void toUpperString (char* str) | 328 | 335
-261 | Revision_347/routines.c | 340 | 347 | 57 | 296 | newLowerString | extern char* newLowerString (const char* str) | 339 | 347
-262 | Revision_347/routines.c | 352 | 359 | 57 | 301 | newUpperString | extern char* newUpperString (const char* str) | 351 | 359
-378 | Revision_347/sh.c | 88 | 93 | 58 | 180 | findShTags | static void findShTags (void) | 52 | 99
-379 | Revision_347/asm.c | 348 | 353 | 58 | 556 | findAsmTags | static void findAsmTags (void) | 274 | 358
-201 | Revision_347/beta.c | 136 | 143 | 59 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-202 | Revision_347/beta.c | 207 | 215 | 59 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-203 | Revision_347/beta.c | 154 | 158 | 60 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-205 | Revision_347/beta.c | 280 | 284 | 60 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-204 | Revision_347/beta.c | 167 | 171 | 60 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-206 | Revision_347/beta.c | 160 | 164 | 60 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-207 | Revision_347/beta.c | 274 | 278 | 60 | 160 | findBetaTags | static void findBetaTags (void) | 84 | 310
-310 | Revision_347/sql.c | 412 | 418 | 61 | 601 | skipArgumentList | static void skipArgumentList (tokenInfo *const token) | 411 | 418
-312 | Revision_347/fortran.c | 1066 | 1070 | 61 | 453 | skipPast | static void skipPast (tokenInfo *const token, tokenType type) | 1065 | 1070
-298 | Revision_347/sql.c | 620 | 626 | 61 | 598 | parseTable | static void parseTable (tokenInfo *const token) | 614 | 629
-313 | Revision_347/sql.c | 438 | 443 | 62 | 597 | parseSubProgram | static void parseSubProgram (tokenInfo *const token) | 420 | 447
-299 | Revision_347/sql.c | 604 | 609 | 62 | 592 | parsePackage | static void parsePackage (tokenInfo *const token) | 596 | 612
-313 | Revision_347/sql.c | 454 | 462 | 63 | 593 | parseRecord | static void parseRecord (tokenInfo *const token) | 449 | 463
-314 | Revision_347/fortran.c | 1747 | 1753 | 63 | 319 | parseEntryStmt | static void parseEntryStmt (tokenInfo *const token) | 1746 | 1753
-380 | Revision_347/sql.c | 537 | 545 | 63 | 593 | parseLabel | static void parseLabel (tokenInfo *const token) | 536 | 545
-59 | Revision_347/fortran.c | 1407 | 1415 | 63 | 314 | parseCommonNamelistStmt | static void parseCommonNamelistStmt (tokenInfo *const token, tagType type) | 1398 | 1425
-208 | Revision_347/parse.c | 98 | 108 | 64 | 195 | getExtensionLanguage | static langType getExtensionLanguage (const char *const extension) | 97 | 108
-209 | Revision_347/parse.c | 111 | 122 | 64 | 206 | getPatternLanguage | static langType getPatternLanguage (const char *const fileName) | 110 | 122
-356 | Revision_347/parse.c | 272 | 276 | 65 | 140 | enableLanguages | extern void enableLanguages (const boolean state) | 271 | 276
-357 | Revision_347/parse.c | 546 | 550 | 65 | 626 | printLanguageList | extern void printLanguageList (void) | 545 | 550
-358 | Revision_347/parse.c | 527 | 531 | 65 | 627 | printLanguageMaps | extern void printLanguageMaps (const langType language) | 524 | 534
-239 | Revision_347/readtags.c | 542 | 548 | 66 | 527 | nameComparison | static int nameComparison (tagFile *const file) | 538 | 558
-240 | Revision_347/readtags.c | 550 | 556 | 66 | 527 | nameComparison | static int nameComparison (tagFile *const file) | 538 | 558
-123 | Revision_347/readtags.c | 585 | 589 | 67 | 166 | findFirstMatchBefore | static tagResult findFirstMatchBefore (tagFile *const file) | 578 | 591
-124 | Revision_347/readtags.c | 640 | 646 | 67 | 179 | findSequential | static tagResult findSequential (tagFile *const file) | 636 | 648
-210 | Revision_347/readtags.c | 717 | 725 | 68 | 530 | tagsSetSortType | extern tagResult tagsSetSortType (tagFile *const file, const sortType type) | 716 | 725
-211 | Revision_347/readtags.c | 772 | 780 | 68 | 486 | tagsClose | extern tagResult tagsClose (tagFile *const file) | 771 | 780
-212 | Revision_347/readtags.c | 728 | 736 | 68 | 490 | tagsFirst | extern tagResult tagsFirst (tagFile *const file, tagEntry *const entry) | 727 | 736
-241 | Revision_347/readtags.c | 739 | 744 | 69 | 490 | tagsNext | extern tagResult tagsNext (tagFile *const file, tagEntry *const entry) | 738 | 744
-242 | Revision_347/readtags.c | 756 | 761 | 69 | NULL | NULL | NULL | NULL | NULL
-287 | Revision_347/readtags.c | 764 | 769 | 69 | 489 | tagsFindNext | extern tagResult tagsFindNext (tagFile *const file, tagEntry *const entry) | 763 | 769
-369 | Revision_347/fortran.c | 1260 | 1281 | 70 | 353 | parseQualifierSpecList | static void parseQualifierSpecList (tokenInfo *const token) | 1254 | 1285
-366 | Revision_347/fortran.c | 1780 | 1803 | 70 | 266 | isIgnoredDeclaration | static boolean isIgnoredDeclaration (tokenInfo *const token) | 1776 | 1805
-85 | Revision_347/fortran.c | 1314 | 1320 | 71 | 319 | parseEntityDecl | static void parseEntityDecl (tokenInfo *const token) | 1305 | 1340
-84 | Revision_347/fortran.c | 1373 | 1379 | 71 | 363 | parseTypeDeclarationStmt | static void parseTypeDeclarationStmt (tokenInfo *const token) | 1368 | 1382
-314 | Revision_347/fortran.c | 1440 | 1448 | 72 | 345 | parseMap | static void parseMap (tokenInfo *const token) | 1439 | 1448
-59 | Revision_347/fortran.c | 1479 | 1488 | 72 | 633 | parseUnionStmt | static void parseUnionStmt (tokenInfo *const token) | 1478 | 1488
-65 | Revision_347/fortran.c | 1526 | 1532 | 73 | 363 | parseStructureStmt | static void parseStructureStmt (tokenInfo *const token) | 1519 | 1556
-221 | Revision_347/fortran.c | 1702 | 1711 | 73 | 339 | parseInterfaceBlock | static void parseInterfaceBlock (tokenInfo *const token) | 1690 | 1741
-21 | Revision_347/fortran.c | 1720 | 1735 | 74 | 339 | parseInterfaceBlock | static void parseInterfaceBlock (tokenInfo *const token) | 1690 | 1741
-374 | Revision_347/fortran.c | 1935 | 1951 | 74 | 340 | parseInternalSubprogramPart | static void parseInternalSubprogramPart (tokenInfo *const token) | 1929 | 1952
-220 | Revision_347/fortran.c | 1899 | 1918 | 75 | 311 | parseBlockData | static void parseBlockData (tokenInfo *const token) | 1898 | 1918
-221 | Revision_347/fortran.c | 1970 | 1987 | 75 | 345 | parseModule | static void parseModule (tokenInfo *const token) | 1969 | 1987
-372 | Revision_347/fortran.c | 2042 | 2063 | 75 | 363 | parseSubprogram | static void parseSubprogram (tokenInfo *const token, const tagType tag) | 2041 | 2063
-289 | Revision_347/asm.c | 244 | 257 | 76 | NULL | NULL | NULL | NULL | NULL
-279 | Revision_347/asm.c | 262 | 272 | 76 | NULL | NULL | NULL | NULL | NULL
-222 | Revision_347/scheme.c | 70 | 78 | 77 | 178 | findSchemeTags | static void findSchemeTags (void) | 57 | 96
-223 | Revision_347/scheme.c | 85 | 93 | 77 | 178 | findSchemeTags | static void findSchemeTags (void) | 57 | 96
-224 | Revision_347/options.c | 366 | 372 | 78 | 190 | freeString | static void freeString (char **const pString) | 365 | 372
-225 | Revision_347/options.c | 375 | 381 | 78 | 185 | freeList | extern void freeList (stringList** const pList) | 374 | 381
-226 | Revision_347/options.c | 538 | 544 | 79 | 75 | cArgNewFromString | extern cookedArgs* cArgNewFromString (const char* string) | 537 | 544
-227 | Revision_347/options.c | 556 | 562 | 79 | 73 | cArgNewFromFile | extern cookedArgs* cArgNewFromFile (FILE* const fp) | 555 | 562
-228 | Revision_347/options.c | 565 | 571 | 79 | 74 | cArgNewFromLineFile | extern cookedArgs* cArgNewFromLineFile (FILE* const fp) | 564 | 571
-229 | Revision_347/options.c | 547 | 553 | 79 | 72 | cArgNewFromArgv | extern cookedArgs* cArgNewFromArgv (char* const* const argv) | 546 | 553
-230 | Revision_347/options.c | 974 | 978 | 80 | 37 | addLanguageMap | static char* addLanguageMap (const langType language, char* map) | 965 | 1010
-231 | Revision_347/options.c | 1000 | 1004 | 80 | 37 | addLanguageMap | static char* addLanguageMap (const langType language, char* map) | 965 | 1010
-232 | Revision_347/options.c | 1094 | 1098 | 81 | NULL | NULL | NULL | NULL | NULL
-233 | Revision_347/options.c | 1100 | 1104 | 81 | NULL | NULL | NULL | NULL | NULL
-360 | Revision_347/options.c | 1146 | 1158 | 82 | NULL | NULL | NULL | NULL | NULL
-235 | Revision_347/options.c | 1163 | 1175 | 82 | NULL | NULL | NULL | NULL | NULL
-236 | Revision_347/options.c | 1417 | 1434 | 83 | NULL | NULL | NULL | NULL | NULL
-237 | Revision_347/options.c | 1455 | 1472 | 83 | NULL | NULL | NULL | NULL | NULL
+globalCloneId | filePath | StartLine | EndLine | classId | globalMethodId | method_name | method_signature | methodStart | methodEnd | package_name | class_name
+1 | Revision_347/args.c | 85 | 92 | 1 | 301 | nextString | static char* nextString (const Arguments* const current, const char** const next) | 84 | 92 |  | args
+2 | Revision_347/args.c | 159 | 166 | 1 | 300 | nextFileString | static char* nextFileString (const Arguments* const current, FILE* const fp) | 158 | 166 |  | args
+214 | Revision_347/args.c | 144 | 148 | 2 | 299 | nextFileLine | static char* nextFileLine (FILE* const fp) | 123 | 156 |  | args
+215 | Revision_347/sml.c | 174 | 178 | 2 | 571 | findSmlTags | static void findSmlTags (void) | 150 | 189 |  | sml
+139 | Revision_347/readtags.c | 699 | 703 | 2 | 169 | findNext | static tagResult findNext (tagFile *const file, tagEntry *const entry) | 688 | 705 |  | readtags
+3 | Revision_347/args.c | 181 | 189 | 3 | 55 | argNewFromArgv | extern Arguments* argNewFromArgv (char* const* const argv) | 180 | 189 |  | args
+4 | Revision_347/args.c | 202 | 210 | 3 | 57 | argNewFromLineFile | extern Arguments* argNewFromLineFile (FILE* const fp) | 201 | 210 |  | args
+5 | Revision_347/args.c | 192 | 199 | 3 | 56 | argNewFromFile | extern Arguments* argNewFromFile (FILE* const fp) | 191 | 199 |  | args
+6 | Revision_347/args.c | 265 | 271 | 4 | 52 | argDelete | extern void argDelete (Arguments* const current) | 264 | 271 |  | args
+7 | Revision_347/options.c | 574 | 579 | 4 | 68 | cArgDelete | extern void cArgDelete (cookedArgs* const current) | 573 | 579 |  | options
+188 | Revision_347/asm.c | 120 | 128 | 5 | 552 | buildAsmKeywordHash | static void buildAsmKeywordHash (void) | 119 | 128 |  | asm
+196 | Revision_347/sql.c | 193 | 202 | 5 | 555 | buildSqlKeywordHash | static void buildSqlKeywordHash (void) | 192 | 202 |  | sql
+258 | Revision_347/verilog.c | 107 | 117 | 5 | 226 | initialize | static void initialize (const langType language) | 106 | 117 |  | verilog
+191 | Revision_347/asm.c | 244 | 257 | 6 | NULL | NULL | NULL | NULL | NULL |  | 
+179 | Revision_347/asm.c | 262 | 272 | 6 | NULL | NULL | NULL | NULL | NULL |  | 
+256 | Revision_347/asm.c | 348 | 353 | 7 | 536 | findAsmTags | static void findAsmTags (void) | 274 | 358 |  | asm
+257 | Revision_347/sh.c | 88 | 93 | 7 | 178 | findShTags | static void findShTags (void) | 52 | 99 |  | sh
+174 | Revision_347/asm.c | 367 | 386 | 8 | 1 | AsmParser | extern parserDefinition* AsmParser (void) | 366 | 386 |  | asm
+197 | Revision_347/sql.c | 672 | 681 | 8 | 554 | SqlParser | extern parserDefinition* SqlParser (void) | 671 | 681 |  | sql
+230 | Revision_347/erlang.c | 179 | 187 | 8 | 575 | ErlangParser | extern parserDefinition *ErlangParser (void) | 178 | 187 |  | erlang
+184 | Revision_347/verilog.c | 324 | 333 | 8 | 547 | VerilogParser | extern parserDefinition* VerilogParser (void) | 323 | 333 |  | verilog
+19 | Revision_347/perl.c | 109 | 117 | 8 | 17 | PerlParser | extern parserDefinition* PerlParser (void) | 108 | 117 |  | perl
+22 | Revision_347/tcl.c | 106 | 114 | 8 | 25 | TclParser | extern parserDefinition* TclParser (void) | 105 | 114 |  | tcl
+11 | Revision_347/lisp.c | 127 | 137 | 8 | 14 | LispParser | extern parserDefinition* LispParser (void) | 126 | 137 |  | lisp
+14 | Revision_347/python.c | 213 | 221 | 8 | 19 | PythonParser | extern parserDefinition *PythonParser (void) | 212 | 221 |  | python
+20 | Revision_347/vim.c | 168 | 176 | 8 | 26 | VimParser | extern parserDefinition* VimParser (void) | 167 | 176 |  | vim
+216 | Revision_347/sml.c | 192 | 200 | 8 | 569 | SmlParser | extern parserDefinition *SmlParser (void) | 191 | 200 |  | sml
+21 | Revision_347/php.c | 125 | 133 | 8 | 18 | PhpParser | extern parserDefinition* PhpParser (void) | 124 | 133 |  | php
+10 | Revision_347/awk.c | 71 | 79 | 8 | 3 | AwkParser | extern parserDefinition* AwkParser () | 70 | 79 |  | awk
+24 | Revision_347/sh.c | 102 | 112 | 8 | 23 | ShParser | extern parserDefinition* ShParser (void) | 101 | 112 |  | sh
+18 | Revision_347/asp.c | 181 | 189 | 8 | 2 | AspParser | extern parserDefinition* AspParser (void) | 180 | 189 |  | asp
+26 | Revision_347/make.c | 91 | 101 | 8 | 15 | MakefileParser | extern parserDefinition* MakefileParser (void) | 90 | 101 |  | make
+17 | Revision_347/scheme.c | 99 | 109 | 8 | 22 | SchemeParser | extern parserDefinition* SchemeParser (void) | 98 | 109 |  | scheme
+15 | Revision_347/beta.c | 313 | 321 | 8 | 4 | BetaParser | extern parserDefinition* BetaParser (void) | 312 | 321 |  | beta
+154 | Revision_347/lua.c | 123 | 131 | 8 | 520 | LuaParser | extern parserDefinition* LuaParser (void) | 122 | 131 |  | lua
+16 | Revision_347/ruby.c | 167 | 175 | 8 | 21 | RubyParser | extern parserDefinition* RubyParser (void) | 166 | 175 |  | ruby
+213 | Revision_347/cobol.c | 40 | 48 | 8 | 6 | CobolParser | extern parserDefinition* CobolParser () | 39 | 48 |  | cobol
+13 | Revision_347/pascal.c | 255 | 263 | 8 | 16 | PascalParser | extern parserDefinition* PascalParser (void) | 254 | 263 |  | pascal
+253 | Revision_347/html.c | 40 | 47 | 8 | 583 | HtmlParser | extern parserDefinition* HtmlParser (void) | 39 | 47 |  | html
+27 | Revision_347/slang.c | 34 | 41 | 8 | 24 | SlangParser | extern parserDefinition* SlangParser (void) | 33 | 41 |  | slang
+252 | Revision_347/jscript.c | 31 | 38 | 8 | 584 | JavaScriptParser | extern parserDefinition* JavaScriptParser (void) | 30 | 38 |  | jscript
+28 | Revision_347/yacc.c | 31 | 38 | 8 | 27 | YaccParser | extern parserDefinition* YaccParser () | 30 | 38 |  | yacc
+25 | Revision_347/rexx.c | 30 | 37 | 8 | 20 | RexxParser | extern parserDefinition* RexxParser (void) | 29 | 37 |  | rexx
+29 | Revision_347/keyword.c | 107 | 116 | 8 | NULL | NULL | NULL | NULL | NULL |  | 
+30 | Revision_347/options.c | 621 | 627 | 8 | 69 | cArgForth | extern void cArgForth (cookedArgs* const current) | 608 | 629 |  | options
+242 | Revision_347/options.c | 528 | 533 | 8 | 78 | cArgRead | static void cArgRead (cookedArgs *const current) | 502 | 535 |  | options
+205 | Revision_347/sql.c | 205 | 213 | 8 | 296 | newToken | static tokenInfo *newToken (void) | 204 | 213 |  | sql
+31 | Revision_347/asp.c | 70 | 89 | 9 | 156 | findAspTags | static void findAspTags (void) | 41 | 178 |  | asp
+32 | Revision_347/asp.c | 93 | 112 | 9 | 156 | findAspTags | static void findAspTags (void) | 41 | 178 |  | asp
+33 | Revision_347/asp.c | 116 | 132 | 10 | 156 | findAspTags | static void findAspTags (void) | 41 | 178 |  | asp
+38 | Revision_347/php.c | 58 | 75 | 10 | 172 | findPhpTags | static void findPhpTags (void) | 44 | 122 |  | php
+34 | Revision_347/asp.c | 136 | 151 | 10 | 156 | findAspTags | static void findAspTags (void) | 41 | 178 |  | asp
+35 | Revision_347/ruby.c | 79 | 94 | 10 | 175 | findRubyTags | static void findRubyTags (void) | 44 | 164 |  | ruby
+38 | Revision_347/php.c | 78 | 91 | 10 | 172 | findPhpTags | static void findPhpTags (void) | 44 | 122 |  | php
+34 | Revision_347/asp.c | 155 | 170 | 10 | 156 | findAspTags | static void findAspTags (void) | 41 | 178 |  | asp
+147 | Revision_347/vim.c | 121 | 135 | 10 | 181 | findVimTags | static void findVimTags (void) | 70 | 165 |  | vim
+176 | Revision_347/ruby.c | 96 | 111 | 10 | 175 | findRubyTags | static void findRubyTags (void) | 44 | 164 |  | ruby
+224 | Revision_347/vim.c | 95 | 110 | 10 | 181 | findVimTags | static void findVimTags (void) | 70 | 165 |  | vim
+148 | Revision_347/vim.c | 143 | 162 | 10 | 181 | findVimTags | static void findVimTags (void) | 70 | 165 |  | vim
+148 | Revision_347/vim.c | 114 | 136 | 10 | 181 | findVimTags | static void findVimTags (void) | 70 | 165 |  | vim
+43 | Revision_347/beta.c | 71 | 82 | 11 | 278 | makeBetaTag | static void makeBetaTag (const char* const name, const betaKind kind) | 70 | 82 |  | beta
+217 | Revision_347/sml.c | 73 | 79 | 11 | 572 | makeSmlTag | static void makeSmlTag (smlKind type, vString *name) | 72 | 79 |  | sml
+198 | Revision_347/sql.c | 226 | 238 | 11 | 559 | makeSqlTag | static void makeSqlTag (tokenInfo *const token, const sqlKind kind) | 225 | 238 |  | sql
+44 | Revision_347/parse.c | 46 | 57 | 11 | NULL | NULL | NULL | NULL | NULL |  | 
+198 | Revision_347/sql.c | 228 | 237 | 11 | 559 | makeSqlTag | static void makeSqlTag (tokenInfo *const token, const sqlKind kind) | 225 | 238 |  | sql
+45 | Revision_347/beta.c | 136 | 143 | 12 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+46 | Revision_347/beta.c | 207 | 215 | 12 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+47 | Revision_347/beta.c | 154 | 158 | 13 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+49 | Revision_347/beta.c | 167 | 171 | 13 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+51 | Revision_347/beta.c | 160 | 164 | 13 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+48 | Revision_347/beta.c | 274 | 278 | 13 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+50 | Revision_347/beta.c | 280 | 284 | 13 | 158 | findBetaTags | static void findBetaTags (void) | 84 | 310 |  | beta
+231 | Revision_347/erlang.c | 58 | 62 | 14 | 173 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 57 | 62 |  | erlang
+180 | Revision_347/python.c | 105 | 109 | 14 | 173 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 104 | 109 |  | python
+218 | Revision_347/sml.c | 82 | 86 | 14 | 173 | skipSpace | static const unsigned char *skipSpace (const unsigned char *cp) | 81 | 86 |  | sml
+181 | Revision_347/options.c | 955 | 960 | 14 | 446 | skipPastMap | static char* skipPastMap (char* p) | 954 | 960 |  | options
+232 | Revision_347/erlang.c | 66 | 75 | 15 | NULL | NULL | NULL | NULL | NULL |  | 
+195 | Revision_347/tcl.c | 44 | 54 | 15 | NULL | NULL | NULL | NULL | NULL |  | 
+194 | Revision_347/python.c | 113 | 122 | 15 | NULL | NULL | NULL | NULL | NULL |  | 
+237 | Revision_347/erlang.c | 97 | 105 | 16 | 579 | parseModuleTag | static void parseModuleTag (const unsigned char *cp, vString *const module) | 96 | 105 |  | erlang
+254 | Revision_347/main.c | 260 | 267 | 16 | 410 | recurseIntoDirectory | static boolean recurseIntoDirectory (const char *const dirName) | 247 | 284 |  | main
+255 | Revision_347/main.c | 179 | 185 | 16 | NULL | NULL | NULL | NULL | NULL |  | 
+235 | Revision_347/erlang.c | 108 | 113 | 16 | 580 | parseSimpleTag | static void parseSimpleTag (const unsigned char *cp, erlangKind kind) | 107 | 113 |  | erlang
+239 | Revision_347/erlang.c | 116 | 121 | 16 | 578 | parseFunctionTag | static void parseFunctionTag (const unsigned char *cp, vString *const module) | 115 | 121 |  | erlang
+236 | Revision_347/python.c | 145 | 150 | 16 | 544 | parseFunction | static void parseFunction (const unsigned char *cp, vString *const class) | 144 | 150 |  | python
+74 | Revision_347/get.c | 297 | 309 | 17 | 279 | makeDefineTag | static void makeDefineTag (const char *const name) | 291 | 310 |  | get
+76 | Revision_347/parse.c | 557 | 571 | 17 | 283 | makeFileTag | static void makeFileTag (const char *const fileName) | 556 | 571 |  | parse
+75 | Revision_347/read.c | 214 | 225 | 17 | 335 | parseLineDirective | static boolean parseLineDirective (void) | 171 | 231 |  | read
+77 | Revision_347/get.c | 461 | 472 | 18 | 442 | skipOverCplusComment | static int skipOverCplusComment (void) | 460 | 472 |  | get
+79 | Revision_347/get.c | 478 | 489 | 18 | 451 | skipToEndOfString | static int skipToEndOfString (void) | 477 | 489 |  | get
+80 | Revision_347/get.c | 535 | 540 | 19 | 102 | cppGetc | extern int cppGetc (void) | 528 | 651 |  | get
+81 | Revision_347/read.c | 415 | 419 | 19 | 149 | fileGetc | extern int fileGetc (void) | 406 | 441 |  | read
+85 | Revision_347/keyword.c | 185 | 189 | 20 | 182 | freeKeywordTable | extern void freeKeywordTable (void) | 174 | 193 |  | keyword
+86 | Revision_347/options.c | 1034 | 1038 | 20 | 383 | processLanguageMap | static char* processLanguageMap (char* map) | 1012 | 1058 |  | options
+87 | Revision_347/readtags.c | 455 | 459 | 20 | 226 | initialize | static tagFile *initialize (const char *const filePath, tagFileInfo *const info) | 442 | 471 |  | readtags
+89 | Revision_347/lisp.c | 91 | 97 | 21 | 167 | findLispTags | static void findLispTags (void) | 80 | 124 |  | lisp
+90 | Revision_347/lisp.c | 112 | 118 | 21 | 167 | findLispTags | static void findLispTags (void) | 80 | 124 |  | lisp
+243 | Revision_347/main.c | 126 | 139 | 22 | 246 | isDestinationStdout | extern boolean isDestinationStdout (void) | 125 | 139 |  | main
+244 | Revision_347/options.c | 394 | 399 | 22 | 581 | filesRequired | extern boolean filesRequired (void) | 393 | 399 |  | options
+107 | Revision_347/options.c | 366 | 372 | 23 | 188 | freeString | static void freeString (char **const pString) | 365 | 372 |  | options
+108 | Revision_347/options.c | 375 | 381 | 23 | 183 | freeList | extern void freeList (stringList** const pList) | 374 | 381 |  | options
+112 | Revision_347/options.c | 538 | 544 | 24 | 75 | cArgNewFromString | extern cookedArgs* cArgNewFromString (const char* string) | 537 | 544 |  | options
+115 | Revision_347/options.c | 547 | 553 | 24 | 72 | cArgNewFromArgv | extern cookedArgs* cArgNewFromArgv (char* const* const argv) | 546 | 553 |  | options
+114 | Revision_347/options.c | 556 | 562 | 24 | 73 | cArgNewFromFile | extern cookedArgs* cArgNewFromFile (FILE* const fp) | 555 | 562 |  | options
+113 | Revision_347/options.c | 565 | 571 | 24 | 74 | cArgNewFromLineFile | extern cookedArgs* cArgNewFromLineFile (FILE* const fp) | 564 | 571 |  | options
+116 | Revision_347/options.c | 669 | 673 | 25 | NULL | NULL | NULL | NULL | NULL |  | 
+117 | Revision_347/options.c | 1213 | 1217 | 25 | 233 | installHeaderListDefaults | static void installHeaderListDefaults (void) | 1209 | 1218 |  | options
+118 | Revision_347/options.c | 974 | 978 | 26 | 37 | addLanguageMap | static char* addLanguageMap (const langType language, char* map) | 965 | 1010 |  | options
+119 | Revision_347/options.c | 1000 | 1004 | 26 | 37 | addLanguageMap | static char* addLanguageMap (const langType language, char* map) | 965 | 1010 |  | options
+120 | Revision_347/options.c | 1094 | 1098 | 27 | NULL | NULL | NULL | NULL | NULL |  | 
+120 | Revision_347/options.c | 1100 | 1104 | 27 | NULL | NULL | NULL | NULL | NULL |  | 
+245 | Revision_347/options.c | 1146 | 1158 | 28 | NULL | NULL | NULL | NULL | NULL |  | 
+123 | Revision_347/options.c | 1163 | 1175 | 28 | NULL | NULL | NULL | NULL | NULL |  | 
+124 | Revision_347/options.c | 1417 | 1434 | 29 | NULL | NULL | NULL | NULL | NULL |  | 
+125 | Revision_347/options.c | 1455 | 1472 | 29 | NULL | NULL | NULL | NULL | NULL |  | 
+223 | Revision_347/options.c | 1674 | 1678 | 30 | 362 | previewFirstOption | extern void previewFirstOption (cookedArgs* const args) | 1666 | 1682 |  | options
+16 | Revision_347/ruby.c | 136 | 140 | 30 | 175 | findRubyTags | static void findRubyTags (void) | 44 | 164 |  | ruby
+126 | Revision_347/parse.c | 98 | 108 | 31 | 194 | getExtensionLanguage | static langType getExtensionLanguage (const char *const extension) | 97 | 108 |  | parse
+127 | Revision_347/parse.c | 111 | 122 | 31 | 205 | getPatternLanguage | static langType getPatternLanguage (const char *const fileName) | 110 | 122 |  | parse
+246 | Revision_347/parse.c | 272 | 276 | 32 | 137 | enableLanguages | extern void enableLanguages (const boolean state) | 271 | 276 |  | parse
+247 | Revision_347/parse.c | 527 | 531 | 32 | 127 | printLanguageMaps | extern void printLanguageMaps (const langType language) | 524 | 534 |  | parse
+248 | Revision_347/parse.c | 546 | 550 | 32 | 137 | printLanguageList | extern void printLanguageList (void) | 545 | 550 |  | parse
+128 | Revision_347/pascal.c | 133 | 137 | 33 | NULL | NULL | NULL | NULL | NULL |  | 
+129 | Revision_347/perl.c | 56 | 60 | 33 | NULL | NULL | NULL | NULL | NULL |  | 
+212 | Revision_347/pascal.c | 149 | 153 | 34 | NULL | NULL | NULL | NULL | NULL |  | 
+131 | Revision_347/pascal.c | 183 | 189 | 34 | NULL | NULL | NULL | NULL | NULL |  | 
+130 | Revision_347/pascal.c | 175 | 181 | 34 | NULL | NULL | NULL | NULL | NULL |  | 
+219 | Revision_347/python.c | 172 | 181 | 35 | 173 | findPythonTags | static void findPythonTags (void) | 152 | 210 |  | python
+220 | Revision_347/sml.c | 162 | 171 | 35 | 571 | findSmlTags | static void findSmlTags (void) | 150 | 189 |  | sml
+221 | Revision_347/python.c | 201 | 206 | 36 | 173 | findPythonTags | static void findPythonTags (void) | 152 | 210 |  | python
+222 | Revision_347/sml.c | 180 | 185 | 36 | 571 | findSmlTags | static void findSmlTags (void) | 150 | 189 |  | sml
+149 | Revision_347/readtags.c | 106 | 113 | 37 | 460 | struppercmp | static int struppercmp (const char *s1, const char *s2) | 105 | 113 |  | readtags
+155 | Revision_347/routines.c | 289 | 296 | 37 | 460 | strnuppercmp | extern int strnuppercmp (const char *s1, const char *s2, size_t n) | 288 | 296 |  | routines
+134 | Revision_347/readtags.c | 116 | 123 | 37 | 460 | strnuppercmp | static int strnuppercmp (const char *s1, const char *s2, size_t n) | 115 | 123 |  | readtags
+156 | Revision_347/routines.c | 279 | 286 | 37 | 460 | struppercmp | extern int struppercmp (const char *s1, const char *s2) | 278 | 286 |  | routines
+110 | Revision_347/readtags.c | 144 | 148 | 38 | 210 | growString | static int growString (vstring *s) | 125 | 150 |  | readtags
+111 | Revision_347/vstring.c | 35 | 40 | 38 | 504 | vStringResize | static void vStringResize (vString *const string, const size_t newSize) | 34 | 40 |  | vstring
+87 | Revision_347/readtags.c | 503 | 507 | 39 | 398 | readNext | static tagResult readNext (tagFile *const file, tagEntry *const entry) | 495 | 509 |  | readtags
+88 | Revision_347/readtags.c | 680 | 684 | 39 | NULL | NULL | NULL | NULL | NULL |  | 
+150 | Revision_347/readtags.c | 542 | 548 | 40 | 519 | nameComparison | static int nameComparison (tagFile *const file) | 538 | 558 |  | readtags
+151 | Revision_347/readtags.c | 550 | 556 | 40 | 519 | nameComparison | static int nameComparison (tagFile *const file) | 538 | 558 |  | readtags
+134 | Revision_347/readtags.c | 585 | 589 | 41 | 164 | findFirstMatchBefore | static tagResult findFirstMatchBefore (tagFile *const file) | 578 | 591 |  | readtags
+135 | Revision_347/readtags.c | 640 | 646 | 41 | 177 | findSequential | static tagResult findSequential (tagFile *const file) | 636 | 648 |  | readtags
+136 | Revision_347/readtags.c | 717 | 725 | 42 | 169 | tagsSetSortType | extern tagResult tagsSetSortType (tagFile *const file, const sortType type) | 716 | 725 |  | readtags
+139 | Revision_347/readtags.c | 772 | 780 | 42 | 478 | tagsClose | extern tagResult tagsClose (tagFile *const file) | 771 | 780 |  | readtags
+139 | Revision_347/readtags.c | 728 | 736 | 42 | 169 | tagsFirst | extern tagResult tagsFirst (tagFile *const file, tagEntry *const entry) | 727 | 736 |  | readtags
+152 | Revision_347/readtags.c | 739 | 744 | 43 | 482 | tagsNext | extern tagResult tagsNext (tagFile *const file, tagEntry *const entry) | 738 | 744 |  | readtags
+153 | Revision_347/readtags.c | 764 | 769 | 43 | 481 | tagsFindNext | extern tagResult tagsFindNext (tagFile *const file, tagEntry *const entry) | 763 | 769 |  | readtags
+187 | Revision_347/readtags.c | 756 | 761 | 43 | NULL | NULL | NULL | NULL | NULL |  | 
+157 | Revision_347/routines.c | 228 | 235 | 44 | 133 | eMalloc | extern void *eMalloc (const size_t size) | 227 | 235 |  | routines
+158 | Revision_347/routines.c | 238 | 245 | 44 | 131 | eCalloc | extern void *eCalloc (const size_t count, const size_t size) | 237 | 245 |  | routines
+159 | Revision_347/routines.c | 313 | 317 | 45 | 135 | eStrdup | extern char* eStrdup (const char* str) | 312 | 317 |  | routines
+94 | Revision_347/vstring.c | 125 | 129 | 45 | 502 | vStringNewInit | extern vString *vStringNewInit (const char *const s) | 124 | 129 |  | vstring
+95 | Revision_347/vstring.c | 118 | 122 | 45 | 501 | vStringNewCopy | extern vString *vStringNewCopy (vString *const string) | 117 | 122 |  | vstring
+160 | Revision_347/routines.c | 320 | 326 | 46 | 488 | toLowerString | extern void toLowerString (char* str) | 319 | 326 |  | routines
+161 | Revision_347/routines.c | 329 | 335 | 46 | 489 | toUpperString | extern void toUpperString (char* str) | 328 | 335 |  | routines
+162 | Revision_347/routines.c | 340 | 347 | 47 | 294 | newLowerString | extern char* newLowerString (const char* str) | 339 | 347 |  | routines
+163 | Revision_347/routines.c | 352 | 359 | 47 | 297 | newUpperString | extern char* newUpperString (const char* str) | 351 | 359 |  | routines
+140 | Revision_347/scheme.c | 70 | 78 | 48 | 176 | findSchemeTags | static void findSchemeTags (void) | 57 | 96 |  | scheme
+141 | Revision_347/scheme.c | 85 | 93 | 48 | 176 | findSchemeTags | static void findSchemeTags (void) | 57 | 96 |  | scheme
+182 | Revision_347/sort.c | 123 | 128 | 49 | 94 | compareTagsFolded | static int compareTagsFolded(const void *const one, const void *const two) | 122 | 128 |  | sort
+183 | Revision_347/sort.c | 131 | 136 | 49 | 94 | compareTags | static int compareTags (const void *const one, const void *const two) | 130 | 136 |  | sort
+206 | Revision_347/sql.c | 331 | 335 | 50 | 408 | readToken | static void readToken (tokenInfo *const token) | 296 | 399 |  | sql
+62 | Revision_347/strlist.c | 134 | 138 | 50 | 466 | stringListDelete | extern void stringListDelete (stringList *const current) | 129 | 143 |  | strlist
+209 | Revision_347/sql.c | 412 | 418 | 51 | 567 | skipArgumentList | static void skipArgumentList (tokenInfo *const token) | 411 | 418 |  | sql
+200 | Revision_347/sql.c | 620 | 626 | 51 | 566 | parseTable | static void parseTable (tokenInfo *const token) | 614 | 629 |  | sql
+201 | Revision_347/sql.c | 438 | 443 | 52 | 565 | parseSubProgram | static void parseSubProgram (tokenInfo *const token) | 420 | 447 |  | sql
+208 | Revision_347/sql.c | 604 | 609 | 52 | 561 | parsePackage | static void parsePackage (tokenInfo *const token) | 596 | 612 |  | sql
+142 | Revision_347/strlist.c | 32 | 38 | 53 | 467 | stringListNew | extern stringList *stringListNew (void) | 31 | 38 |  | strlist
+143 | Revision_347/vstring.c | 77 | 87 | 53 | 500 | vStringNew | extern vString *vStringNew (void) | 76 | 87 |  | vstring
+144 | Revision_347/strlist.c | 147 | 154 | 54 | NULL | NULL | NULL | NULL | NULL |  | 
+145 | Revision_347/strlist.c | 158 | 165 | 54 | NULL | NULL | NULL | NULL | NULL |  | 
+146 | Revision_347/strlist.c | 169 | 176 | 54 | NULL | NULL | NULL | NULL | NULL |  | 
+259 | Revision_347/verilog.c | 141 | 145 | 55 | 593 | vGetc | static int vGetc (void) | 125 | 173 |  | verilog
+260 | Revision_347/verilog.c | 244 | 248 | 55 | NULL | NULL | NULL | NULL | NULL |  | 
+192 | Revision_347/vim.c | 56 | 60 | 56 | 434 | skipPrefix | static const unsigned char* skipPrefix (const unsigned char* name, int *scope) | 50 | 68 |  | vim
+193 | Revision_347/vim.c | 62 | 66 | 56 | 434 | skipPrefix | static const unsigned char* skipPrefix (const unsigned char* name, int *scope) | 50 | 68 |  | vim
