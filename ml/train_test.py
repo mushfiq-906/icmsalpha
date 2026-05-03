@@ -75,6 +75,30 @@ NON_FEATURES = {
     "will_diverge", "will_diverge_decay",  # both labels always excluded from features
 }
 
+RUN_PREFIX = "run"  # default; overridden from __main__ or by caller
+
+def extract_run_prefix(csv_path: str) -> str:
+    """
+    Derive a '{System}_{CloneType}' prefix from the CSV path.
+
+    Examples:
+        'WorkFolder/Jmol/Datasets/.../Type3_Block_forecast_dataset.csv'  -> 'Jmol_Type3'
+        'WorkFolder/Ctags/Datasets/.../Type1_Block_evolution_dataset.csv' -> 'Ctags_Type1'
+    """
+    p = Path(csv_path)
+    # System name: folder between 'WorkFolder' and 'Datasets'
+    parts = p.parts
+    system = "Unknown"
+    for i, part in enumerate(parts):
+        if part.lower() == "workfolder" and i + 1 < len(parts):
+            system = parts[i + 1]
+            break
+
+    # Clone type: 'Type1', 'Type2', 'Type3' from the filename
+    stem = p.stem  # e.g. 'Type3_Block_forecast_dataset'
+    clone_type = stem.split("_")[0] if "_" in stem else stem  # 'Type3'
+    return f"{system}_{clone_type}"
+
 # ── DATA ─────────────────────────────────────────────────────────────────────
 
 def load(csv_path: str) -> pd.DataFrame:
@@ -233,7 +257,7 @@ def plot_shap(model, X_test: pd.DataFrame):
     plt.figure(figsize=(10, 8))
     shap.summary_plot(sv, X_test, show=False, max_display=20)
     plt.tight_layout()
-    out = RESULTS_DIR / "shap_summary.png"
+    out = RESULTS_DIR / f"{RUN_PREFIX}_shap_summary.png"
     plt.savefig(out, dpi=150); plt.close()
     print(f"  -> {out}")
 
@@ -244,7 +268,7 @@ def plot_importance(model, cols: list):
     ax.set_title("LightGBM - Feature Importance (top 20)")
     ax.set_xlabel("Importance")
     plt.tight_layout()
-    out = RESULTS_DIR / "feature_importance.png"
+    out = RESULTS_DIR / f"{RUN_PREFIX}_feature_importance.png"
     plt.savefig(out, dpi=150); plt.close()
     print(f"  -> {out}")
 
@@ -262,7 +286,7 @@ def plot_label_drift(df: pd.DataFrame, cut_idx: int):
     ax.set_xlabel("Revision bucket")
     ax.legend()
     plt.tight_layout()
-    out = RESULTS_DIR / "label_drift.png"
+    out = RESULTS_DIR / f"{RUN_PREFIX}_label_drift.png"
     plt.savefig(out, dpi=150); plt.close()
     print(f"  -> {out}")
 
@@ -323,7 +347,7 @@ def main(csv_path: str):
                              .sort_values("MCC", ascending=False)
     )
     print_results(results_df)
-    results_df.to_csv(RESULTS_DIR / "model_comparison.csv")
+    results_df.to_csv(RESULTS_DIR / f"{RUN_PREFIX}_model_comparison.csv")
 
     # Walk-forward cross-validation on LightGBM
     print("\nWalk-forward CV (LightGBM, 5 folds) ...")
@@ -338,8 +362,8 @@ def main(csv_path: str):
     print(f"  AUC  : {auc_mean:.4f} +/- {auc_std:.4f}")
 
     # Save model
-    joblib.dump(trained["LightGBM"], RESULTS_DIR / "trained_lgbm.pkl")
-    print(f"\nSaved model -> {RESULTS_DIR / 'trained_lgbm.pkl'}")
+    joblib.dump(trained["LightGBM"], RESULTS_DIR / f"{RUN_PREFIX}_trained_lgbm.pkl")
+    print(f"\nSaved model -> {RESULTS_DIR / f'{RUN_PREFIX}_trained_lgbm.pkl'}")
 
     # Plots
     plot_shap(trained["LightGBM"], X_test)
@@ -354,6 +378,7 @@ if __name__ == "__main__":
                         help="Target column. Use 'will_diverge_decay' for Option C.")
     args = parser.parse_args()
     TARGET = args.target
+    RUN_PREFIX = extract_run_prefix(args.csv)
     # Re-derive NON_FEATURES with the chosen target
     NON_FEATURES = {
         TARGET, "Revision",

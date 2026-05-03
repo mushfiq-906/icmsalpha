@@ -63,8 +63,8 @@ from sklearn.metrics import (
 
 # Reuse helpers from the static-eval script
 from train_test import (
-    DEFAULT_CSV, RESULTS_DIR, TARGET, RANDOM_SEED, NON_FEATURES,
-    load, get_feature_cols, best_threshold,
+    DEFAULT_CSV, RESULTS_DIR, TARGET, RANDOM_SEED, NON_FEATURES, RUN_PREFIX,
+    load, get_feature_cols, best_threshold, extract_run_prefix,
 )
 
 # ── CONFIG ───────────────────────────────────────────────────────────────────
@@ -300,15 +300,15 @@ def main(csv_path: str):
                     .sort_values("MCC", ascending=False))
     pred_df = pd.DataFrame(pred_rows)
 
-    metrics_df.to_csv(RESULTS_DIR / "walk_forward_metrics.csv")
-    pred_df.to_csv(RESULTS_DIR / "walk_forward_predictions.csv", index=False)
+    metrics_df.to_csv(RESULTS_DIR / f"walk_forward_metrics_{RUN_PREFIX}.csv")
+    pred_df.to_csv(RESULTS_DIR / f"walk_forward_predictions_{RUN_PREFIX}.csv", index=False)
 
     print_results(metrics_df)
 
-    plot_rolling_mcc(plot_data, RESULTS_DIR / "mcc_over_time.png")
-    print(f"\n  -> {RESULTS_DIR / 'walk_forward_metrics.csv'}")
-    print(f"  -> {RESULTS_DIR / 'walk_forward_predictions.csv'}")
-    print(f"  -> {RESULTS_DIR / 'mcc_over_time.png'}")
+    plot_rolling_mcc(plot_data, RESULTS_DIR / f"mcc_over_time_{RUN_PREFIX}.png")
+    print(f"\n  -> {RESULTS_DIR / f'walk_forward_metrics_{RUN_PREFIX}.csv'}")
+    print(f"  -> {RESULTS_DIR / f'walk_forward_predictions_{RUN_PREFIX}.csv'}")
+    print(f"  -> {RESULTS_DIR / f'mcc_over_time_{RUN_PREFIX}.png'}")
 
 
 if __name__ == "__main__":
@@ -319,6 +319,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     import train_test
     train_test.TARGET = args.target
+    train_test.RUN_PREFIX = extract_run_prefix(args.csv)
+    RUN_PREFIX = train_test.RUN_PREFIX
     train_test.NON_FEATURES = {
         args.target, "Revision",
         "gcid1", "gcid2", "classid",
