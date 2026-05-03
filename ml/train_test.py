@@ -57,7 +57,7 @@ from sklearn.metrics import (
 # ── CONFIG ───────────────────────────────────────────────────────────────────
 
 DEFAULT_CSV = (
-    r"WorkFolder\Jmol\Datasets\CloneGenealogy"
+    r"WorkFolder\Ctags\Datasets\CloneGenealogy"
     r"\Type3_Block_forecast_dataset.csv"
 )
 
@@ -72,6 +72,7 @@ NON_FEATURES = {
     TARGET, "Revision",
     "gcid1", "gcid2", "classid",
     "wies", "will_independently_evolve",
+    "will_diverge", "will_diverge_decay",  # both labels always excluded from features
 }
 
 # ── DATA ─────────────────────────────────────────────────────────────────────
@@ -349,5 +350,15 @@ def main(csv_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv", default=DEFAULT_CSV)
+    parser.add_argument("--target", default="will_diverge",
+                        help="Target column. Use 'will_diverge_decay' for Option C.")
     args = parser.parse_args()
+    TARGET = args.target
+    # Re-derive NON_FEATURES with the chosen target
+    NON_FEATURES = {
+        TARGET, "Revision",
+        "gcid1", "gcid2", "classid",
+        "wies", "will_independently_evolve",
+        "will_diverge", "will_diverge_decay",
+    }
     main(args.csv)

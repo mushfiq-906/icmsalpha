@@ -63,7 +63,7 @@ from sklearn.metrics import (
 
 # Reuse helpers from the static-eval script
 from train_test import (
-    DEFAULT_CSV, RESULTS_DIR, TARGET, RANDOM_SEED,
+    DEFAULT_CSV, RESULTS_DIR, TARGET, RANDOM_SEED, NON_FEATURES,
     load, get_feature_cols, best_threshold,
 )
 
@@ -314,5 +314,15 @@ def main(csv_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv", default=DEFAULT_CSV)
+    parser.add_argument("--target", default="will_diverge",
+                        help="Target column. Use 'will_diverge_decay' for Option C.")
     args = parser.parse_args()
+    import train_test
+    train_test.TARGET = args.target
+    train_test.NON_FEATURES = {
+        args.target, "Revision",
+        "gcid1", "gcid2", "classid",
+        "wies", "will_independently_evolve",
+        "will_diverge", "will_diverge_decay",
+    }
     main(args.csv)

@@ -42,7 +42,7 @@ from pathlib import Path
 # ── CONFIG ───────────────────────────────────────────────────────────────────
 
 DEFAULT_CSV = (
-    r"WorkFolder\Jmol\Datasets\CloneGenealogy"
+    r"WorkFolder\Ctags\Datasets\CloneGenealogy"
     r"\Type3_Block_evolution_dataset.csv"
 )
 
@@ -54,6 +54,11 @@ NON_FEATURE_COLS = {
     "gcid1", "gcid2", "classid",  # identifiers
     "wies",                        # = 1 − WCS, redundant
     "will_independently_evolve",   # old leaky label — replaced here
+    "will_diverge_decay",          # Option C label — not a feature for Option B
+    "weighted_coupling_strength",  # subsumed by ir_decay_* and cs_decay_*
+                                   # (WCS uses λ=0.03 ≈ h=23, nearly identical
+                                   # to ir_decay_h20; keeping it causes all
+                                   # decay variants to be pruned as duplicates)
 }
 
 
@@ -96,7 +101,8 @@ def shift_features_to_previous(df: pd.DataFrame) -> pd.DataFrame:
     First event per pair has no previous state -> dropped.
     """
     feat_cols = [c for c in df.columns if c not in NON_FEATURE_COLS
-                 and c not in {"will_diverge", "will_independently_evolve"}]
+                 and c not in {"will_diverge", "will_independently_evolve",
+                               "will_diverge_decay"}]
 
     df[feat_cols] = df.groupby(PAIR_COLS)[feat_cols].shift(1)
 
@@ -173,6 +179,26 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
         df["delta_major_author"] = (
             df["major_author_prop1"] - df["major_author_prop2"]
         ).abs()
+    # ── Decay-weighted derived features ────────────────────────────────────
+
+    # IR decay spread: difference between shortest and longest half-life
+    # Large spread → IR estimate is sensitive to recency → unstable pair
+    if has("ir_decay_h10", "ir_decay_h75"):
+        df["ir_decay_spread"] = df["ir_decay_h10"] - df["ir_decay_h75"]
+
+    # CS-IR divergence: when CS says coupled but IR says independent (or vice versa)
+    if has("cs_decay_h20", "ir_decay_h20"):
+        df["cs_ir_divergence_h20"] = df["cs_decay_h20"] - (1.0 - df["ir_decay_h20"])
+
+    # Composite decay signal: average of IR_decay across half-lives
+    ir_cols = [c for c in df.columns if c.startswith("ir_decay_h")]
+    if len(ir_cols) > 0:
+        df["ir_decay_mean"] = df[ir_cols].mean(axis=1)
+
+    # Composite SPCP consistency: std of SPCP_decay across half-lives
+    spcp_cols = [c for c in df.columns if c.startswith("spcp_decay_h")]
+    if len(spcp_cols) > 1:
+        df["spcp_decay_std"] = df[spcp_cols].std(axis=1)
 
     return df
 
@@ -186,7 +212,8 @@ def encode(df: pd.DataFrame) -> pd.DataFrame:
 
 # ── PRUNE: drop constants and near-duplicate columns ─────────────────────────
 
-PROTECTED = {"Revision", "gcid1", "gcid2", "classid", "will_diverge"}
+PROTECTED = {"Revision", "gcid1", "gcid2", "classid", "will_diverge",
+             "will_diverge_decay"}
 
 # Always keep these even if constant in the current CSV.  They vary across
 # clone types (e.g. similarity is constant only in Type-1/Type-2 because

@@ -31,6 +31,20 @@ public class CloneGenealogyAnalysis {
     private static final double DECAY_LAMBDA = 0.03;
     private static final int    WCS_RECENT_WINDOW = 10; // revision window for short-term coupling
 
+    /**
+     * Candidate half-lives (in revisions) for multi-λ decay feature export.
+     * λ = ln(2) / h.  The model/Optuna selects the best via feature importance.
+     * h=20 → events 60 revisions old carry ~12.5% weight (3 half-lives).
+     */
+    private static final int[] HALF_LIVES = {10, 20, 30, 50, 75};
+
+    /** SPCP similarity threshold — loaded from config, same as SPCPAnalysis */
+    private double spcpSimThreshold = 0.70; // default, overridden in constructor if config exists
+
+    private static double lambdaFromHalfLife(int h) {
+        return Math.log(2.0) / h;
+    }
+
     // Path to commit logs (searches common relative locations)
     private final List<String> commitSearchPaths = Arrays.asList(
             "./commit_logs.txt",
@@ -53,6 +67,14 @@ public class CloneGenealogyAnalysis {
             this.cChoice = "Type2";
         } else if (choice == 3) {
             this.cChoice = "Type3";
+        }
+
+        // Load SPCP similarity threshold from config (same value SPCPAnalysis uses)
+        try {
+            LoadParam lp = new LoadParam();
+            this.spcpSimThreshold = lp.getSpcpSimilarity();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not load SPCP config, using default threshold " + spcpSimThreshold);
         }
     }
 
@@ -828,6 +850,12 @@ public class CloneGenealogyAnalysis {
         // --- WIES + TARGET LABEL ---
         double wies;                      // Weighted Independent Evolution Score = 1 - WCS
         int will_independently_evolve;    // 1 if wies > 0.5, else 0
+        // --- DECAY-WEIGHTED METRICS (5 half-lives × 3 metrics = 15 features) ---
+        double[] irDecay  = new double[5]; // ir_decay at h={10,20,30,50,75}
+        double[] csDecay  = new double[5]; // cs_decay at h={10,20,30,50,75}
+        double[] spcpDecay = new double[5]; // spcp_decay at h={10,20,30,50,75}
+        // --- COMPOSITE DECAY-WEIGHTED LABEL (Option C) ---
+        int willDivergeDecay;             // 1 if composite hierarchy says independent (using h=20)
     }
 
     /**
@@ -874,6 +902,10 @@ public class CloneGenealogyAnalysis {
         // Track which clones exist at each revision and their change status
         Map<Integer, Map<Integer, String>> revisionCloneStatus = new HashMap<>(); // rev -> (gcid -> changeType)
 
+        // Store per-revision clone instances for dynamic SPCP fragment fetching
+        // Structure: gcid -> (revision -> Clones instance with filePath, startLine, endLine)
+        Map<Integer, Map<Integer, Clones>> cloneInstancesByRev = new HashMap<>();
+
         System.out.println("Loading clones from all revisions...");
 
         // Step 1: Load all clones from all revisions to build complete picture
@@ -910,6 +942,9 @@ public class CloneGenealogyAnalysis {
                 } else if ("U".equalsIgnoreCase(c.cloneType)) {
                     h.unchangedRevs.add(rev);
                 }
+
+                // Store clone instance for this revision (for SPCP fragment fetching)
+                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>()).put(rev, c);
             }
             revisionCloneStatus.put(rev, revStatus);
         }
@@ -956,6 +991,14 @@ public class CloneGenealogyAnalysis {
                         continue;
                     }
 
+                    // Pre-compute SPCP-verified revisions for this pair (once, not per event)
+                    // This set grows as we iterate revisions — but we compute it up to pairEndRev
+                    // so it covers the entire pair lifetime. Per-event SPCP_decay uses only
+                    // the subset of spcpRevisions up to the current revision.
+                    int pairEndRev = Math.min(h1.endRev, h2.endRev);
+                    Set<Integer> spcpRevisions = computeSPCPRevisions(
+                            gcid1, gcid2, h1, h2, pairEndRev, cloneInstancesByRev);
+
                     // Track cumulative counts
                     int coChangeCount = 0;
                     int gcid1IndependentCount = 0;
@@ -963,7 +1006,6 @@ public class CloneGenealogyAnalysis {
 
                     // Analyze each revision where at least one clone exists
                     int pairStartRev = Math.max(h1.addedInRev, h2.addedInRev);
-                    int pairEndRev = Math.min(h1.endRev, h2.endRev);
 
                     for (int rev = pairStartRev; rev <= pairEndRev; rev++) {
                         Map<Integer, String> revStatus = revisionCloneStatus.get(rev);
@@ -1073,6 +1115,36 @@ public class CloneGenealogyAnalysis {
                                 rec.wies = 1.0 - rec.weightedCouplingStrength;
                                 rec.will_independently_evolve = rec.wies > 0.5 ? 1 : 0;
 
+                                // --- DECAY-WEIGHTED METRICS at 5 candidate half-lives ---
+                                // Co-change revisions for this pair up to current revision
+                                Set<Integer> coChangeRevsUpToNow = new TreeSet<>();
+                                for (int r : h1.changeRevs) {
+                                    if (r <= rev && h2.changeRevs.contains(r)) {
+                                        coChangeRevsUpToNow.add(r);
+                                    }
+                                }
+                                // SPCP revisions filtered to only those up to current revision
+                                Set<Integer> spcpRevsUpToNow = new TreeSet<>();
+                                for (int r : spcpRevisions) {
+                                    if (r <= rev) spcpRevsUpToNow.add(r);
+                                }
+
+                                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                    double lambda = lambdaFromHalfLife(HALF_LIVES[hi]);
+                                    rec.irDecay[hi] = computeDecayWeightedIR(h1, h2, pairStartRev, rev, lambda);
+                                    rec.csDecay[hi] = computeDecayWeightedCS(h1, h2, pairStartRev, rev, lambda);
+                                    rec.spcpDecay[hi] = computeDecayWeightedSPCP(
+                                            spcpRevsUpToNow, coChangeRevsUpToNow, rev, lambda);
+                                }
+
+                                // --- Option C composite label using h=20 (index 1) ---
+                                // DEPENDENT if CS_decay >= 0.5 AND SPCP_decay >= 0.5 AND IR_decay < 0.5
+                                // INDEPENDENT otherwise
+                                boolean dependent = rec.csDecay[1] >= 0.5
+                                        && rec.spcpDecay[1] >= 0.5
+                                        && rec.irDecay[1] < 0.5;
+                                rec.willDivergeDecay = dependent ? 0 : 1;
+
                                 records.add(rec);
                             }
                         }
@@ -1107,14 +1179,19 @@ public class CloneGenealogyAnalysis {
                     "distinct_authors1,distinct_authors2," +
                     "major_author_prop1,major_author_prop2," +
                     "minor_author_count1,minor_author_count2," +
-                    "wies,will_independently_evolve\n");
+                    "wies,will_independently_evolve," +
+                    "ir_decay_h10,ir_decay_h20,ir_decay_h30,ir_decay_h50,ir_decay_h75," +
+                    "cs_decay_h10,cs_decay_h20,cs_decay_h30,cs_decay_h50,cs_decay_h75," +
+                    "spcp_decay_h10,spcp_decay_h20,spcp_decay_h30,spcp_decay_h50,spcp_decay_h75," +
+                    "will_diverge_decay\n");
 
             // Write records
             for (EvolutionRecord rec : records) {
-                bw.write(String.format(
+                StringBuilder sb = new StringBuilder();
+                sb.append(String.format(
                         "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%.4f,%d,%d," +
                         "%.4f,%.4f,%d," +
-                        "%d,%d,%d,%d,%d,%d,%d,%d,%.4f,%.4f,%d,%d,%.4f,%d\n",
+                        "%d,%d,%d,%d,%d,%d,%d,%d,%.4f,%.4f,%d,%d,%.4f,%d",
                         rec.revision,
                         rec.gcid1,
                         rec.gcid2,
@@ -1156,6 +1233,21 @@ public class CloneGenealogyAnalysis {
                         // WIES + target label
                         rec.wies,
                         rec.will_independently_evolve));
+
+                // Append decay-weighted metrics (15 features + 1 label)
+                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                    sb.append(String.format(",%.4f", rec.irDecay[hi]));
+                }
+                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                    sb.append(String.format(",%.4f", rec.csDecay[hi]));
+                }
+                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                    sb.append(String.format(",%.4f", rec.spcpDecay[hi]));
+                }
+                sb.append(String.format(",%d", rec.willDivergeDecay));
+                sb.append("\n");
+
+                bw.write(sb.toString());
             }
         }
 
@@ -1472,6 +1564,245 @@ public class CloneGenealogyAnalysis {
         }
         return count;
     }
+
+    // ============== DECAY-WEIGHTED METRIC METHODS ==============
+
+    /**
+     * Decay-weighted Independence Ratio (IR_decay).
+     *
+     * IR_decay = Σ w(indep_changes) / (Σ w(co_changes) + Σ w(indep_changes) + ε)
+     *
+     * where w(event at revision r) = e^(-λ * (maxRev - r))
+     *
+     * Higher IR_decay → pair is trending toward independent evolution.
+     * The advisor's example: co-changes at 15,30,45 and independent at 60,75,90
+     * with λ=0.03, r_current=100 gives IR_decay ≈ 0.79 (vs unweighted 0.50).
+     */
+    private double computeDecayWeightedIR(CloneHistory h1, CloneHistory h2,
+            int minRev, int maxRev, double lambda) {
+        double coWeight = 0.0;
+        double indepWeight = 0.0;
+
+        // Collect all revisions where either clone changed
+        Set<Integer> allChangeRevs = new HashSet<>();
+        allChangeRevs.addAll(h1.changeRevs);
+        allChangeRevs.addAll(h2.changeRevs);
+
+        for (int rev : allChangeRevs) {
+            if (rev < minRev || rev > maxRev) continue;
+
+            double w = Math.exp(-lambda * (maxRev - rev));
+            boolean c1Changed = h1.changeRevs.contains(rev);
+            boolean c2Changed = h2.changeRevs.contains(rev);
+
+            if (c1Changed && c2Changed) {
+                coWeight += w;
+            } else {
+                // One changed, the other didn't → independent change
+                indepWeight += w;
+            }
+        }
+
+        double denom = coWeight + indepWeight + 1e-9;
+        return indepWeight / denom;
+    }
+
+    /**
+     * Decay-weighted Coupling Strength (CS_decay) — advisor's max-denominator formulation.
+     *
+     * CS_decay = Σ w(co_changes) / max(Σ w(gc1_all_changes), Σ w(gc2_all_changes)) + ε
+     *
+     * This differs from the existing WCS (union denominator / Jaccard-style).
+     * CS_decay captures "what fraction of the more-active clone's changes are co-changes",
+     * making it sensitive to asymmetric pairs where one clone changes much more than the other.
+     */
+    private double computeDecayWeightedCS(CloneHistory h1, CloneHistory h2,
+            int minRev, int maxRev, double lambda) {
+        double coWeight = 0.0;
+        double gc1Weight = 0.0;
+        double gc2Weight = 0.0;
+
+        // Weighted sum of gc1's changes
+        for (int rev : h1.changeRevs) {
+            if (rev < minRev || rev > maxRev) continue;
+            double w = Math.exp(-lambda * (maxRev - rev));
+            gc1Weight += w;
+            if (h2.changeRevs.contains(rev)) {
+                coWeight += w;
+            }
+        }
+
+        // Weighted sum of gc2's changes (only for denominator — co-change already counted)
+        for (int rev : h2.changeRevs) {
+            if (rev < minRev || rev > maxRev) continue;
+            double w = Math.exp(-lambda * (maxRev - rev));
+            gc2Weight += w;
+        }
+
+        double maxWeight = Math.max(gc1Weight, gc2Weight);
+        return maxWeight < 1e-9 ? 0.0 : coWeight / (maxWeight + 1e-9);
+    }
+
+    /**
+     * Dynamically compute SPCP status for each co-change revision of a pair.
+     * For each co-change, fetches source fragments and checks if similarity
+     * is preserved after the change (using LCS-based token similarity).
+     *
+     * @param gcid1  global clone id of first clone
+     * @param gcid2  global clone id of second clone
+     * @param h1     CloneHistory of first clone
+     * @param h2     CloneHistory of second clone
+     * @param maxRev upper bound revision
+     * @param cloneInstancesByRev  gcid → (revision → Clones) mapping for fragment lookup
+     * @return set of revision numbers where the co-change was similarity-preserving
+     */
+    private Set<Integer> computeSPCPRevisions(int gcid1, int gcid2,
+            CloneHistory h1, CloneHistory h2, int maxRev,
+            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
+
+        Set<Integer> coChangeRevs = new TreeSet<>(h1.changeRevs);
+        coChangeRevs.retainAll(h2.changeRevs);
+
+        Set<Integer> spcpRevs = new TreeSet<>();
+
+        for (int rev : coChangeRevs) {
+            if (rev > maxRev) continue;
+
+            // Find next revision where BOTH clones exist (to compare after-state)
+            int nextRev = findNextRevWithBothClones(gcid1, gcid2, rev, cloneInstancesByRev);
+            if (nextRev == -1) continue;
+
+            // Fetch fragments
+            String before1 = getFragmentText(gcid1, rev, cloneInstancesByRev);
+            String before2 = getFragmentText(gcid2, rev, cloneInstancesByRev);
+            String after1  = getFragmentText(gcid1, nextRev, cloneInstancesByRev);
+            String after2  = getFragmentText(gcid2, nextRev, cloneInstancesByRev);
+
+            if (before1 == null || before2 == null || after1 == null || after2 == null) continue;
+
+            double simAfter = lcsSimilarity(after1, after2);
+            if (simAfter >= spcpSimThreshold) {
+                spcpRevs.add(rev);
+            }
+        }
+
+        return spcpRevs;
+    }
+
+    /**
+     * Decay-weighted SPCP fraction.
+     *
+     * SPCP_decay = Σ w(SPCP-verified co-change revisions) / (Σ w(all co-change revisions) + ε)
+     *
+     * Captures whether the pair is *currently* following similarity-preserving patterns,
+     * not whether it did so historically. A pair that was SPCP for 80 revisions but
+     * broke the pattern in the last 10 gets a low SPCP_decay.
+     */
+    private double computeDecayWeightedSPCP(Set<Integer> spcpRevs,
+            Set<Integer> allCoChangeRevs, int maxRev, double lambda) {
+        double spcpWeight = 0.0;
+        double totalWeight = 0.0;
+
+        for (int rev : allCoChangeRevs) {
+            if (rev > maxRev) continue;
+            double w = Math.exp(-lambda * (maxRev - rev));
+            totalWeight += w;
+            if (spcpRevs.contains(rev)) {
+                spcpWeight += w;
+            }
+        }
+
+        return totalWeight < 1e-9 ? 0.0 : spcpWeight / totalWeight;
+    }
+
+    // ============== FRAGMENT FETCHING FOR DYNAMIC SPCP ==============
+
+    /**
+     * Find next revision after currentRev where BOTH clones have instance data.
+     */
+    private int findNextRevWithBothClones(int gcid1, int gcid2, int currentRev,
+            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
+        Map<Integer, Clones> instances1 = cloneInstancesByRev.get(gcid1);
+        Map<Integer, Clones> instances2 = cloneInstancesByRev.get(gcid2);
+        if (instances1 == null || instances2 == null) return -1;
+
+        // Find sorted revisions after currentRev where both exist
+        TreeSet<Integer> revs1 = new TreeSet<>(instances1.keySet());
+        for (int nextRev : revs1.tailSet(currentRev + 1)) {
+            if (instances2.containsKey(nextRev)) {
+                return nextRev;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Get the source code text of a clone fragment at a specific revision.
+     * Uses the clone's filePath, startLine, endLine to read from the source files.
+     */
+    private String getFragmentText(int gcid, int revision,
+            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
+        Map<Integer, Clones> instances = cloneInstancesByRev.get(gcid);
+        if (instances == null) return null;
+        Clones c = instances.get(revision);
+        if (c == null) return null;
+
+        // Build the full path to the source file
+        // filePath already contains "Revision_N/..." prefix
+        Path filePath = Paths.get(cp.getCloneDir(), c.filePath);
+        if (!Files.exists(filePath)) return null;
+
+        try {
+            // Use ISO-8859-1 to handle non-UTF-8 characters in C source files
+            List<String> lines = Files.readAllLines(filePath, java.nio.charset.StandardCharsets.ISO_8859_1);
+
+            int start = Math.max(0, c.startLine - 1);
+            int end = Math.min(lines.size() - 1, c.endLine - 1);
+            if (start > end || start >= lines.size()) return null;
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = start; i <= end; i++) {
+                sb.append(lines.get(i)).append("\n");
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    // ============== LCS SIMILARITY (ported from SPCPAnalysis) ==============
+
+    private static List<String> tokenize(String s) {
+        if (s == null) return Collections.emptyList();
+        s = s.replaceAll("[^A-Za-z0-9_]", " ");
+        String[] toks = s.trim().split("\\s+");
+        List<String> out = new ArrayList<>();
+        for (String t : toks)
+            if (!t.isEmpty()) out.add(t);
+        return out;
+    }
+
+    private static int lcsLength(List<String> a, List<String> b) {
+        int n = a.size(), m = b.size();
+        if (n == 0 || m == 0) return 0;
+        int[] prev = new int[m + 1], cur = new int[m + 1];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++)
+                cur[j] = a.get(i - 1).equals(b.get(j - 1)) ? prev[j - 1] + 1 : Math.max(prev[j], cur[j - 1]);
+            int[] tmp = prev;
+            prev = cur;
+            cur = tmp;
+            java.util.Arrays.fill(cur, 0);
+        }
+        return prev[m];
+    }
+
+    private static double lcsSimilarity(String a, String b) {
+        List<String> ta = tokenize(a), tb = tokenize(b);
+        if (ta.isEmpty() || tb.isEmpty()) return 0.0;
+        return (double) lcsLength(ta, tb) / Math.max(ta.size(), tb.size());
+    }
+
 
     /**
      * Quote a string for CSV output (escape existing quotes)
