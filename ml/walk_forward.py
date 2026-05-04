@@ -70,7 +70,7 @@ from train_test import (
 # ── CONFIG ───────────────────────────────────────────────────────────────────
 
 MIN_TRAIN      = 100   # warmup: need this many events before first prediction
-REFIT_EVERY    = 10    # retrain cadence (lower = slower, more responsive)
+REFIT_EVERY    = 5    # retrain cadence (lower = slower, more responsive)
 CALIB_WINDOW   = 50    # threshold-tuning window (recent events before i)
 ROLLING_WINDOW = 50    # for the MCC-over-time plot
 
@@ -81,23 +81,23 @@ def model_factories(pos_weight: float) -> dict:
     """Factories so each fold gets a fresh, unfitted model."""
     return {
         "LightGBM": lambda: LGBMClassifier(
-            n_estimators=500, learning_rate=0.05, max_depth=6,
+            n_estimators=250, learning_rate=0.05, max_depth=6,
             num_leaves=31, scale_pos_weight=pos_weight,
             subsample=0.8, colsample_bytree=0.8, min_child_samples=10,
             random_state=RANDOM_SEED, n_jobs=-1, verbose=-1,
         ),
         "XGBoost": lambda: XGBClassifier(
-            n_estimators=500, learning_rate=0.05, max_depth=6,
+            n_estimators=250, learning_rate=0.05, max_depth=6,
             scale_pos_weight=pos_weight, random_state=RANDOM_SEED,
             n_jobs=-1, eval_metric="logloss", verbosity=0,
         ),
         "CatBoost": lambda: CatBoostClassifier(
-            iterations=500, learning_rate=0.05, depth=6,
+            iterations=250, learning_rate=0.05, depth=6,
             auto_class_weights="Balanced",
             random_seed=RANDOM_SEED, verbose=0,
         ),
         "RandomForest": lambda: RandomForestClassifier(
-            n_estimators=500, max_depth=12, class_weight="balanced",
+            n_estimators=250, max_depth=12, class_weight="balanced",
             random_state=RANDOM_SEED, n_jobs=-1,
         ),
     }
