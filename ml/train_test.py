@@ -28,11 +28,15 @@ Primary metrics : MCC, AUC-ROC, PR-AUC
 import argparse
 import os
 # Must be set BEFORE sklearn/joblib import so workers inherit it.
-os.environ.setdefault("PYTHONWARNINGS", "ignore")
+os.environ["PYTHONWARNINGS"] = "ignore"
 
 import warnings
 warnings.simplefilter("ignore")
 warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", module="sklearn")
+warnings.filterwarnings("ignore", module="joblib")
 
 import joblib
 from typing import Any
