@@ -1482,9 +1482,10 @@ public class CloneGenealogyAnalysis {
                             Set<Integer> spcpRevsUpToNow = new TreeSet<>();
                             for (int r : pairSPCPRevisions.getOrDefault(pairKey, Collections.emptySet()))
                                 if (r <= rev) spcpRevsUpToNow.add(r);
+                            final int revFinal = rev;
                             Set<Integer> coChangeRevsUpToNow = new TreeSet<>(h1.changeRevs);
                             coChangeRevsUpToNow.retainAll(h2.changeRevs);
-                            coChangeRevsUpToNow.removeIf(r -> r > rev);
+                            coChangeRevsUpToNow.removeIf(r -> r > revFinal);
 
                             StringBuilder pairRow = new StringBuilder();
                             pairRow.append(rev).append(",").append(gcid1).append(",").append(gcid2).append(",")
