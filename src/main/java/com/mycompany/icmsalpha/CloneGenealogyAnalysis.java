@@ -1256,6 +1256,222 @@ public class CloneGenealogyAnalysis {
         System.out.println("Total records: " + records.size());
     }
 
+    // ============== REVISION-WISE DATASET EXPORT ==============
+
+    /**
+     * Export revision-wise dataset capturing three layers at every revision R:
+     *
+     *   Layer 1 (fragment): gcid, filePath, changeType, nlines,
+     *                        cumulative changes/unchanged, stability, lifespan, author
+     *   Layer 2 (pair):     gcid1, gcid2, cumulative co/independent change counts,
+     *                        WCS, coupling_trend, last_co_change_age, last_solo_change_age
+     *   Layer 3 (fragment←pairs): mean/max/min WCS across all pairs of a gcid,
+     *                              count of strongly-coupled and decoupled pairs
+     *
+     * Output files (Layer 1+3 combined, Layer 2 separate):
+     *   _rev_fragment.csv
+     *   _rev_pair.csv
+     */
+    public void exportRevisionWiseDataset() throws IOException {
+        System.out.println("=== Starting Revision-Wise Dataset Export ===");
+        System.out.println("Clone Type: " + cChoice + ", Granularity: " + granularity);
+        System.out.println("Revision range: " + startRev + " to " + endRev);
+
+        String commitPath = findCommitLogPath();
+        Map<Integer, String> revAuthorMap = buildRevisionAuthorMap(commitPath, startRev, endRev);
+
+        Map<Integer, Clones>                      cloneInfoMap        = new HashMap<>();
+        Map<Integer, String>                      gcidToFilename      = new HashMap<>();
+        Map<Integer, String>                      gcidToFullPath      = new HashMap<>();
+        Map<Integer, CloneHistory>                historyMap          = new HashMap<>();
+        Map<Integer, Map<Integer, Clones>>        cloneInstancesByRev = new HashMap<>();
+        Map<Integer, Map<Integer, String>>        revisionCloneStatus = new HashMap<>();
+
+        for (int rev = startRev; rev <= endRev; rev++) {
+            List<Clones> clones = ap.getGlobalClones(rev, cChoice, granularity);
+            Map<Integer, String> revStatus = new HashMap<>();
+            for (Clones c : clones) {
+                int gcid = c.globalCloneId;
+                revStatus.put(gcid, c.cloneType);
+                cloneInfoMap.put(gcid, c);
+                gcidToFilename.putIfAbsent(gcid, extractFileName(c.filePath));
+                gcidToFullPath.putIfAbsent(gcid, c.filePath);
+                CloneHistory h = historyMap.get(gcid);
+                if (h == null) {
+                    h = new CloneHistory();
+                    h.globalCloneId = gcid; h.addedInRev = rev; h.startRev = rev;
+                    historyMap.put(gcid, h);
+                }
+                h.endRev = rev;
+                if ("M".equalsIgnoreCase(c.cloneType)) h.changeRevs.add(rev);
+                else if ("U".equalsIgnoreCase(c.cloneType)) h.unchangedRevs.add(rev);
+                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>()).put(rev, c);
+            }
+            revisionCloneStatus.put(rev, revStatus);
+        }
+
+        System.out.println("Total unique clones: " + cloneInfoMap.size());
+        computeProcessAndOwnershipMetrics(historyMap, revAuthorMap, gcidToFilename);
+
+        // group clones by class for pair generation
+        Map<Integer, List<Integer>> classToClonesMap = new HashMap<>();
+        for (Map.Entry<Integer, Clones> e : cloneInfoMap.entrySet())
+            classToClonesMap.computeIfAbsent(e.getValue().classId, k -> new ArrayList<>()).add(e.getKey());
+
+        String basePath = cp.getGenealogyPath(cChoice, granularity).replace(".csv", "");
+        String fragCsvPath = basePath + "_rev_fragment.csv";
+        String pairCsvPath = basePath + "_rev_pair.csv";
+
+        try (BufferedWriter fragBw = new BufferedWriter(new FileWriter(fragCsvPath));
+             BufferedWriter pairBw = new BufferedWriter(new FileWriter(pairCsvPath))) {
+
+            // Layer 1 + Layer 3 header
+            fragBw.write(
+                "revision,gcid,filePath,changeType,nlines," +
+                "totalChanges,totalUnchanged,stabilityIndex,changeProneness,lifespan,author," +
+                "activePairs,meanWCS,maxWCS,minWCS,stronglyCoupledPairs,decoupledPairs\n");
+
+            // Layer 2 header
+            pairBw.write(
+                "revision,gcid1,gcid2,classId,changeType1,changeType2," +
+                "coChangeCount,gcid1Independent,gcid2Independent," +
+                "weightedCouplingStrength,couplingTrend,lastCoChangeAge,lastSoloChangeAge," +
+                "similarity,sameFile,depth\n");
+
+            // Running cumulative counters — avoids rescanning history sets each revision
+            Map<Integer, Integer> changesSoFar   = new HashMap<>();
+            Map<Integer, Integer> unchangedSoFar = new HashMap<>();
+            // Per-pair cumulative [coChange, g1Indep, g2Indep]
+            Map<String, int[]> pairCumCounts = new HashMap<>();
+
+            for (int rev = startRev; rev <= endRev; rev++) {
+                Map<Integer, String> revStatus =
+                        revisionCloneStatus.getOrDefault(rev, Collections.emptyMap());
+
+                // Increment running fragment counters for this revision
+                for (Map.Entry<Integer, String> entry : revStatus.entrySet()) {
+                    int gcid = entry.getKey();
+                    String ct = entry.getValue();
+                    if ("M".equalsIgnoreCase(ct))      changesSoFar.merge(gcid, 1, Integer::sum);
+                    else if ("U".equalsIgnoreCase(ct)) unchangedSoFar.merge(gcid, 1, Integer::sum);
+                }
+
+                // Layer 3 accumulator: gcid -> WCS values from all its active pairs this rev
+                Map<Integer, List<Double>> gcidWcsAccum = new HashMap<>();
+
+                // ----- Layer 2: pair coupling rows -----
+                for (Map.Entry<Integer, List<Integer>> classEntry : classToClonesMap.entrySet()) {
+                    int classId      = classEntry.getKey();
+                    List<Integer> gc = classEntry.getValue();
+
+                    for (int i = 0; i < gc.size(); i++) {
+                        for (int j = i + 1; j < gc.size(); j++) {
+                            int gcid1 = gc.get(i), gcid2 = gc.get(j);
+
+                            // Only emit a row when both clones are alive this revision
+                            if (!revStatus.containsKey(gcid1) || !revStatus.containsKey(gcid2)) continue;
+
+                            CloneHistory h1 = historyMap.get(gcid1), h2 = historyMap.get(gcid2);
+                            if (h1 == null || h2 == null) continue;
+
+                            // Update cumulative pair counts
+                            String pairKey = gcid1 + "-" + gcid2;
+                            int[] cum = pairCumCounts.computeIfAbsent(pairKey, k -> new int[3]);
+                            String ct1 = revStatus.get(gcid1), ct2 = revStatus.get(gcid2);
+                            boolean ch1 = "M".equalsIgnoreCase(ct1), ch2 = "M".equalsIgnoreCase(ct2);
+                            if (ch1 && ch2)      cum[0]++;
+                            else if (ch1)        cum[1]++;
+                            else if (ch2)        cum[2]++;
+
+                            int pStart = Math.max(h1.addedInRev, h2.addedInRev);
+                            double wcs   = computeWeightedCouplingStrength(h1, h2, pStart, rev);
+                            double trend = computeCouplingTrend(h1, h2, pStart, rev);
+                            int lcca     = lastCoChangeAge(h1, h2, rev);
+                            int lsca     = lastSoloChangeAge(h1, h2, rev);
+
+                            Clones ci1 = cloneInfoMap.get(gcid1);
+                            int similarity = ci1 != null ? ci1.similarity : 0;
+                            int sameFile   = gcidToFilename.getOrDefault(gcid1, "")
+                                                .equals(gcidToFilename.getOrDefault(gcid2, "")) ? 1 : 0;
+                            int depth      = calculatePathDepth(
+                                                gcidToFullPath.getOrDefault(gcid1, ""),
+                                                gcidToFullPath.getOrDefault(gcid2, ""));
+
+                            pairBw.write(
+                                rev + "," + gcid1 + "," + gcid2 + "," + classId + "," +
+                                ct1 + "," + ct2 + "," +
+                                cum[0] + "," + cum[1] + "," + cum[2] + "," +
+                                String.format("%.4f", wcs) + "," +
+                                String.format("%.4f", trend) + "," +
+                                lcca + "," + lsca + "," +
+                                similarity + "," + sameFile + "," + depth + "\n");
+
+                            // Accumulate for Layer 3
+                            gcidWcsAccum.computeIfAbsent(gcid1, k -> new ArrayList<>()).add(wcs);
+                            gcidWcsAccum.computeIfAbsent(gcid2, k -> new ArrayList<>()).add(wcs);
+                        }
+                    }
+                }
+
+                // ----- Layer 1 + Layer 3: fragment rows -----
+                List<Integer> activeGcids = new ArrayList<>(revStatus.keySet());
+                Collections.sort(activeGcids);
+
+                for (int gcid : activeGcids) {
+                    CloneHistory h = historyMap.get(gcid);
+                    if (h == null) continue;
+                    Clones c = cloneInfoMap.get(gcid);
+
+                    String ct       = revStatus.get(gcid);
+                    int tc          = changesSoFar.getOrDefault(gcid, 0);
+                    int tu          = unchangedSoFar.getOrDefault(gcid, 0);
+                    int lifespan    = rev - h.addedInRev;
+                    int totalRevs   = lifespan + 1;
+                    double stabIdx  = totalRevs > 0 ? (double) tu / totalRevs : 0.0;
+                    double changePr = totalRevs > 0 ? (double) tc / totalRevs : 0.0;
+                    String author   = revAuthorMap.getOrDefault(rev, "UNKNOWN");
+                    int nlines      = c != null ? c.nLines : 0;
+
+                    // Layer 3: aggregate WCS across all active pairs for this gcid
+                    List<Double> wcsList = gcidWcsAccum.getOrDefault(gcid, Collections.emptyList());
+                    int numPairs = wcsList.size();
+                    double wcsSum = 0, wcsMax = 0, wcsMin = numPairs > 0 ? 1.0 : 0.0;
+                    int stronglyCoupled = 0, decoupled = 0;
+                    for (double w : wcsList) {
+                        wcsSum += w;
+                        if (w > wcsMax) wcsMax = w;
+                        if (w < wcsMin) wcsMin = w;
+                        if (w >= 0.5) stronglyCoupled++;
+                        if (w < 0.2)  decoupled++;
+                    }
+                    double wcsMean = numPairs > 0 ? wcsSum / numPairs : 0.0;
+                    if (numPairs == 0) wcsMin = 0.0;
+
+                    fragBw.write(
+                        rev + "," + gcid + "," +
+                        quote(gcidToFilename.getOrDefault(gcid, "")) + "," +
+                        ct + "," + nlines + "," +
+                        tc + "," + tu + "," +
+                        String.format("%.4f", stabIdx) + "," +
+                        String.format("%.4f", changePr) + "," +
+                        lifespan + "," +
+                        quote(author) + "," +
+                        numPairs + "," +
+                        String.format("%.4f", wcsMean) + "," +
+                        String.format("%.4f", wcsMax) + "," +
+                        String.format("%.4f", wcsMin) + "," +
+                        stronglyCoupled + "," + decoupled + "\n");
+                }
+
+                System.out.println("Rev " + rev + ": " + revStatus.size() + " active clones written");
+            }
+        }
+
+        System.out.println("=== Revision-Wise Export Complete ===");
+        System.out.println("Fragment CSV: " + fragCsvPath);
+        System.out.println("Pair CSV: " + pairCsvPath);
+    }
+
     // ============== PROCESS & OWNERSHIP METRIC HELPERS ==============
 
     /**

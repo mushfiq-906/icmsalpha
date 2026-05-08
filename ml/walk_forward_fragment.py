@@ -19,6 +19,8 @@ import argparse
 import os
 import warnings
 warnings.filterwarnings("ignore")
+# Suppress sklearn config-propagation warnings emitted by joblib worker processes
+os.environ.setdefault("PYTHONWARNINGS", "ignore")
 
 import numpy as np
 import pandas as pd
@@ -173,9 +175,9 @@ def walk_forward(csv_path: str, output_dir: str = None):
     print(f"  Rows: {len(df):,}, Features: {len(feature_cols)}, "
           f"Revisions: {df['Revision'].nunique()}")
 
-    # Determine output directory
+    # Determine output directory — resolve relative to the script, not the CSV
     if output_dir is None:
-        output_dir = Path(csv_path).parent.parent.parent.parent / "ml" / "results"
+        output_dir = Path(__file__).resolve().parent / "results"
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -331,8 +333,8 @@ def walk_forward(csv_path: str, output_dir: str = None):
         print(f"    Balanced Acc = {gm['balanced_acc']:.4f}")
         print(f"    G-mean       = {gm['gmean']:.4f}")
         print(f"    F1           = {gm['f1']:.4f}")
-        print(f"    Sensitivity  = {gm['sensitivity']:.4f}")
-        print(f"    Specificity  = {gm['specificity']:.4f}")
+        print(f"    Sensitivity  = {gm['sensitivity']:.4f}  (positive=dependent,  label=0)")
+        print(f"    Specificity  = {gm['specificity']:.4f}  (negative=independent, label=1)")
         print(f"    TP={gm['TP']}  TN={gm['TN']}  FP={gm['FP']}  FN={gm['FN']}")
         print(f"    Predictions  = {gm['total_predictions']}")
 
@@ -387,25 +389,34 @@ def walk_forward(csv_path: str, output_dir: str = None):
     except Exception as e:
         print(f"  [WARN] Could not create plot: {e}")
 
-    # ── FEATURE IMPORTANCE ───────────────────────────────────────────────────
-    try:
-        # Use the last fitted model for feature importance
-        for model_name, model in models.items():
+    # ── FEATURE IMPORTANCE (all models) ─────────────────────────────────────
+    best_model_name = max(
+        (mn for mn in models if global_y_true[mn]),
+        key=lambda mn: matthews_corrcoef(
+            global_y_true[mn], global_y_pred[mn]) if global_y_true[mn] else -2,
+        default=None,
+    )
+    for model_name, model in models.items():
+        try:
             if hasattr(model, "feature_importances_"):
                 imp = pd.DataFrame({
-                    "feature": feature_cols,
+                    "feature":    feature_cols,
                     "importance": model.feature_importances_,
                 }).sort_values("importance", ascending=False)
                 imp_path = output_dir / f"frag_feature_importance_{tag}_{model_name}.csv"
                 imp.to_csv(imp_path, index=False)
-                print(f"  Feature imp     -> {imp_path} ({model_name})")
-                # Print top 10
-                print(f"\n  Top 10 features ({model_name}):")
-                for _, row in imp.head(10).iterrows():
-                    print(f"    {row['feature']:35s} {row['importance']:.4f}")
-                break
-    except Exception:
-        pass
+                print(f"  Feature imp     -> {imp_path}")
+        except Exception:
+            pass
+
+    if best_model_name and hasattr(models[best_model_name], "feature_importances_"):
+        best_imp = pd.DataFrame({
+            "feature":    feature_cols,
+            "importance": models[best_model_name].feature_importances_,
+        }).sort_values("importance", ascending=False)
+        print(f"\n  Top 10 features ({best_model_name}, best by global MCC):")
+        for _, row in best_imp.head(10).iterrows():
+            print(f"    {row['feature']:38s} {row['importance']:.4f}")
 
     print(f"\n{'='*70}")
     print("  DONE")
