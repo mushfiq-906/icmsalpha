@@ -55,6 +55,7 @@ public class CloneGenealogy extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -271,6 +272,13 @@ public class CloneGenealogy extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Export Revision-Wise Dataset");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -286,6 +294,8 @@ public class CloneGenealogy extends javax.swing.JFrame {
                                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 209,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(85, Short.MAX_VALUE)));
         layout.setVerticalGroup(
@@ -302,6 +312,9 @@ public class CloneGenealogy extends javax.swing.JFrame {
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 45,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 45,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -425,6 +438,24 @@ public class CloneGenealogy extends javax.swing.JFrame {
         }
     }
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            print("Exporting Revision-Wise Dataset for clone type " + type + "...");
+            int clonetype = Integer.parseInt(type);
+            CloneGenealogyAnalysis analysis = new CloneGenealogyAnalysis(clonetype, granularity, startRev, endRev);
+            analysis.exportRevisionWiseDataset();
+            print("Revision-Wise Dataset export complete!");
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Revision-Wise Dataset exported successfully!\nCheck WorkFolder for _rev_fragment.csv and _rev_pair.csv.",
+                    "Export Complete", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(CloneGenealogy.class.getName()).log(Level.SEVERE, null, ex);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Export failed: " + ex.getMessage(),
+                    "Export Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -479,6 +510,7 @@ public class CloneGenealogy extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

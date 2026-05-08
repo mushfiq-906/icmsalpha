@@ -1318,6 +1318,50 @@ public class CloneGenealogyAnalysis {
         for (Map.Entry<Integer, Clones> e : cloneInfoMap.entrySet())
             classToClonesMap.computeIfAbsent(e.getValue().classId, k -> new ArrayList<>()).add(e.getKey());
 
+        // ----- Filter: drop fragments and pairs with zero change activity -----
+        // For forecasting work, fragments that never see an 'M' event and pairs
+        // that have no joint change activity carry no signal — exclude them.
+        Set<Integer> interestingGcids = new HashSet<>();
+        for (Map.Entry<Integer, CloneHistory> e : historyMap.entrySet()) {
+            if (!e.getValue().changeRevs.isEmpty()) interestingGcids.add(e.getKey());
+        }
+
+        Set<String> interestingPairs = new HashSet<>();
+        for (List<Integer> clones : classToClonesMap.values()) {
+            for (int i = 0; i < clones.size(); i++) {
+                for (int j = i + 1; j < clones.size(); j++) {
+                    int g1 = clones.get(i), g2 = clones.get(j);
+                    CloneHistory h1 = historyMap.get(g1), h2 = historyMap.get(g2);
+                    if (h1 == null || h2 == null) continue;
+                    int jointStart = Math.max(h1.addedInRev, h2.addedInRev);
+                    int jointEnd   = Math.min(h1.endRev,     h2.endRev);
+                    if (jointStart > jointEnd) continue;
+                    boolean anyChange = false;
+                    for (Integer r : h1.changeRevs)
+                        if (r >= jointStart && r <= jointEnd) { anyChange = true; break; }
+                    if (!anyChange) for (Integer r : h2.changeRevs)
+                        if (r >= jointStart && r <= jointEnd) { anyChange = true; break; }
+                    if (anyChange) interestingPairs.add(g1 + "-" + g2);
+                }
+            }
+        }
+        System.out.println("Filter: " + interestingGcids.size() + "/" + historyMap.size()
+                + " gcids retained (had ≥1 'M' event)");
+        System.out.println("Filter: " + interestingPairs.size() + " pairs retained "
+                + "(had ≥1 'M' event during joint lifetime)");
+
+        // Load SPCP pairs and pre-compute per-pair SPCP revision sets (for decay features)
+        Set<String> spcpPairs = loadSPCPPairs();
+        Map<String, Set<Integer>> pairSPCPRevisions = new HashMap<>();
+        for (String pk : interestingPairs) {
+            String[] pts = pk.split("-");
+            int g1 = Integer.parseInt(pts[0]), g2 = Integer.parseInt(pts[1]);
+            CloneHistory ph1 = historyMap.get(g1), ph2 = historyMap.get(g2);
+            if (ph1 == null || ph2 == null) continue;
+            int pEnd = Math.min(ph1.endRev, ph2.endRev);
+            pairSPCPRevisions.put(pk, computeSPCPRevisions(g1, g2, ph1, ph2, pEnd, cloneInstancesByRev));
+        }
+
         String basePath = cp.getGenealogyPath(cChoice, granularity).replace(".csv", "");
         String fragCsvPath = basePath + "_rev_fragment.csv";
         String pairCsvPath = basePath + "_rev_pair.csv";
@@ -1336,7 +1380,14 @@ public class CloneGenealogyAnalysis {
                 "revision,gcid1,gcid2,classId,changeType1,changeType2," +
                 "coChangeCount,gcid1Independent,gcid2Independent," +
                 "weightedCouplingStrength,couplingTrend,lastCoChangeAge,lastSoloChangeAge," +
-                "similarity,sameFile,depth\n");
+                "similarity,sameFile,depth," +
+                "sameAuthor,classSize,isSpcp,wcsRecent,soloEventsAfterLastCoChange," +
+                "nlines1,nlines2,noc1,noc2,fileAge1,fileAge2,churn1,churn2," +
+                "distinctAuthors1,distinctAuthors2,majorAuthorProp1,majorAuthorProp2," +
+                "minorAuthorCount1,minorAuthorCount2," +
+                "ir_decay_h10,ir_decay_h20,ir_decay_h30,ir_decay_h50,ir_decay_h75," +
+                "cs_decay_h10,cs_decay_h20,cs_decay_h30,cs_decay_h50,cs_decay_h75," +
+                "spcp_decay_h10,spcp_decay_h20,spcp_decay_h30,spcp_decay_h50,spcp_decay_h75\n");
 
             // Running cumulative counters — avoids rescanning history sets each revision
             Map<Integer, Integer> changesSoFar   = new HashMap<>();
@@ -1374,8 +1425,11 @@ public class CloneGenealogyAnalysis {
                             CloneHistory h1 = historyMap.get(gcid1), h2 = historyMap.get(gcid2);
                             if (h1 == null || h2 == null) continue;
 
-                            // Update cumulative pair counts
+                            // Skip pairs with no joint change activity over their lifetime
                             String pairKey = gcid1 + "-" + gcid2;
+                            if (!interestingPairs.contains(pairKey)) continue;
+
+                            // Update cumulative pair counts
                             int[] cum = pairCumCounts.computeIfAbsent(pairKey, k -> new int[3]);
                             String ct1 = revStatus.get(gcid1), ct2 = revStatus.get(gcid2);
                             boolean ch1 = "M".equalsIgnoreCase(ct1), ch2 = "M".equalsIgnoreCase(ct2);
@@ -1383,13 +1437,17 @@ public class CloneGenealogyAnalysis {
                             else if (ch1)        cum[1]++;
                             else if (ch2)        cum[2]++;
 
+                            // Only emit rows where at least one clone changed this revision
+                            if (!ch1 && !ch2) continue;
+
                             int pStart = Math.max(h1.addedInRev, h2.addedInRev);
-                            double wcs   = computeWeightedCouplingStrength(h1, h2, pStart, rev);
-                            double trend = computeCouplingTrend(h1, h2, pStart, rev);
-                            int lcca     = lastCoChangeAge(h1, h2, rev);
-                            int lsca     = lastSoloChangeAge(h1, h2, rev);
+                            double wcs       = computeWeightedCouplingStrength(h1, h2, pStart, rev);
+                            double trend     = computeCouplingTrend(h1, h2, pStart, rev);
+                            int lcca         = lastCoChangeAge(h1, h2, rev);
+                            int lsca         = lastSoloChangeAge(h1, h2, rev);
 
                             Clones ci1 = cloneInfoMap.get(gcid1);
+                            Clones ci2 = cloneInfoMap.get(gcid2);
                             int similarity = ci1 != null ? ci1.similarity : 0;
                             int sameFile   = gcidToFilename.getOrDefault(gcid1, "")
                                                 .equals(gcidToFilename.getOrDefault(gcid2, "")) ? 1 : 0;
@@ -1397,14 +1455,71 @@ public class CloneGenealogyAnalysis {
                                                 gcidToFullPath.getOrDefault(gcid1, ""),
                                                 gcidToFullPath.getOrDefault(gcid2, ""));
 
-                            pairBw.write(
-                                rev + "," + gcid1 + "," + gcid2 + "," + classId + "," +
-                                ct1 + "," + ct2 + "," +
-                                cum[0] + "," + cum[1] + "," + cum[2] + "," +
-                                String.format("%.4f", wcs) + "," +
-                                String.format("%.4f", trend) + "," +
-                                lcca + "," + lsca + "," +
-                                similarity + "," + sameFile + "," + depth + "\n");
+                            // New enrichment fields
+                            String revAuthor = revAuthorMap.getOrDefault(rev, "UNKNOWN");
+                            int sameAuthor   = 1; // single committer per revision in this VCS model
+                            int classSize    = classToClonesMap.getOrDefault(classId, Collections.emptyList()).size();
+                            int isSpcp       = (spcpPairs.contains(gcid1 + "-" + gcid2)
+                                                || spcpPairs.contains(gcid2 + "-" + gcid1)) ? 1 : 0;
+                            double wcsRecent = computeWeightedCouplingStrength(
+                                                h1, h2, Math.max(pStart, rev - WCS_RECENT_WINDOW), rev);
+                            int soloAfter    = countSoloAfterLastCoChange(h1, h2, rev);
+
+                            // Fragment size & cumulative process metrics (up to current rev)
+                            int nlines1  = ci1 != null ? ci1.nLines : 0;
+                            int nlines2  = ci2 != null ? ci2.nLines : 0;
+                            int noc1     = changesSoFar.getOrDefault(gcid1, 0);
+                            int noc2     = changesSoFar.getOrDefault(gcid2, 0);
+                            int fileAge1 = rev - h1.addedInRev;
+                            int fileAge2 = rev - h2.addedInRev;
+                            // Churn and ownership are full-lifetime values from computeProcessAndOwnershipMetrics
+                            int churn1   = h1.churn;   int churn2   = h2.churn;
+                            int da1      = h1.distinctAuthors;   int da2 = h2.distinctAuthors;
+                            double map1  = h1.majorAuthorProportion; double map2 = h2.majorAuthorProportion;
+                            int mac1     = h1.minorAuthorCount;  int mac2 = h2.minorAuthorCount;
+
+                            // Decay-weighted features (5 half-lives × 3 metrics)
+                            Set<Integer> spcpRevsUpToNow = new TreeSet<>();
+                            for (int r : pairSPCPRevisions.getOrDefault(pairKey, Collections.emptySet()))
+                                if (r <= rev) spcpRevsUpToNow.add(r);
+                            Set<Integer> coChangeRevsUpToNow = new TreeSet<>(h1.changeRevs);
+                            coChangeRevsUpToNow.retainAll(h2.changeRevs);
+                            coChangeRevsUpToNow.removeIf(r -> r > rev);
+
+                            StringBuilder pairRow = new StringBuilder();
+                            pairRow.append(rev).append(",").append(gcid1).append(",").append(gcid2).append(",")
+                                .append(classId).append(",").append(ct1).append(",").append(ct2).append(",")
+                                .append(cum[0]).append(",").append(cum[1]).append(",").append(cum[2]).append(",")
+                                .append(String.format("%.4f", wcs)).append(",")
+                                .append(String.format("%.4f", trend)).append(",")
+                                .append(lcca).append(",").append(lsca).append(",")
+                                .append(similarity).append(",").append(sameFile).append(",").append(depth).append(",")
+                                .append(sameAuthor).append(",").append(classSize).append(",").append(isSpcp).append(",")
+                                .append(String.format("%.4f", wcsRecent)).append(",").append(soloAfter).append(",")
+                                .append(nlines1).append(",").append(nlines2).append(",")
+                                .append(noc1).append(",").append(noc2).append(",")
+                                .append(fileAge1).append(",").append(fileAge2).append(",")
+                                .append(churn1).append(",").append(churn2).append(",")
+                                .append(da1).append(",").append(da2).append(",")
+                                .append(String.format("%.4f", map1)).append(",").append(String.format("%.4f", map2)).append(",")
+                                .append(mac1).append(",").append(mac2);
+                            for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                double lambda = lambdaFromHalfLife(HALF_LIVES[hi]);
+                                pairRow.append(",").append(String.format("%.4f",
+                                    computeDecayWeightedIR(h1, h2, pStart, rev, lambda)));
+                            }
+                            for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                double lambda = lambdaFromHalfLife(HALF_LIVES[hi]);
+                                pairRow.append(",").append(String.format("%.4f",
+                                    computeDecayWeightedCS(h1, h2, pStart, rev, lambda)));
+                            }
+                            for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                double lambda = lambdaFromHalfLife(HALF_LIVES[hi]);
+                                pairRow.append(",").append(String.format("%.4f",
+                                    computeDecayWeightedSPCP(spcpRevsUpToNow, coChangeRevsUpToNow, rev, lambda)));
+                            }
+                            pairRow.append("\n");
+                            pairBw.write(pairRow.toString());
 
                             // Accumulate for Layer 3
                             gcidWcsAccum.computeIfAbsent(gcid1, k -> new ArrayList<>()).add(wcs);
@@ -1418,11 +1533,14 @@ public class CloneGenealogyAnalysis {
                 Collections.sort(activeGcids);
 
                 for (int gcid : activeGcids) {
+                    if (!interestingGcids.contains(gcid)) continue;
                     CloneHistory h = historyMap.get(gcid);
                     if (h == null) continue;
                     Clones c = cloneInfoMap.get(gcid);
 
                     String ct       = revStatus.get(gcid);
+                    // Only emit rows where the clone actually changed this revision
+                    if (!"M".equalsIgnoreCase(ct)) continue;
                     int tc          = changesSoFar.getOrDefault(gcid, 0);
                     int tu          = unchangedSoFar.getOrDefault(gcid, 0);
                     int lifespan    = rev - h.addedInRev;
