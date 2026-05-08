@@ -71,16 +71,35 @@ MCC (primary), AUC-ROC, PR-AUC, Balanced Accuracy, G-mean, F1, Sensitivity, Spec
 
 ## Current Results — Ctags Type-3 Block
 
-**1,179 predictions** across 191 change revisions (485 unique fragments):
+**1,179 predictions** across 191 change revisions (485 unique fragments).
+Label distribution: **809 dependent (69%)**, **370 independent (31%)**.
 
-| Model | MCC | AUC-ROC | PR-AUC | Bal.Acc | G-mean | F1 | Sens | Spec |
-|-------|-----|---------|--------|---------|--------|-----|------|------|
-| **LightGBM** | **0.578** | 0.825 | 0.896 | **0.790** | **0.787** | **0.867** | 0.864 | 0.716 |
-| CatBoost | 0.562 | 0.834 | 0.901 | 0.783 | 0.780 | 0.861 | 0.855 | 0.711 |
-| RandomForest | 0.561 | **0.861** | 0.910 | 0.784 | 0.781 | 0.859 | 0.849 | **0.719** |
-| XGBoost | 0.497 | 0.858 | **0.921** | 0.755 | 0.753 | 0.833 | 0.811 | 0.700 |
+### Global Metrics
 
-Label distribution: ~69% dependent, ~31% independent.
+| Model | MCC | AUC-ROC | PR-AUC | Bal.Acc | G-mean | Accuracy | TP | TN | FP | FN |
+|-------|-----|---------|--------|---------|--------|----------|-----|-----|-----|-----|
+| **LightGBM** | **0.578** | 0.825 | 0.896 | **0.790** | **0.787** | 0.818 | 699 | 265 | 105 | 110 |
+| CatBoost | 0.562 | 0.834 | 0.901 | 0.783 | 0.780 | 0.810 | 692 | 263 | 107 | 117 |
+| RandomForest | 0.561 | **0.861** | 0.910 | 0.784 | 0.781 | 0.808 | 687 | 266 | 104 | 122 |
+| XGBoost | 0.497 | 0.858 | **0.921** | 0.755 | 0.753 | 0.776 | 656 | 259 | 111 | 153 |
+
+### Per-Class Metrics — Dependent (label=1)
+
+| Model | Precision | Recall | F1 | Support |
+|-------|-----------|--------|-----|---------|
+| **LightGBM** | **0.8694** | **0.8640** | **0.8667** | 809 |
+| CatBoost | 0.8661 | 0.8554 | 0.8607 | 809 |
+| RandomForest | 0.8685 | 0.8492 | 0.8588 | 809 |
+| XGBoost | 0.8553 | 0.8109 | 0.8325 | 809 |
+
+### Per-Class Metrics — Independent (label=0)
+
+| Model | Precision | Recall | F1 | Support |
+|-------|-----------|--------|-----|---------|
+| **LightGBM** | **0.7067** | **0.7162** | **0.7114** | 370 |
+| RandomForest | 0.6856 | **0.7189** | 0.7018 | 370 |
+| CatBoost | 0.6921 | 0.7108 | 0.7013 | 370 |
+| XGBoost | 0.6286 | 0.7000 | 0.6624 | 370 |
 
 ## Repository Structure
 
