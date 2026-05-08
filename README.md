@@ -1,130 +1,141 @@
 # icmsalpha
 
-This is the repository for my master's thesis work. I am working on **forecasting independent evolution possibilities of code clones**.
+This is the repository for my master's thesis work on **forecasting dependent and independent evolution of code clone fragments**.
 
 ## Overview
 
-Code clones (duplicated code fragments) often evolve together (co-change) but sometimes diverge — one copy is modified while the other is not, leading to inconsistent maintenance and latent bugs. This project builds a machine-learning pipeline that **predicts whether a clone pair will independently evolve** (diverge) in the next revision, using historical clone genealogy data.
+Code clones (duplicated code fragments) often evolve together (co-change) but sometimes diverge — one copy is modified while the other is not, leading to inconsistent maintenance and latent bugs. This project builds a machine-learning pipeline that **predicts whether a changed clone fragment will change dependently** (co-changing with at least one clone-class peer) **or independently** (changing in isolation) at its next modification event, using historical clone genealogy data.
 
 ## Research Question
 
-> Given the evolution history of a clone pair up to revision *n*, can we predict whether the pair will diverge (independently evolve) at revision *n+1*?
+> Given the evolution history of clone fragments up to revision *R−1*, can we predict whether each fragment that changes at revision *R* will change **dependently** or **independently**?
 
-## Approach
+## Methodology
 
-### 1. Clone Tracking (Java side)
-The `icmsalpha` Java module extracts clone genealogies from version-control history of subject systems. It produces per-revision records of clone pairs annotated with structural and behavioral metrics.
+### 1. Clone Genealogy Extraction (Java)
 
-### 2. Feature Engineering
-For each clone pair at each revision, we compute:
+The `icmsalpha` Java module extracts clone genealogies from version-control history using NiCad clone detection. For each revision, every clone fragment is tracked by a persistent **global clone identifier (gcid)** with a change type: **M** (modified), **U** (unchanged), or **A** (added).
 
-| Feature | Meaning |
-|---|---|
-| **IR** | Inconsistent Revisions — count of past divergent revisions |
-| **CS** | Co-change Score — frequency of joint modification |
-| **SPCP** | Sibling Pattern Co-change Probability |
-| **IR_decay**, **CS_decay**, **SPCP_decay** | Time-decayed versions (5 half-lives) emphasizing recent history |
+Two revision-wise datasets are generated:
 
-### 3. Forecasting Models
-Four supervised classifiers plus a soft-voting ensemble:
+- **`rev_fragment.csv`** — Fragment-level features (one row per modified fragment per revision)
+- **`rev_pair.csv`** — Pair-level coupling features (one row per active pair per revision where at least one side changed)
 
-- **LightGBM**
-- **XGBoost**
-- **CatBoost**
-- **Random Forest**
-- **Ensemble** — averaged probabilities of the three boosters
+### 2. Feature Engineering (52 dimensions)
 
-### 4. Evaluation: Walk-Forward (Prequential)
-A single 70/30 split is misleading on this data because the positive (independent-evolution) class is rare and concentrated in late revisions. We use **walk-forward evaluation** instead:
+At each validation revision *R*, a 52-dimensional feature vector is built for each changed fragment using **only data from revisions strictly before *R*** (no look-ahead bias):
 
-```
-For each event index i in [MIN_TRAIN, n):
-    train  = df.iloc[:i]            (all events strictly before i)
-    test   = df.iloc[i:i+1]         (the single event at i)
-```
+**Fragment-level features (12):** nlines, totalChanges, totalUnchanged, stabilityIndex, changeProneness, lifespan, activePairs, meanWCS, maxWCS, minWCS, stronglyCoupledPairs, decoupledPairs
 
-- The model is **refit every `REFIT_EVERY` events** (default: 5).
-- A **threshold** is tuned on a sliding `CALIB_WINDOW` (default: 50) of recent events to adapt to local label-distribution drift.
-- Metrics aggregate over the full prediction stream.
+**Side-aware process metrics (4):** churn, distinctAuthors, majorAuthorProp, minorAuthorCount
 
-This better matches deployment: at revision *n*, predict using only history `1..n-1`.
+**Aggregated pair features (13):** pair_count_alive, max/sum co-change counts, max/sum independent counts, coupling_trend, last_co_change_age, last_solo_change_age, similarity, sameFile, depth
 
-## Subject Systems & Clone Types
+**Enriched pair features (8):** wcsRecent, soloEventsAfterLastCoChange, isSpcp, classSize, sameAuthor
 
-| Subject | Clone Types Studied |
-|---|---|
-| **Ctags** | Type-1, Type-2, Type-3 (Block-level) |
-| **JMol** | Type-3 (Block-level) |
+**Decay-weighted metrics (15):** IR_decay, CS_decay, SPCP_decay at 5 half-lives (h ∈ {10, 20, 30, 50, 75})
 
-Datasets are organized under:
+### 3. Labeling
+
+- **Dependent (label = 1):** At least one clone-class peer also changed at revision *R*
+- **Independent (label = 0):** No peer changed — the fragment changed alone
+
+### 4. Classification Models
+
+Four supervised classifiers evaluated independently:
+
+| Model | Key Parameters | Class Balancing |
+|-------|---------------|-----------------|
+| **LightGBM** | 300 rounds, depth=6, lr=0.05 | `is_unbalance=True` |
+| **XGBoost** | 300 rounds, depth=6, lr=0.05 | `scale_pos_weight` (auto) |
+| **CatBoost** | 300 iterations, depth=6, lr=0.05 | `auto_class_weights="Balanced"` |
+| **Random Forest** | 300 trees, depth=10, min_leaf=5 | `class_weight="balanced"` |
+
+### 5. Walk-Forward Evaluation
+
+A **sliding-window test-then-train** protocol that prevents data leakage:
 
 ```
-WorkFolder/<Subject>/Datasets/CloneGenealogy/
-    Type<N>_Block_evolution_dataset.csv     ← features + target
-    Type<N>_Block_forecast_dataset.csv      ← held-out forecast set
+For each validation revision Rᵢ:
+  1. Build feature vectors using only data < Rᵢ
+  2. Predict dependent/independent for each changed fragment
+  3. Validate against actual labels at Rᵢ
+  4. Add verified (x, y) to training pool
+  5. Retrain model (REFIT_EVERY = 1)
+  6. Re-calibrate threshold via MCC optimization
 ```
+
+### 6. Evaluation Metrics
+
+MCC (primary), AUC-ROC, PR-AUC, Balanced Accuracy, G-mean, F1, Sensitivity, Specificity
+
+## Current Results — Ctags Type-3 Block
+
+**1,179 predictions** across 191 change revisions (485 unique fragments):
+
+| Model | MCC | AUC-ROC | PR-AUC | Bal.Acc | G-mean | F1 | Sens | Spec |
+|-------|-----|---------|--------|---------|--------|-----|------|------|
+| **LightGBM** | **0.578** | 0.825 | 0.896 | **0.790** | **0.787** | **0.867** | 0.864 | 0.716 |
+| CatBoost | 0.562 | 0.834 | 0.901 | 0.783 | 0.780 | 0.861 | 0.855 | 0.711 |
+| RandomForest | 0.561 | **0.861** | 0.910 | 0.784 | 0.781 | 0.859 | 0.849 | **0.719** |
+| XGBoost | 0.497 | 0.858 | **0.921** | 0.755 | 0.753 | 0.833 | 0.811 | 0.700 |
+
+Label distribution: ~69% dependent, ~31% independent.
 
 ## Repository Structure
 
 ```
 icmsalpha/
-├── src/main/java/com/mycompany/icmsalpha/   # Java clone-tracking pipeline
+├── src/main/java/com/mycompany/icmsalpha/   # Java clone-tracking & dataset export
 ├── WorkFolder/
-│   ├── Ctags/Datasets/CloneGenealogy/        # Ctags datasets
-│   └── Jmol/Datasets/CloneGenealogy/         # JMol datasets
+│   └── Ctags/Datasets/CloneGenealogy/
+│       ├── Type3_Block_rev_fragment.csv      # Fragment-level revision data
+│       └── Type3_Block_rev_pair.csv          # Pair-level revision data (50 columns)
 ├── ml/
-│   ├── train_test.py                         # static 70/30 baseline + helpers
-│   ├── walk_forward.py                       # prequential evaluation (primary)
-│   └── results/                              # metrics, plots, trained models
-├── catboost_info/                            # CatBoost training logs
+│   ├── predict_standing.py                   # Walk-forward fragment-level forecasting
+│   ├── plots.py                              # Analysis graph generation
+│   └── results/                              # Metrics, plots, feature importance
 └── README.md
 ```
 
-## Running the ML Pipeline
+## Running the Pipeline
 
 ```bash
-# Walk-forward evaluation on Ctags Type-3
-python ml/walk_forward.py --csv WorkFolder/Ctags/Datasets/CloneGenealogy/Type3_Block_evolution_dataset.csv
-
-# JMol Type-3 with the decay-weighted target
-python ml/walk_forward.py --csv WorkFolder/Jmol/Datasets/CloneGenealogy/Type3_Block_evolution_dataset.csv --target will_diverge_decay
+# Fragment-level walk-forward prediction on Ctags Type-3
+python ml/predict_standing.py \
+  --frag WorkFolder/Ctags/Datasets/CloneGenealogy/Type3_Block_rev_fragment.csv \
+  --pair WorkFolder/Ctags/Datasets/CloneGenealogy/Type3_Block_rev_pair.csv
 ```
 
-Outputs (suffixed with the subject/clone-type prefix):
-- `ml/results/walk_forward_metrics_<PREFIX>.csv`
-- `ml/results/walk_forward_predictions_<PREFIX>.csv`
-- `ml/results/mcc_over_time_<PREFIX>.png`
+### Output Files
 
-## Current Results
+| File | Description |
+|------|-------------|
+| `standing_*_global_metrics.csv` | Final metrics per model |
+| `standing_*_verification_log.csv` | Per-event prediction log |
+| `standing_*_per_revision.csv` | Per-revision rolling metrics |
+| `standing_*_rolling_mcc.png` | MCC over revisions |
+| `standing_*_confusion_matrix.png` | Confusion matrices |
+| `standing_*_roc_curve.png` | ROC curves |
+| `standing_*_pr_curve.png` | Precision-Recall curves |
+| `standing_*_feature_importance_*.png/csv` | Feature importance per model |
+| `standing_*_model_comparison.png` | Model comparison bar chart |
+| `standing_*_label_distribution.png` | Label distribution pie chart |
 
-### Walk-forward evaluation on JMol Type-3 (13,239 predictions)
-
-| Model | MCC | AUC-ROC | PR-AUC | Balanced Acc | G-mean | F1 | Time (s) |
-|---|---|---|---|---|---|---|---|
-| **LightGBM** | **0.9553** | 0.9971 | 0.9987 | 0.9754 | 0.9753 | 0.9880 | 2055.7 |
-| Ensemble | 0.9529 | 0.9980 | 0.9993 | 0.9735 | 0.9733 | 0.9874 | 8220.1 |
-| XGBoost | 0.9509 | 0.9973 | 0.9990 | 0.9731 | 0.9729 | 0.9869 | 2143.1 |
-| CatBoost | 0.9506 | 0.9974 | 0.9991 | 0.9725 | 0.9723 | 0.9868 | 4021.3 |
-| RandomForest | 0.8153 | 0.9958 | 0.9985 | 0.8718 | 0.8632 | 0.9529 | 3075.9 |
-
-Imbalance-aware metrics (MCC, Balanced Acc, G-mean) are the primary indicators because of class skew. **LightGBM is the top single model**; the ensemble is comparable but ~4× slower.
-
-## Configuration Knobs (`ml/walk_forward.py`)
+## Configuration (`predict_standing.py`)
 
 | Constant | Default | Effect |
-|---|---|---|
-| `MIN_TRAIN` | 100 | Warm-up: events before first prediction |
-| `REFIT_EVERY` | 5 | Refit cadence (lower = more responsive, slower) |
-| `CALIB_WINDOW` | 50 | Recent events used for threshold tuning |
-| `ROLLING_WINDOW` | 50 | Window for the MCC-over-time plot |
-
-Each booster currently uses `n_estimators=250` to balance accuracy and runtime.
+|----------|---------|--------|
+| `WARMUP_REVS` | 5 | Revisions before first prediction |
+| `MIN_TRAIN` | 30 | Minimum training samples before fitting |
+| `REFIT_EVERY` | 1 | Retrain after every revision |
+| `CALIB_WINDOW` | 100 | Recent events for threshold calibration |
 
 ## Tooling
 
-- **Java 8+** for `icmsalpha` clone tracking
+- **Java 8+** for clone genealogy extraction and dataset export
 - **Python 3.10+** with `pandas`, `numpy`, `scikit-learn`, `lightgbm`, `xgboost`, `catboost`, `matplotlib`
 
 ## Author
 
-Master's thesis project — code-clone evolution forecasting.
+Master's thesis project — code clone fragment change forecasting.
