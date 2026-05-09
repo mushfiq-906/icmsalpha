@@ -29,7 +29,7 @@ except ImportError: HAS_CAT = False
 WARMUP_REVS = 5
 MIN_TRAIN = 30
 REFIT_EVERY = 1
-CALIB_WINDOW = 100
+CALIB_WINDOW = 50
 THRESHOLD_DEFAULT = 0.5
 SENTINEL_AGE = 9999
 DECAY_HORIZONS = [10, 20, 30, 50, 75]
@@ -232,12 +232,13 @@ def run(frag_path, pair_path, output_dir=None):
     frag_df = frag_df[frag_df["gcid"].isin(active)].copy()
     pair_df = pair_df[pair_df["gcid1"].isin(active) | pair_df["gcid2"].isin(active)].copy()
 
-    if output_dir is None:
-        output_dir = Path(__file__).resolve().parent / "results"
-    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
-
     tag = f"{Path(frag_path).parent.parent.parent.name}_{Path(frag_path).stem.replace('_rev_fragment','')}"
+    system_name = Path(frag_path).parent.parent.parent.name  # e.g. "Ctags"
     print(f"  Tag: {tag}")
+
+    if output_dir is None:
+        output_dir = Path(__file__).resolve().parent / "results" / "predict_standing" / system_name
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
 
     # Index
     frag_index = {r: g for r, g in frag_df.groupby("revision")}

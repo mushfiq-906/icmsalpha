@@ -148,7 +148,7 @@ python ml/predict_standing.py \
 | `WARMUP_REVS` | 5 | Revisions before first prediction |
 | `MIN_TRAIN` | 30 | Minimum training samples before fitting |
 | `REFIT_EVERY` | 1 | Retrain after every revision |
-| `CALIB_WINDOW` | 100 | Recent events for threshold calibration |
+| `CALIB_WINDOW` | 50 | Recent events for threshold calibration |
 
 ## Tooling
 
