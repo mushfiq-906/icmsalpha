@@ -39,7 +39,7 @@ warnings.filterwarnings("ignore")
 # ──────────────────────────────────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────────────────────────────────
-SYSTEM = "Ctags"
+SYSTEM = "dnsjava"
 CLONE_TYPE = "Type3_Block"
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -337,7 +337,7 @@ def plot_combined_heatmap(df, out_dir):
     count_pivot = count_pivot[[c for c in col_order if c in count_pivot.columns]]
 
     # Build annotation strings
-    annot = pivot.copy()
+    annot = pivot.astype(object)
     for r in annot.index:
         for c in annot.columns:
             val = pivot.loc[r, c] if pd.notna(pivot.loc[r, c]) else 0

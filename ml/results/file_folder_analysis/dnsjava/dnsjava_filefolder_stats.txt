@@ -1,0 +1,26 @@
+File/Folder Structural Proximity - dnsjava (Type3_Block)
+============================================================
+
+1. Same-File x Dependency (chi2 / Fisher)
+   sameFile_chi2: 2489.0322
+   sameFile_chi2_pvalue: 0.0000
+   sameFile_cramersV: 0.5275
+   sameFile_fisher_OR: 16.7788
+   sameFile_fisher_pvalue: 0.0000
+
+2. Mann-Whitney U: file_distance (dep vs. indep)
+   mannwhitney_U: 7671580.5000
+   mannwhitney_pvalue: 0.7031
+   dep_distance_median: 4.0000
+   dep_distance_mean: 2.4719
+   indep_distance_median: 1.0000
+   indep_distance_mean: 2.4227
+
+3. Point-biserial: file_distance <-> dep_label
+   pointbiserial_r: 0.0121
+   pointbiserial_pvalue: 0.2522
+
+4. Logistic Regression: dep ~ sameFile + file_distance
+   Accuracy: 0.8325
+   OR(sameFile): 16.8131
+   OR(file_distance): 1.0544

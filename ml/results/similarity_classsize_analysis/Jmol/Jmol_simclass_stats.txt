@@ -1,0 +1,37 @@
+Similarity & Class Size Analysis - Jmol (Type3_Block)
+============================================================
+
+1. Point-biserial correlations with dep_label
+   similarity: r=-0.0205, p=9.10e-03
+   classSize:  r=-0.1539, p=4.18e-86
+
+2. Spearman rank correlations
+   similarity: rho=-0.0247, p=1.72e-03
+   classSize:  rho=-0.1434, p=6.40e-75
+
+3. Mann-Whitney U: similarity (dep vs indep)
+   U=25233902, p=1.72e-03
+   Dep mean=79.99, median=75
+   Ind mean=80.44, median=75
+
+4. Mann-Whitney U: classSize (dep vs indep)
+   U=21220962, p=3.58e-74
+   Dep mean=14.8, median=14
+   Ind mean=17.7, median=16
+
+5. Similarity threshold analysis
+   sim >= 70: n=16,137, dep_rate=27.6%
+   sim >= 75: n=13,753, dep_rate=25.1%
+   sim >= 80: n=6,087, dep_rate=31.5%
+   sim >= 85: n=3,829, dep_rate=25.2%
+   sim >= 90: n=2,954, dep_rate=24.9%
+   sim >= 95: n=2,726, dep_rate=24.8%
+
+6. Small vs Large class comparison
+   classSize=2 (n=42): dep_rate=69.0%
+   classSize>=5 (n=15,811): dep_rate=27.2%
+
+7. Logistic Regression: dep ~ similarity + classSize
+   Accuracy: 0.7239
+   OR(similarity): 0.9898
+   OR(classSize): 0.9557

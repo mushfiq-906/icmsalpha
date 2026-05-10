@@ -750,3 +750,754 @@ revision_number,method_name,method_signature,package_name,class_name,src,start_l
 832 | writeShort | writeShort(int i) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 52 | 55 | 551551 | 188
 832 | writeShortAt | writeShortAt(int i, int pos) throws IllegalArgumentException | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 150 | 157 | 551552 | 285
 832 | writeString | writeString(String s) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 90 | 98 | 551553 | 189
+832 | A6Record | A6Record() {} | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 26 | 27 | 550803 | 491
+832 | A6Record | A6Record(Name name, short dclass, int ttl) | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 29 | 31 | 550804 | 491
+832 | AAAARecord | AAAARecord() {} | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 24 | 25 | 550805 | 501
+832 | AAAARecord | AAAARecord(Name name, short dclass, int ttl) | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 27 | 29 | 550806 | 501
+832 | AAAARecord | AAAARecord(Name name, short dclass, int ttl, Inet6Address address) | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 41 | 42 | 550807 | 501
+832 | ARecord | ARecord() {} | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 24 | 25 | 550808 | 6
+832 | ARecord | ARecord(Name name, short dclass, int ttl) | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 27 | 29 | 550809 | 6
+832 | ARecord | ARecord(Name name, short dclass, int ttl, InetAddress address) | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 67 | 68 | 550810 | 6
+832 | AXFR | AXFR() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 378 | 380 | 550811 | 485
+832 | AXFRIterator | AXFRIterator() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 25 | 27 | 550812 | 486
+832 | Address | Address() {} | org.xbill.DNS | Address | org/xbill/DNS/Address.java | 19 | 20 | 550813 | 559
+832 | BigIntegerLength | BigIntegerLength(BigInteger i) | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 30 | 33 | 550814 | 444
+832 | BitSetLength | BitSetLength(BitSet b) | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 149 | 154 | 550815 | 484
+832 | CERTRecord | CERTRecord() {} | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 42 | 43 | 550816 | 364
+832 | CERTRecord | CERTRecord(Name name, short dclass, int ttl) | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 45 | 47 | 550817 | 364
+832 | CNAMERecord | CNAMERecord() {} | org.xbill.DNS | CNAMERecord | org/xbill/DNS/CNAMERecord.java | 21 | 22 | 550818 | 238
+832 | CNAMERecord | CNAMERecord(Name name, short dclass, int ttl) | org.xbill.DNS | CNAMERecord | org/xbill/DNS/CNAMERecord.java | 24 | 26 | 550819 | 238
+832 | CNAMERecord | CNAMERecord(Name name, short dclass, int ttl, Name target) | org.xbill.DNS | CNAMERecord | org/xbill/DNS/CNAMERecord.java | 38 | 39 | 550820 | 238
+832 | Cache | Cache() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 187 | 189 | 550821 | 298
+832 | Cache | Cache(String file) throws IOException | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 201 | 208 | 550822 | 298
+832 | Cache | Cache(short dclass) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 176 | 180 | 550823 | 298
+832 | CacheCleaner | CacheCleaner() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 118 | 121 | 550824 | 507
+832 | Compression | Compression() | org.xbill.DNS | Compression | org/xbill/DNS/Compression.java | 31 | 33 | 550825 | 10
+832 | Credibility | Credibility() {} | org.xbill.DNS | Credibility | org/xbill/DNS/Credibility.java | 19 | 20 | 550826 | 355
+832 | DClass | DClass() {} | org.xbill.DNS | DClass | org/xbill/DNS/DClass.java | 47 | 48 | 550827 | 359
+832 | DHPubKey | DHPubKey(BigInteger p, BigInteger g, BigInteger y) | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 28 | 31 | 550828 | 445
+832 | DNAMERecord | DNAMERecord() {} | org.xbill.DNS | DNAMERecord | org/xbill/DNS/DNAMERecord.java | 21 | 22 | 550829 | 441
+832 | DNAMERecord | DNAMERecord(Name name, short dclass, int ttl) | org.xbill.DNS | DNAMERecord | org/xbill/DNS/DNAMERecord.java | 24 | 26 | 550830 | 441
+832 | DNAMERecord | DNAMERecord(Name name, short dclass, int ttl, Name target) | org.xbill.DNS | DNAMERecord | org/xbill/DNS/DNAMERecord.java | 38 | 39 | 550831 | 441
+832 | DNSSEC | DNSSEC() { } | org.xbill.DNS | DNSSEC | org/xbill/DNS/DNSSEC.java | 25 | 26 | 550832 | 560
+832 | DNSSECVerifier | DNSSECVerifier() | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 44 | 46 | 550833 | 446
+832 | DSAPubKey | DSAPubKey(BigInteger p, BigInteger q, BigInteger g, BigInteger y) | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 53 | 56 | 550834 | 447
+832 | DSRecord | DSRecord(Name name, short dclass, int ttl) | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 33 | 35 | 550835 | 551
+832 | DSRecord | private DSRecord() {} | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 30 | 31 | 550836 | 551
+832 | DataByteOutputStream | DataByteOutputStream() | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 34 | 36 | 550837 | 282
+832 | DataByteOutputStream | DataByteOutputStream(int size) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 25 | 27 | 550838 | 283
+832 | DoubleHashMap | DoubleHashMap() | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 168 | 171 | 550839 | 561
+832 | Element | Element(Name name, long ttl, byte cred, int src, short type) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 35 | 44 | 550840 | 299
+832 | Element | Element(RRset r, byte cred, int src) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 60 | 69 | 550841 | 299
+832 | Element | Element(Record r, byte cred, int src) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 47 | 57 | 550842 | 299
+832 | ExtendedResolver | ExtendedResolver() throws UnknownHostException | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 100 | 112 | 550843 | 338
+832 | F | F(int x, int y, int z) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 37 | 39 | 550844 | 90
+832 | FF | FF(int a, int b, int c, int d, int x, int s, int ac) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 62 | 66 | 550845 | 117
+832 | FindServer | FindServer() {} | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 48 | 49 | 550846 | 376
+832 | Flags | Flags() {} | org.xbill.DNS | Flags | org/xbill/DNS/Flags.java | 54 | 55 | 550847 | 356
+832 | G | G(int x, int y, int z) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 42 | 44 | 550848 | 91
+832 | GG | GG(int a, int b, int c, int d, int x, int s, int ac) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 69 | 73 | 550849 | 118
+832 | H | H(int x, int y, int z) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 47 | 49 | 550850 | 92
+832 | HH | HH(int a, int b, int c, int d, int x, int s, int ac) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 76 | 80 | 550851 | 119
+832 | HINFORecord | HINFORecord() {} | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 23 | 24 | 550852 | 88
+832 | HINFORecord | HINFORecord(Name name, short dclass, int ttl) | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 26 | 28 | 550853 | 88
+832 | HINFORecord | HINFORecord(Name name, short dclass, int ttl, String cpu, String os) | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 41 | 45 | 550854 | 88
+832 | Header | Header() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 42 | 44 | 550855 | 12
+832 | Header | Header(DataByteInputStream in) throws IOException | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 51 | 56 | 550856 | 12
+832 | Header | Header(int id) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 32 | 36 | 550857 | 12
+832 | I | I(int x, int y, int z) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 52 | 54 | 550858 | 93
+832 | II | II(int a, int b, int c, int d, int x, int s, int ac) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 83 | 87 | 550859 | 120
+832 | Inet6Address | Inet6Address(String s) throws TextParseException | org.xbill.DNS | Inet6Address | org/xbill/DNS/Inet6Address.java | 49 | 132 | 550860 | 489
+832 | KEYRecord | KEYRecord() {} | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 63 | 64 | 550861 | 365
+832 | KEYRecord | KEYRecord(Name name, short dclass, int ttl) | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 66 | 68 | 550862 | 365
+832 | KXRecord | KXRecord() {} | org.xbill.DNS | KXRecord | org/xbill/DNS/KXRecord.java | 21 | 22 | 550863 | 395
+832 | KXRecord | KXRecord(Name name, short dclass, int ttl) | org.xbill.DNS | KXRecord | org/xbill/DNS/KXRecord.java | 24 | 26 | 550864 | 395
+832 | KXRecord | KXRecord(Name name, short dclass, int ttl, int preference, Name target) | org.xbill.DNS | KXRecord | org/xbill/DNS/KXRecord.java | 40 | 42 | 550865 | 395
+832 | LOCRecord | LOCRecord() {} | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 25 | 26 | 550866 | 403
+832 | LOCRecord | LOCRecord(Name name, short dclass, int ttl) | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 28 | 30 | 550867 | 403
+832 | MXRecord | MXRecord() {} | org.xbill.DNS | MXRecord | org/xbill/DNS/MXRecord.java | 21 | 22 | 550868 | 239
+832 | MXRecord | MXRecord(Name name, short dclass, int ttl) | org.xbill.DNS | MXRecord | org/xbill/DNS/MXRecord.java | 24 | 26 | 550869 | 239
+832 | MXRecord | MXRecord(Name name, short dclass, int ttl, int priority, Name target) | org.xbill.DNS | MXRecord | org/xbill/DNS/MXRecord.java | 40 | 43 | 550870 | 239
+832 | MX_KXRecord | MX_KXRecord() {} | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 22 | 23 | 550871 | 398
+832 | MX_KXRecord | MX_KXRecord(Name name, short type, short dclass, int ttl) | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 25 | 27 | 550872 | 398
+832 | Master | Master(BufferedReader in) | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 61 | 63 | 550873 | 307
+832 | Master | Master(BufferedReader in, Name defaultOrigin) | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 54 | 57 | 550874 | 399
+832 | Master | Master(File file, Name defaultOrigin) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 27 | 38 | 550875 | 307
+832 | Master | Master(String filename) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 48 | 50 | 550876 | 399
+832 | Master | Master(String filename, Name origin) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 42 | 44 | 550877 | 307
+832 | Message | Message() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 48 | 50 | 550878 | 241
+832 | Message | Message(DataByteInputStream in) throws IOException | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 80 | 91 | 550879 | 241
+832 | Message | Message(Header header) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 33 | 38 | 550880 | 241
+832 | Message | Message(int id) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 42 | 44 | 550881 | 16
+832 | MyStringTokenizer | MyStringTokenizer(String s) | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 57 | 59 | 550882 | 162
+832 | MyStringTokenizer | MyStringTokenizer(String s, String delim) | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 48 | 50 | 550883 | 163
+832 | MyStringTokenizer | MyStringTokenizer(String s, String delim, boolean returnTokens) | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 35 | 41 | 550884 | 164
+832 | NAPTRRecord | NAPTRRecord(Name name, short dclass, int ttl) | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 27 | 29 | 550885 | 509
+832 | NAPTRRecord | private NAPTRRecord() {} | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 24 | 25 | 550886 | 509
+832 | NSRecord | NSRecord() {} | org.xbill.DNS | NSRecord | org/xbill/DNS/NSRecord.java | 21 | 22 | 550887 | 242
+832 | NSRecord | NSRecord(Name name, short dclass, int ttl) | org.xbill.DNS | NSRecord | org/xbill/DNS/NSRecord.java | 24 | 26 | 550888 | 242
+832 | NSRecord | NSRecord(Name name, short dclass, int ttl, Name target) | org.xbill.DNS | NSRecord | org/xbill/DNS/NSRecord.java | 38 | 39 | 550889 | 242
+832 | NS_CNAME_PTRRecord | NS_CNAME_PTRRecord() {} | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 21 | 22 | 550890 | 360
+832 | NS_CNAME_PTRRecord | NS_CNAME_PTRRecord(Name name, short type, short dclass, int ttl) | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 24 | 26 | 550891 | 360
+832 | NS_CNAME_PTRRecord | NS_CNAME_PTRRecord(Name name, short type, short dclass, int ttl, Name target) | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 29 | 32 | 550892 | 360
+832 | NXTRecord | NXTRecord() {} | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 27 | 28 | 550893 | 244
+832 | NXTRecord | NXTRecord(Name name, short dclass, int ttl) | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 30 | 32 | 550894 | 244
+832 | NXTRecord | NXTRecord(Name name, short dclass, int ttl, Name next, BitSet bitmap) | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 45 | 49 | 550895 | 244
+832 | Name | Name() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 69 | 70 | 550896 | 21
+832 | Name | Name(DataByteInputStream in) throws IOException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 319 | 364 | 550897 | 21
+832 | Name | Name(Name src, int n) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 372 | 380 | 550898 | 21
+832 | Name | Name(String s) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 207 | 209 | 550899 | 22
+832 | Name | Name(String s, Name origin) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 176 | 199 | 550900 | 21
+832 | NameSet | NameSet(boolean isCache) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 25 | 29 | 550901 | 302
+832 | NameTooLongException | NameTooLongException() | org.xbill.DNS | NameTooLongException | org/xbill/DNS/NameTooLongException.java | 17 | 19 | 550902 | 585
+832 | NameTooLongException | NameTooLongException(String s) | org.xbill.DNS | NameTooLongException | org/xbill/DNS/NameTooLongException.java | 22 | 24 | 550903 | 586
+832 | OPTRecord | OPTRecord() {} | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 32 | 33 | 550904 | 211
+832 | OPTRecord | OPTRecord(Name name, short dclass, int ttl) | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 35 | 37 | 550905 | 211
+832 | OPTRecord | OPTRecord(short payloadSize, byte xrcode, byte version) | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 60 | 62 | 550906 | 211
+832 | OPTRecord | OPTRecord(short payloadSize, byte xrcode, byte version, int flags) | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 49 | 53 | 550907 | 211
+832 | Opcode | Opcode() {} | org.xbill.DNS | Opcode | org/xbill/DNS/Opcode.java | 36 | 37 | 550908 | 353
+832 | Options | Options() {} | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 52 | 53 | 550909 | 429
+832 | PTRRecord | PTRRecord() {} | org.xbill.DNS | PTRRecord | org/xbill/DNS/PTRRecord.java | 22 | 23 | 550910 | 245
+832 | PTRRecord | PTRRecord(Name name, short dclass, int ttl) | org.xbill.DNS | PTRRecord | org/xbill/DNS/PTRRecord.java | 25 | 27 | 550911 | 245
+832 | PTRRecord | PTRRecord(Name name, short dclass, int ttl, Name target) | org.xbill.DNS | PTRRecord | org/xbill/DNS/PTRRecord.java | 39 | 40 | 550912 | 245
+832 | QElement | QElement(Object obj, int res) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 26 | 29 | 550913 | 358
+832 | ROTATE_LEFT | ROTATE_LEFT(int x, int n) | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 57 | 59 | 550914 | 121
+832 | RPRecord | RPRecord() {} | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 26 | 27 | 550915 | 480
+832 | RPRecord | RPRecord(Name name, short dclass, int ttl) | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 29 | 31 | 550916 | 480
+832 | RPRecord | RPRecord(Name name, short dclass, int ttl, Name mailbox, Name textDomain) | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 44 | 48 | 550917 | 480
+832 | RRset | RRset() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 27 | 32 | 550918 | 248
+832 | RSAPubKey | RSAPubKey(BigInteger modulus, BigInteger exponent) | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 26 | 29 | 550919 | 448
+832 | Rcode | Rcode() {} | org.xbill.DNS | Rcode | org/xbill/DNS/Rcode.java | 90 | 91 | 550920 | 354
+832 | Receiver | Receiver(LinkedList queue, Map idMap) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 37 | 40 | 550921 | 374
+832 | Record | Record() {} | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 29 | 30 | 550922 | 26
+832 | Record | Record(Name name, short type, short dclass, int ttl) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 31 | 36 | 550923 | 26
+832 | SIG0Signer | SIG0Signer(int algorithm, PrivateKey privateKey, Name name, int keyFootprint) | org.xbill.DNS.security | SIG0Signer | org/xbill/DNS/security/SIG0Signer.java | 43 | 48 | 550924 | 515
+832 | SIGRecord | SIGRecord() {} | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 35 | 36 | 550925 | 366
+832 | SIGRecord | SIGRecord(Name name, short dclass, int ttl) | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 38 | 40 | 550926 | 366
+832 | SOARecord | SOARecord() {} | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 24 | 25 | 550927 | 367
+832 | SOARecord | SOARecord(Name name, short dclass, int ttl) | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 27 | 29 | 550928 | 367
+832 | SRVRecord | SRVRecord() {} | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 26 | 27 | 550929 | 375
+832 | SRVRecord | SRVRecord(Name name, short dclass, int ttl) | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 29 | 31 | 550930 | 375
+832 | Section | Section() {} | org.xbill.DNS | Section | org/xbill/DNS/Section.java | 62 | 63 | 550931 | 357
+832 | SetResponse | SetResponse() {} | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 64 | 65 | 550932 | 386
+832 | SetResponse | SetResponse(byte type) | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 73 | 78 | 550933 | 386
+832 | SetResponse | SetResponse(byte type, RRset rrset) | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 66 | 71 | 550934 | 386
+832 | SimpleDSAParams | SimpleDSAParams(BigInteger p, BigInteger q, BigInteger g) | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 26 | 30 | 550935 | 449
+832 | SimpleResolver | SimpleResolver() throws UnknownHostException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 67 | 69 | 550936 | 246
+832 | SimpleResolver | SimpleResolver(String hostname) throws UnknownHostException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 48 | 58 | 550937 | 27
+832 | StringValueTable | StringValueTable() | org.xbill.DNS.utils | StringValueTable | org/xbill/DNS/utils/StringValueTable.java | 20 | 23 | 550938 | 251
+832 | TKEYRecord | TKEYRecord() {} | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 46 | 47 | 550939 | 564
+832 | TKEYRecord | TKEYRecord(Name name, short dclass, int ttl) | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 49 | 51 | 550940 | 565
+832 | TSIGRecord | TSIGRecord() {} | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 34 | 35 | 550941 | 566
+832 | TSIGRecord | TSIGRecord(Name name, short dclass, int ttl) | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 37 | 39 | 550942 | 567
+832 | TSIGstring | TSIGstring(int i) | org.xbill.DNS | Rcode | org/xbill/DNS/Rcode.java | 101 | 107 | 550943 | 255
+832 | TTL | TTL() {} | org.xbill.DNS | TTL | org/xbill/DNS/TTL.java | 17 | 18 | 550944 | 361
+832 | TTL0NotOurs | TTL0NotOurs() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 97 | 99 | 550945 | 433
+832 | TTL0Ours | TTL0Ours() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 92 | 94 | 550946 | 433
+832 | TXTRecord | TXTRecord() {} | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 23 | 24 | 550947 | 190
+832 | TXTRecord | TXTRecord(Name name, short dclass, int ttl) | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 26 | 28 | 550948 | 190
+832 | TXTRecord | TXTRecord(Name name, short dclass, int ttl, List strings) | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 40 | 43 | 550949 | 190
+832 | TXTRecord | TXTRecord(Name name, short dclass, int ttl, String string) | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 50 | 54 | 550950 | 190
+832 | TextParseException | TextParseException() | org.xbill.DNS | TextParseException | org/xbill/DNS/TextParseException.java | 16 | 18 | 550951 | 556
+832 | TextParseException | TextParseException(String s) | org.xbill.DNS | TextParseException | org/xbill/DNS/TextParseException.java | 21 | 23 | 550952 | 557
+832 | Type | Type() | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 249 | 250 | 550953 | 362
+832 | TypeMap | TypeMap() | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 17 | 19 | 550954 | 517
+832 | UNKRecord | UNKRecord() {} | org.xbill.DNS | UNKRecord | org/xbill/DNS/UNKRecord.java | 24 | 25 | 550955 | 363
+832 | UNKRecord | UNKRecord(Name name, short type, short dclass, int ttl) | org.xbill.DNS | UNKRecord | org/xbill/DNS/UNKRecord.java | 27 | 29 | 550956 | 363
+832 | WireParseException | WireParseException() | org.xbill.DNS | WireParseException | org/xbill/DNS/WireParseException.java | 17 | 19 | 550957 | 391
+832 | WireParseException | WireParseException(String s) | org.xbill.DNS | WireParseException | org/xbill/DNS/WireParseException.java | 22 | 24 | 550958 | 392
+832 | WorkerThread | WorkerThread() | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 26 | 28 | 550959 | 344
+832 | Zone | Zone(Name zone, short dclass, String remote, Cache cache) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 190 | 191 | 550960 | 200
+832 | Zone | Zone(String file, Cache cache) throws IOException | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 179 | 181 | 550961 | 200
+832 | Zone | Zone(String file, Cache cache, Name initialOrigin) throws IOException | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 144 | 153 | 550962 | 200
+832 | add | add(int pos, Name name) | org.xbill.DNS | Compression | org/xbill/DNS/Compression.java | 37 | 46 | 550963 | 2
+832 | addAdditional | addAdditional(Message response, int flags) |  | jnamed | jnamed.java | 255 | 258 | 550964 | 273
+832 | addAdditional2 | addAdditional2(Message response, int section, int flags) |  | jnamed | jnamed.java | 225 | 252 | 550965 | 274
+832 | addCacheNS | addCacheNS(Message response, Cache cache, Name name) |  | jnamed | jnamed.java | 204 | 214 | 550966 | 538
+832 | addGlue | addGlue(Message response, Name name, int flags) |  | jnamed | jnamed.java | 217 | 222 | 550967 | 276
+832 | addMessage | addMessage(Message in) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 567 | 688 | 550968 | 300
+832 | addNS | addNS(Message response, Zone zone, int flags) |  | jnamed | jnamed.java | 197 | 201 | 550969 | 524
+832 | addNegative | addNegative(short rcode, Name name, short type, long ttl, byte cred, Object o) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 266 | 273 | 550970 | 315
+832 | addPrimaryZone | addPrimaryZone(String zname, String zonefile) throws IOException |  | jnamed | jnamed.java | 98 | 105 | 550971 | 198
+832 | addRR | addRR(Record r) | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 36 | 50 | 550972 | 249
+832 | addRRset | addRRset(Name name, Message response, RRset rrset, byte section, int flags) |  | jnamed | jnamed.java | 167 | 189 | 550973 | 277
+832 | addRRset | addRRset(RRset rrset, byte cred, Object o) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 244 | 255 | 550974 | 277
+832 | addRRset | addRRset(RRset rrset) | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 81 | 86 | 550975 | 277
+832 | addRecord | addRecord(Record r, byte cred, Object o) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 218 | 234 | 550976 | 3
+832 | addRecord | addRecord(Record r, int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 123 | 128 | 550977 | 3
+832 | addRecord | addRecord(Record r) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 340 | 347 | 550978 | 3
+832 | addResolver | addResolver(Resolver r) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 333 | 335 | 550979 | 346
+832 | addSOA | addSOA(Message response, Zone zone) |  | jnamed | jnamed.java | 192 | 194 | 550980 | 533
+832 | addSearch | addSearch(String search, List list) | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 58 | 69 | 550981 | 580
+832 | addSecondaryZone | addSecondaryZone(String zone, String remote) throws IOException |  | jnamed | jnamed.java | 108 | 113 | 550982 | 488
+832 | addServer | addServer(String server, List list) | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 51 | 55 | 550983 | 581
+832 | addSet | addSet(Name name, short type, Object set) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 155 | 162 | 550984 | 303
+832 | addSet | addSet(Name name, short type, Object set) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 354 | 358 | 550985 | 303
+832 | addTCP | addTCP(final InetAddress addr, final short port) |  | jnamed | jnamed.java | 678 | 683 | 550986 | 209
+832 | addTSIG | addTSIG(String namestr, String key) throws IOException |  | jnamed | jnamed.java | 116 | 119 | 550987 | 294
+832 | addTrustedKey | addTrustedKey(KEYRecord key) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 50 | 56 | 550988 | 450
+832 | addTrustedKey | addTrustedKey(Name name, PublicKey key) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 60 | 66 | 550989 | 451
+832 | addUDP | addUDP(final InetAddress addr, final short port) |  | jnamed | jnamed.java | 686 | 691 | 550990 | 210
+832 | answers | answers() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 132 | 137 | 550991 | 377
+832 | apply | apply(Message m, TSIGRecord old) throws IOException | org.xbill.DNS | TSIG | org/xbill/DNS/TSIG.java | 150 | 152 | 550992 | 108
+832 | apply | apply(Message m, byte error, TSIGRecord old) throws IOException | org.xbill.DNS | TSIG | org/xbill/DNS/TSIG.java | 62 | 142 | 550993 | 108
+832 | applyAXFR | applyAXFR(Message m, TSIGRecord old, boolean first) throws IOException | org.xbill.DNS | TSIG | org/xbill/DNS/TSIG.java | 160 | 211 | 550994 | 108
+832 | applyEDNS | applyEDNS(Message query) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 211 | 216 | 550995 | 574
+832 | applyTSIG | applyTSIG(Message query) throws IOException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 193 | 196 | 550996 | 575
+832 | assignThread | assignThread(Runnable task, String name) | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 92 | 109 | 550997 | 390
+832 | base16 | base16() {} | org.xbill.DNS.utils | base16 | org/xbill/DNS/utils/base16.java | 21 | 22 | 550998 | 349
+832 | base64 | base64() {} | org.xbill.DNS.utils | base64 | org/xbill/DNS/utils/base64.java | 21 | 22 | 550999 | 350
+832 | buildDH | buildDH(DHPublicKey key) | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 147 | 180 | 551000 | 452
+832 | buildDSA | buildDSA(DSAPublicKey key) | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 183 | 198 | 551001 | 453
+832 | buildRSA | buildRSA(RSAPublicKey key) | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 128 | 144 | 551002 | 454
+832 | buildRecord | buildRecord(Name name, short dclass, int ttl, Certificate cert) | org.xbill.DNS.security | CERTConverter | org/xbill/DNS/security/CERTConverter.java | 80 | 82 | 551003 | 455
+832 | check | check(String option) | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 80 | 84 | 551004 | 430
+832 | clear | clear() | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 39 | 41 | 551005 | 112
+832 | clear | clear() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 67 | 73 | 551006 | 112
+832 | clear | clear() | org.xbill.DNS.utils | hmacSigner | org/xbill/DNS/utils/hmacSigner.java | 125 | 132 | 551007 | 112
+832 | clearCache | clearCache() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 193 | 195 | 551008 | 500
+832 | clearCaches | clearCaches() | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 40 | 46 | 551009 | 544
+832 | clone | clone() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 253 | 261 | 551010 | 343
+832 | clone | clone() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 443 | 452 | 551011 | 343
+832 | compare | compare(Object o1, Object o2) throws ClassCastException | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 30 | 37 | 551012 | 496
+832 | compareTo | compareTo(Object o) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 689 | 712 | 551013 | 36
+832 | compareTo | compareTo(Object o) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 499 | 527 | 551014 | 36
+832 | concatenate | concatenate(Name prefix, Name suffix) throws NameTooLongException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 390 | 397 | 551015 | 563
+832 | copy | copy(Name src, Name dst) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 114 | 118 | 551016 | 588
+832 | create | create(SIGRecord sigrec) | org.xbill.DNS.security | DSASignature | org/xbill/DNS/security/DSASignature.java | 28 | 64 | 551017 | 456
+832 | decCount | decCount(int field) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 176 | 178 | 551018 | 47
+832 | deleteRR | deleteRR(Record r) | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 54 | 63 | 551019 | 249
+832 | deleteRecord | deleteRecord(Record r) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 80 | 82 | 551020 | 413
+832 | deleteResolver | deleteResolver(Resolver r) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 339 | 341 | 551021 | 347
+832 | dns | dns() {} | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 37 | 38 | 551022 | 351
+832 | doAXFR | doAXFR(Message response) throws IOException |  | dig | dig.java | 29 | 53 | 551023 | 33
+832 | doAXFR | doAXFR(Name name, Message query, TSIG tsig, TSIGRecord qtsig, Socket s) |  | jnamed | jnamed.java | 367 | 404 | 551024 | 33
+832 | doAdd | doAdd(MyStringTokenizer st) throws IOException |  | update | update.java | 376 | 388 | 551025 | 123
+832 | doAssert | doAssert(MyStringTokenizer st) |  | update | update.java | 504 | 564 | 551026 | 194
+832 | doDelete | doDelete(MyStringTokenizer st) throws IOException |  | update | update.java | 391 | 425 | 551027 | 170
+832 | doFile | doFile(MyStringTokenizer st, List inputs, List istreams) |  | update | update.java | 470 | 489 | 551028 | 193
+832 | doGlue | doGlue(MyStringTokenizer st) throws IOException |  | update | update.java | 428 | 440 | 551029 | 171
+832 | doLog | doLog(MyStringTokenizer st) |  | update | update.java | 492 | 501 | 551030 | 289
+832 | doProhibit | doProhibit(MyStringTokenizer st) throws IOException |  | update | update.java | 349 | 373 | 551031 | 172
+832 | doQuery | doQuery(Message response) throws IOException |  | dig | dig.java | 23 | 26 | 551032 | 34
+832 | doQuery | doQuery(MyStringTokenizer st) throws IOException |  | update | update.java | 443 | 467 | 551033 | 34
+832 | doRequire | doRequire(MyStringTokenizer st) throws IOException |  | update | update.java | 317 | 346 | 551034 | 173
+832 | dump | dump(String prefix) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 73 | 89 | 551035 | 589
+832 | enqueueInfo | enqueueInfo(Object id, Object obj) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 43 | 58 | 551036 | 330
+832 | equals | equals(Object arg) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 654 | 663 | 551037 | 36
+832 | equals | equals(Object arg) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 441 | 456 | 551038 | 36
+832 | errorMessage | errorMessage(Message query, short rcode) |  | jnamed | jnamed.java | 563 | 573 | 551039 | 342
+832 | expiredTTL | expiredTTL() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 85 | 89 | 551040 | 314
+832 | find95 | find95() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 236 | 249 | 551041 | 502
+832 | findAnyRecords | findAnyRecords(Name name, short type) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 500 | 502 | 551042 | 304
+832 | findBestZone | findBestZone(Name name) |  | jnamed | jnamed.java | 132 | 145 | 551043 | 201
+832 | findCachedKey | findCachedKey(Cache cache, Name name, int algorithm, int footprint) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 88 | 96 | 551044 | 457
+832 | findExactMatch | findExactMatch(Name name, short type, short dclass, boolean glue) |  | jnamed | jnamed.java | 148 | 164 | 551045 | 278
+832 | findExactMatch | findExactMatch(Name name, short type) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 330 | 332 | 551046 | 278
+832 | findExactSet | findExactSet(Name name, short type) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 135 | 140 | 551047 | 303
+832 | findKey | findKey(Cache cache, Name name, int algorithm, int footprint) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 99 | 104 | 551048 | 458
+832 | findMatchingKey | findMatchingKey(Iterator it, int algorithm, int footprint) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 69 | 77 | 551049 | 459
+832 | findNT | findNT() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 255 | 265 | 551050 | 503
+832 | findName | findName(Name name) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 146 | 148 | 551051 | 202
+832 | findNetware | findNetware() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 164 | 166 | 551052 | 582
+832 | findProperty | findProperty() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 77 | 101 | 551053 | 226
+832 | findRRset | findRRset(Name name, short type) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 204 | 208 | 551054 | 534
+832 | findRRset | findRRset(Name name, short type, int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 186 | 195 | 551055 | 535
+832 | findRecord | findRecord(Record r) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 172 | 177 | 551056 | 270
+832 | findRecord | findRecord(Record r, int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 162 | 164 | 551057 | 270
+832 | findRecords | findRecords(Name name, short type) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 487 | 489 | 551058 | 301
+832 | findRecords | findRecords(Name name, short type, byte minCred) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 470 | 476 | 551059 | 301
+832 | findRecords | findRecords(Name name, short type) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 251 | 320 | 551060 | 301
+832 | findResolvConf | findResolvConf(String file) | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 109 | 156 | 551061 | 227
+832 | findSets | findSets(Name name, short type) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 47 | 128 | 551062 | 305
+832 | findTSIG | findTSIG(Name name) |  | jnamed | jnamed.java | 358 | 364 | 551063 | 291
+832 | findTrustedKey | findTrustedKey(Name name, int algorithm, int footprint) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 80 | 85 | 551064 | 460
+832 | findUnix | findUnix() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 159 | 161 | 551065 | 227
+832 | findWin | findWin(InputStream in) | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 172 | 230 | 551066 | 227
+832 | first | first() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 163 | 170 | 551067 | 224
+832 | flushName | flushName(Name name) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 710 | 712 | 551068 | 414
+832 | flushSet | flushSet(Name name, short type) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 697 | 702 | 551069 | 415
+832 | format | format(int ttl) | org.xbill.DNS | TTL | org/xbill/DNS/TTL.java | 51 | 74 | 551070 | 428
+832 | formatDate | formatDate(Date d) | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 236 | 253 | 551071 | 38
+832 | freeze | freeze() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 356 | 358 | 551072 | 536
+832 | fromBytes | fromBytes(byte b1, byte b2, byte b3, byte b4) | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 37 | 42 | 551073 | 583
+832 | fromConstantString | fromConstantString(String s) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 305 | 312 | 551074 | 115
+832 | fromDNAME | fromDNAME(DNAMERecord dname) throws NameTooLongException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 427 | 454 | 551075 | 525
+832 | fromString | fromString(String s) throws TextParseException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 294 | 296 | 551076 | 115
+832 | fromString | fromString(String s, Name origin) throws TextParseException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 220 | 285 | 551077 | 115
+832 | fromString | fromString(Name name, short type, short dclass, int ttl, String s, Name origin) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 350 | 351 | 551078 | 115
+832 | fromString | fromString(String str) | org.xbill.DNS.utils | base16 | org/xbill/DNS/utils/base16.java | 48 | 65 | 551079 | 115
+832 | fromString | fromString(String str) | org.xbill.DNS.utils | base64 | org/xbill/DNS/utils/base64.java | 97 | 137 | 551080 | 115
+832 | fromWire | fromWire(DataByteInputStream in, int section) throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 170 | 194 | 551081 | 124
+832 | get | get(Name name) | org.xbill.DNS | Compression | org/xbill/DNS/Compression.java | 53 | 63 | 551082 | 39
+832 | get | get(short type) | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 25 | 29 | 551083 | 39
+832 | getAddress | getAddress() | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 85 | 87 | 551084 | 125
+832 | getAddress | getAddress() | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 131 | 139 | 551085 | 125
+832 | getAdmin | getAdmin() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 131 | 133 | 551086 | 230
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 143 | 145 | 551087 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 119 | 121 | 551088 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 175 | 177 | 551089 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 153 | 155 | 551090 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 166 | 168 | 551091 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 160 | 162 | 551092 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 47 | 49 | 551093 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 72 | 74 | 551094 | 127
+832 | getAlgorithm | getAlgorithm() | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 45 | 47 | 551095 | 127
+832 | getAll | getAll() | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 35 | 48 | 551096 | 518
+832 | getAllByName | getAllByName(String name) throws UnknownHostException | org.xbill.DNS | Address | org/xbill/DNS/Address.java | 86 | 98 | 551097 | 311
+832 | getAltitude | getAltitude() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 284 | 286 | 551098 | 404
+832 | getAnyRecords | getAnyRecords(String name, short type) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 349 | 351 | 551099 | 217
+832 | getAnyRecords | getAnyRecords(String namestr, short type, short dclass) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 327 | 329 | 551100 | 328
+832 | getAnyRecordsByAddress | getAnyRecordsByAddress(String addr, short type) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 372 | 375 | 551101 | 217
+832 | getBitmap | getBitmap() | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 112 | 114 | 551102 | 128
+832 | getByName | getByName(String name) throws UnknownHostException | org.xbill.DNS | Address | org/xbill/DNS/Address.java | 69 | 77 | 551103 | 312
+832 | getCNAME | getCNAME() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 143 | 145 | 551104 | 526
+832 | getCPU | getCPU() | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 75 | 77 | 551105 | 129
+832 | getCache | getCache(short dclass) |  | jnamed | jnamed.java | 122 | 129 | 551106 | 412
+832 | getCache | getCache() | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 175 | 177 | 551107 | 412
+832 | getCache | getCache(short dclass) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 159 | 166 | 551108 | 412
+832 | getCert | getCert() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 151 | 153 | 551109 | 368
+832 | getCertType | getCertType() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 127 | 129 | 551110 | 159
+832 | getCount | getCount(int field) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 185 | 187 | 551111 | 40
+832 | getCred | getCred(Name recordName, Name queryName, short section, boolean isAuth) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 535 | 558 | 551112 | 543
+832 | getDClass | getDClass() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 137 | 142 | 551113 | 224
+832 | getDClass | getDClass() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 397 | 399 | 551114 | 224
+832 | getDClass | getDClass() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 239 | 241 | 551115 | 224
+832 | getDNAME | getDNAME() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 151 | 153 | 551116 | 527
+832 | getDigest | getDigest() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 136 | 138 | 551117 | 552
+832 | getDigestID | getDigestID() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 127 | 130 | 551118 | 553
+832 | getEncoded | getEncoded() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 62 | 64 | 551119 | 461
+832 | getEncoded | getEncoded() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 84 | 86 | 551120 | 461
+832 | getEncoded | getEncoded() | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 57 | 59 | 551121 | 461
+832 | getError | getError() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 196 | 198 | 551122 | 130
+832 | getError | getError() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 190 | 192 | 551123 | 130
+832 | getExpire | getExpire() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 175 | 177 | 551124 | 231
+832 | getExpire | getExpire() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 155 | 157 | 551125 | 231
+832 | getExtendedRcode | getExtendedRcode() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 130 | 132 | 551126 | 212
+832 | getFlag | getFlag(int bit) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 96 | 98 | 551127 | 41
+832 | getFlags | getFlags() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 101 | 103 | 551128 | 131
+832 | getFlags | getFlags() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 159 | 161 | 551129 | 131
+832 | getFlags | getFlags() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 127 | 129 | 551130 | 131
+832 | getFlags | getFlags() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 142 | 144 | 551131 | 131
+832 | getFootprint | getFootprint() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 144 | 146 | 551132 | 259
+832 | getFootprint | getFootprint() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 191 | 224 | 551133 | 259
+832 | getFootprint | getFootprint() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 187 | 189 | 551134 | 259
+832 | getFormat | getFormat() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 53 | 55 | 551135 | 462
+832 | getFormat | getFormat() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 78 | 80 | 551136 | 462
+832 | getFormat | getFormat() | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 51 | 53 | 551137 | 462
+832 | getFudge | getFudge() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 172 | 174 | 551138 | 132
+832 | getG | getG() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 43 | 45 | 551139 | 463
+832 | getHPrecision | getHPrecision() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 296 | 298 | 551140 | 405
+832 | getHeader | getHeader() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 113 | 115 | 551141 | 42
+832 | getHost | getHost() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 125 | 127 | 551142 | 232
+832 | getHostName | getHostName(InetAddress addr) throws UnknownHostException | org.xbill.DNS | Address | org/xbill/DNS/Address.java | 107 | 114 | 551143 | 313
+832 | getID | getID() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 109 | 111 | 551144 | 43
+832 | getKey | getKey() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 183 | 185 | 551145 | 258
+832 | getKey | getKey() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 202 | 204 | 551146 | 258
+832 | getKeyTag | getKeyTag() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 135 | 137 | 551147 | 160
+832 | getLabelString | getLabelString(int n) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 563 | 566 | 551148 | 547
+832 | getLabels | getLabels() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 163 | 165 | 551149 | 260
+832 | getLatitude | getLatitude() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 272 | 274 | 551150 | 406
+832 | getLongitude | getLongitude() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 278 | 280 | 551151 | 407
+832 | getMailbox | getMailbox() | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 88 | 90 | 551152 | 482
+832 | getMember | getMember() | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 34 | 36 | 551153 | 568
+832 | getMember | getMember() | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 32 | 34 | 551154 | 568
+832 | getMember | getMember() | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 32 | 34 | 551155 | 568
+832 | getMember | getMember() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 50 | 52 | 551156 | 568
+832 | getMember | getMember() | org.xbill.DNS | CNAMERecord | org/xbill/DNS/CNAMERecord.java | 29 | 31 | 551157 | 568
+832 | getMember | getMember() | org.xbill.DNS | DNAMERecord | org/xbill/DNS/DNAMERecord.java | 29 | 31 | 551158 | 568
+832 | getMember | getMember() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 38 | 40 | 551159 | 568
+832 | getMember | getMember() | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 31 | 33 | 551160 | 568
+832 | getMember | getMember() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 71 | 73 | 551161 | 568
+832 | getMember | getMember() | org.xbill.DNS | KXRecord | org/xbill/DNS/KXRecord.java | 29 | 31 | 551162 | 568
+832 | getMember | getMember() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 33 | 35 | 551163 | 568
+832 | getMember | getMember() | org.xbill.DNS | MXRecord | org/xbill/DNS/MXRecord.java | 29 | 31 | 551164 | 568
+832 | getMember | getMember() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 32 | 34 | 551165 | 568
+832 | getMember | getMember() | org.xbill.DNS | NSRecord | org/xbill/DNS/NSRecord.java | 29 | 31 | 551166 | 568
+832 | getMember | getMember() | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 35 | 37 | 551167 | 568
+832 | getMember | getMember() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 40 | 42 | 551168 | 568
+832 | getMember | getMember() | org.xbill.DNS | PTRRecord | org/xbill/DNS/PTRRecord.java | 30 | 32 | 551169 | 568
+832 | getMember | getMember() | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 34 | 36 | 551170 | 568
+832 | getMember | getMember() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 43 | 45 | 551171 | 568
+832 | getMember | getMember() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 32 | 34 | 551172 | 568
+832 | getMember | getMember() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 34 | 36 | 551173 | 568
+832 | getMember | getMember() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 54 | 56 | 551174 | 568
+832 | getMember | getMember() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 42 | 44 | 551175 | 568
+832 | getMember | getMember() | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 31 | 33 | 551176 | 568
+832 | getMember | getMember() | org.xbill.DNS | UNKRecord | org/xbill/DNS/UNKRecord.java | 32 | 34 | 551177 | 568
+832 | getMinimum | getMinimum() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 161 | 163 | 551178 | 233
+832 | getMode | getMode() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 190 | 192 | 551179 | 497
+832 | getModulus | getModulus() | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 33 | 35 | 551180 | 464
+832 | getNS | getNS() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 159 | 161 | 551181 | 265
+832 | getNS | getNS() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 227 | 229 | 551182 | 265
+832 | getName | getName() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 113 | 118 | 551183 | 133
+832 | getName | getName() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 362 | 364 | 551184 | 133
+832 | getNext | getNext() | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 106 | 108 | 551185 | 134
+832 | getOPT | getOPT() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 269 | 275 | 551186 | 293
+832 | getOS | getOS() | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 83 | 85 | 551187 | 135
+832 | getOpcode | getOpcode() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 161 | 163 | 551188 | 44
+832 | getOrder | getOrder() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 115 | 117 | 551189 | 510
+832 | getOrigTTL | getOrigTTL() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 169 | 171 | 551190 | 261
+832 | getOrigin | getOrigin() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 221 | 223 | 551191 | 204
+832 | getOriginalID | getOriginalID() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 184 | 186 | 551192 | 136
+832 | getOther | getOther() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 208 | 210 | 551193 | 137
+832 | getOther | getOther() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 196 | 198 | 551194 | 137
+832 | getP | getP() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 33 | 35 | 551195 | 465
+832 | getParams | getParams() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 41 | 43 | 551196 | 466
+832 | getParams | getParams() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 66 | 68 | 551197 | 466
+832 | getPayloadSize | getPayloadSize() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 121 | 123 | 551198 | 213
+832 | getPort | getPort() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 125 | 127 | 551199 | 138
+832 | getPos | getPos() | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 187 | 189 | 551200 | 139
+832 | getPos | getPos() | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 164 | 166 | 551201 | 139
+832 | getPreference | getPreference() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 121 | 123 | 551202 | 511
+832 | getPrefix | getPrefix() | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 119 | 121 | 551203 | 493
+832 | getPrefixBits | getPrefixBits() | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 107 | 109 | 551204 | 494
+832 | getPriority | getPriority() | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 78 | 80 | 551205 | 140
+832 | getPriority | getPriority() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 113 | 115 | 551206 | 140
+832 | getProtocol | getProtocol() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 167 | 169 | 551207 | 141
+832 | getPublicExponent | getPublicExponent() | org.xbill.DNS.security | RSAPubKey | org/xbill/DNS/security/RSAPubKey.java | 39 | 41 | 551208 | 467
+832 | getQ | getQ() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 38 | 40 | 551209 | 468
+832 | getQuestion | getQuestion() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 216 | 225 | 551210 | 295
+832 | getRRsetType | getRRsetType() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 385 | 391 | 551211 | 297
+832 | getRcode | getRcode() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 143 | 145 | 551212 | 45
+832 | getRcode | getRcode() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 282 | 288 | 551213 | 45
+832 | getRecords | getRecords(String name, short type) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 338 | 340 | 551214 | 217
+832 | getRecords | getRecords(String namestr, short type, short dclass) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 315 | 317 | 551215 | 217
+832 | getRecords | getRecords(String namestr, short type, short dclass, byte cred) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 266 | 305 | 551216 | 217
+832 | getRecordsByAddress | getRecordsByAddress(String addr, short type) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 360 | 363 | 551217 | 221
+832 | getRefresh | getRefresh() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 143 | 145 | 551218 | 234
+832 | getRegexp | getRegexp() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 139 | 141 | 551219 | 512
+832 | getReplacement | getReplacement() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 145 | 147 | 551220 | 513
+832 | getResolver | getResolver(int i) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 319 | 323 | 551221 | 340
+832 | getResolver | getResolver() | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 125 | 127 | 551222 | 340
+832 | getResolvers | getResolvers() | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 327 | 329 | 551223 | 341
+832 | getRetry | getRetry() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 149 | 151 | 551224 | 235
+832 | getSOA | getSOA() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 233 | 235 | 551225 | 266
+832 | getSection | getSection(int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 297 | 302 | 551226 | 46
+832 | getSectionArray | getSectionArray(int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 310 | 316 | 551227 | 272
+832 | getSecurity | getSecurity() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 180 | 182 | 551228 | 434
+832 | getSerial | getSerial() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 137 | 139 | 551229 | 236
+832 | getService | getService() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 133 | 135 | 551230 | 514
+832 | getSignature | getSignature() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 199 | 201 | 551231 | 142
+832 | getSignature | getSignature() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 178 | 180 | 551232 | 142
+832 | getSigner | getSigner() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 193 | 195 | 551233 | 262
+832 | getSize | getSize() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 290 | 292 | 551234 | 408
+832 | getString | getString(short value) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 186 | 188 | 551235 | 252
+832 | getString | getString(int v) | org.xbill.DNS.utils | StringValueTable | org/xbill/DNS/utils/StringValueTable.java | 43 | 45 | 551236 | 252
+832 | getStrings | getStrings() | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 108 | 110 | 551237 | 143
+832 | getSuffix | getSuffix() | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 113 | 115 | 551238 | 495
+832 | getTSIG | getTSIG() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 234 | 243 | 551239 | 110
+832 | getTTL | getTTL() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 146 | 159 | 551240 | 288
+832 | getTTL | getTTL() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 405 | 407 | 551241 | 288
+832 | getTarget | getTarget() | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 72 | 74 | 551242 | 144
+832 | getTarget | getTarget() | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 63 | 65 | 551243 | 144
+832 | getTarget | getTarget() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 131 | 133 | 551244 | 144
+832 | getTextDomain | getTextDomain() | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 94 | 96 | 551245 | 483
+832 | getThread | getThread() | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 58 | 84 | 551246 | 345
+832 | getTimeExpire | getTimeExpire() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 184 | 186 | 551247 | 498
+832 | getTimeInception | getTimeInception() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 175 | 177 | 551248 | 499
+832 | getTimeSigned | getTimeSigned() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 181 | 183 | 551249 | 145
+832 | getTimeSigned | getTimeSigned() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 166 | 168 | 551250 | 145
+832 | getType | getType() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 125 | 130 | 551251 | 216
+832 | getType | getType() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 371 | 373 | 551252 | 216
+832 | getTypeCovered | getTypeCovered() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 145 | 147 | 551253 | 263
+832 | getTypedObject | getTypedObject(short type) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 39 | 73 | 551254 | 569
+832 | getVPrecision | getVPrecision() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 302 | 304 | 551255 | 409
+832 | getValue | getValue(String string) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 181 | 183 | 551256 | 253
+832 | getValue | getValue(String s) | org.xbill.DNS.utils | StringValueTable | org/xbill/DNS/utils/StringValueTable.java | 53 | 56 | 551257 | 253
+832 | getVersion | getVersion() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 136 | 138 | 551258 | 214
+832 | getWeight | getWeight() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 119 | 121 | 551259 | 146
+832 | getWireLength | getWireLength() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 417 | 419 | 551260 | 267
+832 | getY | getY() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 35 | 37 | 551261 | 469
+832 | getY | getY() | org.xbill.DNS.security | DSAPubKey | org/xbill/DNS/security/DSAPubKey.java | 60 | 62 | 551262 | 469
+832 | handleException | handleException(Object id, Exception e) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 70 | 75 | 551263 | 393
+832 | handleException | void handleException(Object id, Exception e); | org.xbill.DNS | ResolverListener | org/xbill/DNS/ResolverListener.java | 29 | 30 | 551264 | 393
+832 | hasMoreDelimiters | hasMoreDelimiters() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 102 | 104 | 551265 | 166
+832 | hasMoreElements | hasMoreElements() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 92 | 94 | 551266 | 165
+832 | hasMoreTokens | hasMoreTokens() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 77 | 88 | 551267 | 166
+832 | hasNext | hasNext() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 30 | 32 | 551268 | 165
+832 | hashCode | hashCode() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 669 | 677 | 551269 | 78
+832 | hashCode | hashCode() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 462 | 470 | 551270 | 78
+832 | help | help(String topic) |  | update | update.java | 567 | 703 | 551271 | 174
+832 | inaddrString | inaddrString(InetAddress addr) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 82 | 91 | 551272 | 221
+832 | inaddrString | inaddrString(String s) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 100 | 109 | 551273 | 310
+832 | incCount | incCount(int field) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 171 | 173 | 551274 | 47
+832 | init | init() | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 88 | 90 | 551275 | 348
+832 | initialize | initialize() | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 49 | 69 | 551276 | 417
+832 | isAbsolute | isAbsolute() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 479 | 483 | 551277 | 372
+832 | isCNAME | isCNAME() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 114 | 116 | 551278 | 528
+832 | isDNAME | isDNAME() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 120 | 122 | 551279 | 529
+832 | isDelegation | isDelegation() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 108 | 110 | 551280 | 530
+832 | isDelim | isDelim(int i) | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 71 | 73 | 551281 | 179
+832 | isDottedQuad | isDottedQuad(String s) | org.xbill.DNS | Address | org/xbill/DNS/Address.java | 27 | 48 | 551282 | 385
+832 | isEmpty | isEmpty() | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 72 | 74 | 551283 | 519
+832 | isNXDOMAIN | isNXDOMAIN() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 96 | 98 | 551284 | 384
+832 | isNXRRSET | isNXRRSET() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 102 | 104 | 551285 | 531
+832 | isQualified | isQualified() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 471 | 473 | 551286 | 372
+832 | isRR | isRR(int type) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 278 | 292 | 551287 | 296
+832 | isSigned | isSigned() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 250 | 252 | 551288 | 476
+832 | isSuccessful | isSuccessful() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 126 | 128 | 551289 | 321
+832 | isUnknown | isUnknown() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 90 | 92 | 551290 | 322
+832 | isVerified | isVerified() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 259 | 261 | 551291 | 477
+832 | isWild | isWild() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 460 | 464 | 551292 | 326
+832 | iteratorToString | iteratorToString(Iterator it) | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 185 | 196 | 551293 | 81
+832 | jnamed | jnamed(String conffile) throws IOException |  | jnamed | jnamed.java | 20 | 95 | 551294 | 199
+832 | labels | labels() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 497 | 499 | 551295 | 147
+832 | length | length() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 489 | 491 | 551296 | 48
+832 | logLookup | logLookup(Name name, short type, String msg) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 276 | 279 | 551297 | 587
+832 | longString | longString(int i) | org.xbill.DNS | Section | org/xbill/DNS/Section.java | 74 | 77 | 551298 | 254
+832 | lookupRecords | lookupRecords(Name name, short type, byte minCred) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 292 | 467 | 551299 | 323
+832 | matchType | matchType(short type1, short type2) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 72 | 74 | 551300 | 223
+832 | maxUDPSize | maxUDPSize(Message query) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 219 | 225 | 551301 | 576
+832 | maybeAddRecord | maybeAddRecord(Record record, Cache cache, Object source) throws IOException | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 114 | 135 | 551302 | 200
+832 | md5 | md5() {} | org.xbill.DNS.utils | md5 | org/xbill/DNS/utils/md5.java | 17 | 18 | 551303 | 352
+832 | modeString | modeString() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 127 | 136 | 551304 | 504
+832 | names | names() | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 199 | 201 | 551305 | 435
+832 | newQuery | newQuery(Record r) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 58 | 64 | 551306 | 333
+832 | newRecord | newRecord(Name name, short type, short dclass) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 165 | 167 | 551307 | 50
+832 | newRecord | newRecord(Name name, short type, short dclass, int ttl) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 151 | 153 | 551308 | 50
+832 | newUpdate | newUpdate(Name zone) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 72 | 78 | 551309 | 401
+832 | next | next() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 35 | 79 | 551310 | 167
+832 | nextElement | nextElement() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 181 | 183 | 551311 | 167
+832 | nextRecord | nextRecord() throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 67 | 109 | 551312 | 308
+832 | nextToken | nextToken() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 108 | 177 | 551313 | 168
+832 | numBytes | numBytes() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 375 | 377 | 551314 | 148
+832 | offset | offset(int n) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 101 | 111 | 551315 | 590
+832 | parseDH | parseDH(DataByteInputStream in) throws IOException | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 50 | 86 | 551316 | 470
+832 | parseDSA | parseDSA(DataByteInputStream in) throws IOException | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 89 | 99 | 551317 | 471
+832 | parseDate | parseDate(String s) | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 256 | 268 | 551318 | 149
+832 | parseInclude | parseInclude(MyStringTokenizer st) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 126 | 141 | 551319 | 400
+832 | parseLOCformat | parseLOCformat(int b) throws WireParseException | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 321 | 329 | 551320 | 410
+832 | parseOrigin | parseOrigin(MyStringTokenizer st) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 112 | 116 | 551321 | 309
+832 | parseRR | parseRR(MyStringTokenizer st, boolean useLast, Record last, Name origin) | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 144 | 145 | 551322 | 123
+832 | parseRR | parseRR(MyStringTokenizer st, short classValue, int TTLValue) |  | update | update.java | 283 | 284 | 551323 | 123
+832 | parseRSA | parseRSA(DataByteInputStream in) throws IOException | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 36 | 47 | 551324 | 472
+832 | parseRecord | parseRecord(CERTRecord r) | org.xbill.DNS.security | CERTConverter | org/xbill/DNS/security/CERTConverter.java | 26 | 51 | 551325 | 473
+832 | parseRecord | parseRecord(KEYRecord r) | org.xbill.DNS.security | KEYConverter | org/xbill/DNS/security/KEYConverter.java | 103 | 125 | 551326 | 474
+832 | parseTTL | parseTTL(MyStringTokenizer st) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 119 | 123 | 551327 | 286
+832 | parseTTL | parseTTL(String s) throws NumberFormatException | org.xbill.DNS | TTL | org/xbill/DNS/TTL.java | 24 | 48 | 551328 | 286
+832 | print | print(Object o) |  | update | update.java | 23 | 27 | 551329 | 290
+832 | printFlags | printFlags() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 216 | 226 | 551330 | 54
+832 | put | put(short value, String string) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 174 | 178 | 551331 | 520
+832 | put | put(short type, Object value) | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 54 | 58 | 551332 | 520
+832 | put2 | put2(int v, String s) | org.xbill.DNS.utils | StringValueTable | org/xbill/DNS/utils/StringValueTable.java | 31 | 35 | 551333 | 197
+832 | putBackToken | putBackToken(String s) | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 190 | 192 | 551334 | 182
+832 | randomID | randomID() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 125 | 127 | 551335 | 150
+832 | rdataFromString | rdataFromString(MX_KXRecord rec, MyStringTokenizer st, Name origin) | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 50 | 51 | 551336 | 570
+832 | rdataFromString | rdataFromString(NS_CNAME_PTRRecord rec, MyStringTokenizer st, Name origin) | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 45 | 46 | 551337 | 571
+832 | rdataToString | rdataToString() | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 91 | 103 | 551338 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 76 | 81 | 551339 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 125 | 127 | 551340 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 107 | 121 | 551341 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 100 | 113 | 551342 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 100 | 110 | 551343 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 132 | 153 | 551344 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 194 | 268 | 551345 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 60 | 68 | 551346 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 95 | 111 | 551347 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 54 | 59 | 551348 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 90 | 102 | 551349 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 96 | 117 | 551350 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 76 | 84 | 551351 | 81
+832 | rdataToString | public abstract String rdataToString(); | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 267 | 268 | 551352 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 119 | 141 | 551353 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 102 | 121 | 551354 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 100 | 109 | 551355 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 140 | 162 | 551356 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 121 | 156 | 551357 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 90 | 104 | 551358 | 81
+832 | rdataToString | rdataToString() | org.xbill.DNS | UNKRecord | org/xbill/DNS/UNKRecord.java | 63 | 72 | 551359 | 81
+832 | rdataToWireCanonical | rdataToWireCanonical() throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 261 | 265 | 551360 | 284
+832 | readBigInteger | readBigInteger(int len) throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 165 | 171 | 551361 | 151
+832 | readByte | readByte() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 61 | 66 | 551362 | 56
+832 | readExtendedLine | readExtendedLine(BufferedReader br) throws IOException | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 205 | 225 | 551363 | 161
+832 | readFlags | readFlags(DataByteInputStream in) throws IOException | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 203 | 212 | 551364 | 57
+832 | readInt | readInt() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 111 | 119 | 551365 | 58
+832 | readLong | readLong() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 126 | 140 | 551366 | 59
+832 | readShort | readShort() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 85 | 91 | 551367 | 60
+832 | readString | readString() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 147 | 156 | 551368 | 151
+832 | readTCP | readTCP(Socket s) throws IOException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 155 | 165 | 551369 | 577
+832 | readUDP | readUDP(DatagramSocket s, int max) throws IOException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 135 | 143 | 551370 | 578
+832 | readUnsignedByte | readUnsignedByte() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 73 | 78 | 551371 | 61
+832 | readUnsignedShort | readUnsignedShort() throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 98 | 104 | 551372 | 62
+832 | receiveMessage | receiveMessage(Object id, Message m) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 62 | 67 | 551373 | 330
+832 | receiveMessage | void receiveMessage(Object id, Message m); | org.xbill.DNS | ResolverListener | org/xbill/DNS/ResolverListener.java | 22 | 23 | 551374 | 330
+832 | remainingTokens | remainingTokens() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 196 | 201 | 551375 | 402
+832 | remove | remove(short type) | org.xbill.DNS | TypeMap | org/xbill/DNS/TypeMap.java | 64 | 66 | 551376 | 521
+832 | remove | remove() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 82 | 84 | 551377 | 521
+832 | removeAllRecords | removeAllRecords(int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 151 | 154 | 551378 | 271
+832 | removeName | removeName(Name name) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 191 | 193 | 551379 | 416
+832 | removeRecord | removeRecord(Record r, int section) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 136 | 143 | 551380 | 89
+832 | removeRecord | removeRecord(Record r) | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 366 | 375 | 551381 | 89
+832 | removeSet | removeSet(Name name, short type, Object set) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 169 | 185 | 551382 | 303
+832 | rrFromWire | rrFromWire(MX_KXRecord rec, DataByteInputStream in) | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 39 | 40 | 551383 | 572
+832 | rrFromWire | rrFromWire(NS_CNAME_PTRRecord rec, DataByteInputStream in) | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 35 | 36 | 551384 | 573
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | A6Record | org/xbill/DNS/A6Record.java | 124 | 134 | 551385 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | AAAARecord | org/xbill/DNS/AAAARecord.java | 90 | 94 | 551386 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 142 | 147 | 551387 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | CERTRecord | org/xbill/DNS/CERTRecord.java | 156 | 164 | 551388 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | DSRecord | org/xbill/DNS/DSRecord.java | 149 | 155 | 551389 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) | org.xbill.DNS | HINFORecord | org/xbill/DNS/HINFORecord.java | 88 | 94 | 551390 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | KEYRecord | org/xbill/DNS/KEYRecord.java | 227 | 236 | 551391 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 307 | 318 | 551392 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 83 | 92 | 551393 | 152
+832 | rrToWire | void rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 149 | 158 | 551394 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 68 | 76 | 551395 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 117 | 130 | 551396 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 147 | 159 | 551397 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 99 | 105 | 551398 | 152
+832 | rrToWire | abstract void rrToWire(DataByteOutputStream out, Compression c) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 424 | 425 | 551399 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 204 | 217 | 551400 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 166 | 177 | 551401 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 136 | 144 | 551402 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 213 | 238 | 551403 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 201 | 226 | 551404 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | TXTRecord | org/xbill/DNS/TXTRecord.java | 113 | 122 | 551405 | 152
+832 | rrToWire | rrToWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | UNKRecord | org/xbill/DNS/UNKRecord.java | 75 | 78 | 551406 | 152
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | MX_KXRecord | org/xbill/DNS/MX_KXRecord.java | 95 | 101 | 551407 | 284
+832 | rrToWireCanonical | void rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | NAPTRRecord | org/xbill/DNS/NAPTRRecord.java | 160 | 169 | 551408 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | NS_CNAME_PTRRecord | org/xbill/DNS/NS_CNAME_PTRRecord.java | 79 | 84 | 551409 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | NXTRecord | org/xbill/DNS/NXTRecord.java | 133 | 146 | 551410 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | OPTRecord | org/xbill/DNS/OPTRecord.java | 162 | 164 | 551411 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | RPRecord | org/xbill/DNS/RPRecord.java | 108 | 114 | 551412 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 433 | 435 | 551413 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | SIGRecord | org/xbill/DNS/SIGRecord.java | 220 | 233 | 551414 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | SOARecord | org/xbill/DNS/SOARecord.java | 180 | 191 | 551415 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | SRVRecord | org/xbill/DNS/SRVRecord.java | 147 | 155 | 551416 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | TKEYRecord | org/xbill/DNS/TKEYRecord.java | 241 | 243 | 551417 | 284
+832 | rrToWireCanonical | rrToWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | TSIGRecord | org/xbill/DNS/TSIGRecord.java | 229 | 231 | 551418 | 284
+832 | rrs | rrs() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 80 | 91 | 551419 | 250
+832 | run | run() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 124 | 159 | 551420 | 335
+832 | run | run() | org.xbill.DNS | ResolveThread | org/xbill/DNS/ResolveThread.java | 40 | 48 | 551421 | 335
+832 | run | run() | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 113 | 139 | 551422 | 335
+832 | searchPath | searchPath() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 283 | 285 | 551423 | 370
+832 | sectionToString | sectionToString(int i) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 384 | 403 | 551424 | 192
+832 | send | send(Message query) throws IOException | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 213 | 293 | 551425 | 66
+832 | send | Message send(Message query) throws IOException; | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 83 | 84 | 551426 | 66
+832 | send | send(Message query) throws IOException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 234 | 283 | 551427 | 66
+832 | sendAXFR | sendAXFR(Message query) throws IOException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 307 | 372 | 551428 | 67
+832 | sendAsync | sendAsync(final Message query, final ResolverListener listener) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 306 | 315 | 551429 | 331
+832 | sendAsync | Object sendAsync(final Message query, final ResolverListener listener); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 94 | 95 | 551430 | 331
+832 | sendAsync | sendAsync(final Message query, final ResolverListener listener) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 295 | 304 | 551431 | 331
+832 | sendTo | sendTo(Message query, Receiver receiver, Map idMap, int r) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 145 | 154 | 551432 | 339
+832 | sendUpdate | sendUpdate() throws IOException |  | update | update.java | 244 | 276 | 551433 | 35
+832 | serveTCP | serveTCP(InetAddress addr, short port) |  | jnamed | jnamed.java | 576 | 623 | 551434 | 206
+832 | serveUDP | serveUDP(InetAddress addr, short port) |  | jnamed | jnamed.java | 626 | 675 | 551435 | 207
+832 | server | server() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 275 | 279 | 551436 | 334
+832 | servers | servers() | org.xbill.DNS | FindServer | org/xbill/DNS/FindServer.java | 269 | 271 | 551437 | 371
+832 | set | set(String option) | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 56 | 60 | 551438 | 317
+832 | set | set(String option, String value) | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 64 | 68 | 551439 | 431
+832 | setCleanInterval | setCleanInterval(int minutes) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 749 | 755 | 551440 | 508
+832 | setCount | setCount(int field, int value) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 166 | 168 | 551441 | 69
+832 | setDefaultResolver | setDefaultResolver(String hostname) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 73 | 75 | 551442 | 229
+832 | setEDNS | setEDNS(int level) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 175 | 178 | 551443 | 208
+832 | setEDNS | void setEDNS(int level); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 42 | 43 | 551444 | 208
+832 | setEDNS | setEDNS(int level) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 93 | 98 | 551445 | 208
+832 | setFlag | setFlag(int bit) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 78 | 80 | 551446 | 70
+832 | setHeader | setHeader(Header h) | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 104 | 106 | 551447 | 71
+832 | setID | setID(int id) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 117 | 119 | 551448 | 72
+832 | setIgnoreTruncation | setIgnoreTruncation(boolean flag) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 169 | 172 | 551449 | 292
+832 | setIgnoreTruncation | void setIgnoreTruncation(boolean flag); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 34 | 35 | 551450 | 292
+832 | setIgnoreTruncation | setIgnoreTruncation(boolean flag) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 88 | 90 | 551451 | 292
+832 | setLifetime | setLifetime(long time) | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 36 | 38 | 551452 | 418
+832 | setLoadBalance | setLoadBalance(boolean flag) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 348 | 350 | 551453 | 506
+832 | setMaxNCache | setMaxNCache(int seconds) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 739 | 741 | 551454 | 505
+832 | setMaxThreads | setMaxThreads(int maxThreads) | org.xbill.Task | WorkerThread | org/xbill/Task/WorkerThread.java | 46 | 48 | 551455 | 419
+832 | setNoEscapeCharacter | setNoEscapeCharacter() | org.xbill.DNS.utils | MyStringTokenizer | org/xbill/DNS/utils/MyStringTokenizer.java | 66 | 68 | 551456 | 478
+832 | setOpcode | setOpcode(byte value) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 152 | 154 | 551457 | 73
+832 | setOrigin | setOrigin(Name origin) | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 33 | 35 | 551458 | 532
+832 | setPort | setPort(int port) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 157 | 160 | 551459 | 74
+832 | setPort | void setPort(int port); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 21 | 22 | 551460 | 74
+832 | setPort | setPort(int port) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 78 | 80 | 551461 | 74
+832 | setPos | setPos(int pos) | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 195 | 197 | 551462 | 554
+832 | setRcode | setRcode(short value) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 134 | 136 | 551463 | 76
+832 | setResolver | setResolver(Resolver res) | org.xbill.DNS | dns | org/xbill/DNS/dns.java | 115 | 118 | 551464 | 306
+832 | setRetries | setRetries(int retries) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 354 | 356 | 551465 | 546
+832 | setSecurePolicy | setSecurePolicy() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 729 | 731 | 551466 | 436
+832 | setSecurity | setSecurity(byte status) | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 174 | 176 | 551467 | 437
+832 | setTCP | setTCP(boolean flag) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 163 | 166 | 551468 | 183
+832 | setTCP | void setTCP(boolean flag); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 27 | 28 | 551469 | 183
+832 | setTCP | setTCP(boolean flag) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 83 | 85 | 551470 | 183
+832 | setTSIGKey | setTSIGKey(String key) throws UnknownHostException | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 193 | 196 | 551471 | 116
+832 | setTSIGKey | setTSIGKey(String name, String key) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 187 | 190 | 551472 | 116
+832 | setTSIGKey | void setTSIGKey(String key) throws UnknownHostException; | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 69 | 70 | 551473 | 116
+832 | setTSIGKey | void setTSIGKey(String name, String key); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 59 | 60 | 551474 | 116
+832 | setTSIGKey | setTSIGKey(String key) throws UnknownHostException | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 125 | 127 | 551475 | 116
+832 | setTSIGKey | setTSIGKey(String name, String key) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 106 | 122 | 551476 | 116
+832 | setTimeout | setTimeout(int secs) | org.xbill.DNS | ExtendedResolver | org/xbill/DNS/ExtendedResolver.java | 199 | 202 | 551477 | 332
+832 | setTimeout | void setTimeout(int secs); | org.xbill.DNS | Resolver | org/xbill/DNS/Resolver.java | 75 | 76 | 551478 | 332
+832 | setTimeout | setTimeout(int secs) | org.xbill.DNS | SimpleResolver | org/xbill/DNS/SimpleResolver.java | 130 | 132 | 551479 | 332
+832 | setVerifier | setVerifier(Verifier v) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 720 | 722 | 551480 | 438
+832 | setoffset | setoffset(int n, int offset) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 92 | 98 | 551481 | 591
+832 | sign | sign() | org.xbill.DNS.utils | hmacSigner | org/xbill/DNS/utils/hmacSigner.java | 94 | 107 | 551482 | 154
+832 | sigs | sigs() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 95 | 100 | 551483 | 269
+832 | size | size() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 104 | 106 | 551484 | 325
+832 | skipBytes | skipBytes(int n) throws IOException | org.xbill.DNS.utils | DataByteInputStream | org/xbill/DNS/utils/DataByteInputStream.java | 178 | 180 | 551485 | 77
+832 | string | string(int i) | org.xbill.DNS | DClass | org/xbill/DNS/DClass.java | 51 | 54 | 551486 | 255
+832 | string | string(int i) | org.xbill.DNS | Flags | org/xbill/DNS/Flags.java | 58 | 63 | 551487 | 255
+832 | string | string(int i) | org.xbill.DNS | Opcode | org/xbill/DNS/Opcode.java | 40 | 43 | 551488 | 255
+832 | string | string(int i) | org.xbill.DNS | Rcode | org/xbill/DNS/Rcode.java | 94 | 97 | 551489 | 255
+832 | string | string(int i) | org.xbill.DNS | Section | org/xbill/DNS/Section.java | 67 | 70 | 551490 | 255
+832 | string | string(short i) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 254 | 257 | 551491 | 255
+832 | stripTrailing | stripTrailing(String s) | org.xbill.DNS | Master | org/xbill/DNS/Master.java | 182 | 196 | 551492 | 247
+832 | subdomain | subdomain(Name domain) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 505 | 511 | 551493 | 264
+832 | thaw | thaw() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 365 | 368 | 551494 | 537
+832 | toBytes | toBytes() | org.xbill.DNS | Inet6Address | org/xbill/DNS/Inet6Address.java | 135 | 137 | 551495 | 490
+832 | toDottedQuad | toDottedQuad(int addr) | org.xbill.DNS | ARecord | org/xbill/DNS/ARecord.java | 50 | 60 | 551496 | 584
+832 | toLOCformat | toLOCformat(long l) | org.xbill.DNS | LOCRecord | org/xbill/DNS/LOCRecord.java | 332 | 339 | 551497 | 411
+832 | toMasterFile | toMasterFile() | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 386 | 404 | 551498 | 558
+832 | toShort | toShort(short dclass) | org.xbill.DNS | DClass | org/xbill/DNS/DClass.java | 75 | 79 | 551499 | 562
+832 | toShort | toShort(short type) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 296 | 300 | 551500 | 562
+832 | toString | toString() | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 102 | 113 | 551501 | 81
+832 | toString | toString() | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 247 | 249 | 551502 | 81
+832 | toString | toString() | org.xbill.DNS | Inet6Address | org/xbill/DNS/Inet6Address.java | 140 | 196 | 551503 | 81
+832 | toString | toString() | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 409 | 433 | 551504 | 81
+832 | toString | toString() | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 539 | 556 | 551505 | 81
+832 | toString | toString() | org.xbill.DNS | NameSet | org/xbill/DNS/NameSet.java | 205 | 219 | 551506 | 81
+832 | toString | toString() | org.xbill.DNS | RRset | org/xbill/DNS/RRset.java | 200 | 215 | 551507 | 81
+832 | toString | toString() | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 273 | 291 | 551508 | 81
+832 | toString | toString() | org.xbill.DNS | SetResponse | org/xbill/DNS/SetResponse.java | 165 | 176 | 551509 | 81
+832 | toString | toString() | org.xbill.DNS.security | DHPubKey | org/xbill/DNS/security/DHPubKey.java | 67 | 76 | 551510 | 81
+832 | toStringWithRcode | toStringWithRcode(short newrcode) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 229 | 243 | 551511 | 81
+832 | toWire | toWire() throws IOException | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 67 | 71 | 551512 | 155
+832 | toWire | toWire(DataByteOutputStream out) throws IOException | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 59 | 64 | 551513 | 155
+832 | toWire | toWire() throws IOException | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 336 | 348 | 551514 | 155
+832 | toWire | toWire(DataByteOutputStream out) throws IOException | org.xbill.DNS | Message | org/xbill/DNS/Message.java | 319 | 330 | 551515 | 155
+832 | toWire | toWire(DataByteOutputStream out, Compression c) throws IOException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 576 | 601 | 551516 | 155
+832 | toWire | toWire(DataByteOutputStream out, int section, Compression c) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 206 | 207 | 551517 | 155
+832 | toWire | toWire(int section) throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 227 | 231 | 551518 | 156
+832 | toWireCanonical | toWireCanonical() throws IOException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 619 | 632 | 551519 | 78
+832 | toWireCanonical | toWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 609 | 612 | 551520 | 78
+832 | toWireCanonical | toWireCanonical() throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 250 | 254 | 551521 | 78
+832 | toWireCanonical | toWireCanonical(DataByteOutputStream out) throws IOException | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 234 | 243 | 551522 | 78
+832 | truncate | truncate(Message in, int length, int maxLength) |  | jnamed | jnamed.java | 524 | 543 | 551523 | 279
+832 | truncateSection | truncateSection(Message in, int maxLength, int length, int section) |  | jnamed | jnamed.java | 496 | 521 | 551524 | 280
+832 | unset | unset(String option) | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 72 | 76 | 551525 | 432
+832 | unsetFlag | unsetFlag(int bit) | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 87 | 89 | 551526 | 84
+832 | updString | updString(int i) | org.xbill.DNS | Section | org/xbill/DNS/Section.java | 84 | 87 | 551527 | 254
+832 | update | update(Record r) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 72 | 77 | 551528 | 169
+832 | update | update(InputStream in) throws IOException |  | update | update.java | 30 | 241 | 551529 | 169
+832 | usage | usage() |  | dig | dig.java | 16 | 20 | 551530 | 85
+832 | validate | validate() throws IOException | org.xbill.DNS | Zone | org/xbill/DNS/Zone.java | 101 | 111 | 551531 | 487
+832 | value | value(String s) | org.xbill.DNS | DClass | org/xbill/DNS/DClass.java | 58 | 71 | 551532 | 257
+832 | value | value(String s) | org.xbill.DNS | Flags | org/xbill/DNS/Flags.java | 67 | 77 | 551533 | 257
+832 | value | value(String s) | org.xbill.DNS | Opcode | org/xbill/DNS/Opcode.java | 47 | 57 | 551534 | 257
+832 | value | value(String option) | org.xbill.DNS | Options | org/xbill/DNS/Options.java | 88 | 92 | 551535 | 257
+832 | value | value(String s) | org.xbill.DNS | Rcode | org/xbill/DNS/Rcode.java | 111 | 121 | 551536 | 257
+832 | value | value(String s) | org.xbill.DNS | Section | org/xbill/DNS/Section.java | 91 | 101 | 551537 | 257
+832 | value | value(String s) | org.xbill.DNS | Type | org/xbill/DNS/Type.java | 261 | 274 | 551538 | 257
+832 | verify | byte verify(RRset set, Cache cache); | org.xbill.DNS | Verifier | org/xbill/DNS/Verifier.java | 23 | 24 | 551539 | 439
+832 | verify | verify(RRset set, Cache cache) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 193 | 214 | 551540 | 439
+832 | verifyAXFRStart | verifyAXFRStart() | org.xbill.DNS | TSIG | org/xbill/DNS/TSIG.java | 306 | 308 | 551541 | 114
+832 | verifyRecords | verifyRecords(Cache tcache) | org.xbill.DNS | Cache | org/xbill/DNS/Cache.java | 505 | 532 | 551542 | 539
+832 | verifySIG | verifySIG(RRset set, SIGRecord sigrec, Cache cache) | org.xbill.DNS.security | DNSSECVerifier | org/xbill/DNS/security/DNSSECVerifier.java | 107 | 183 | 551543 | 475
+832 | wild | wild(int n) | org.xbill.DNS | Name | org/xbill/DNS/Name.java | 404 | 418 | 551544 | 327
+832 | withName | withName(Name name) | org.xbill.DNS | Record | org/xbill/DNS/Record.java | 477 | 486 | 551545 | 427
+832 | writeBigInteger | writeBigInteger(BigInteger i) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 132 | 142 | 551546 | 287
+832 | writeByte | writeByte(int i) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 43 | 45 | 551547 | 185
+832 | writeFlags | writeFlags(DataByteOutputStream out) throws IOException | org.xbill.DNS | Header | org/xbill/DNS/Header.java | 190 | 200 | 551548 | 86
+832 | writeInt | writeInt(int i) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 62 | 67 | 551549 | 186
+832 | writeLong | writeLong(long l) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 74 | 83 | 551550 | 187
+832 | writeShort | writeShort(int i) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 52 | 55 | 551551 | 188
+832 | writeShortAt | writeShortAt(int i, int pos) throws IllegalArgumentException | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 150 | 157 | 551552 | 285
+832 | writeString | writeString(String s) | org.xbill.DNS.utils | DataByteOutputStream | org/xbill/DNS/utils/DataByteOutputStream.java | 90 | 98 | 551553 | 189

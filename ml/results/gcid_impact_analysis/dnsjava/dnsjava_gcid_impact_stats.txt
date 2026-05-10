@@ -1,0 +1,23 @@
+gcid-Level Impact Analysis - dnsjava (Type3_Block)
+============================================================
+
+Total gcids: 953
+Mean dep_ratio: 0.4106
+Median dep_ratio: 0.3333
+
+1. File Co-location Impact (same_file_frac <-> dep_ratio)
+   Pearson r: 0.7266
+   p-value:   3.26e-157
+   Point-biserial r (has_sf binary): 0.4816
+   Point-biserial p: 1.73e-56
+
+2. Mann-Whitney U: dep_ratio (has same-file vs cross-file only)
+   U: 156550
+   p-value: 2.88e-59
+   Has same-file (n=674): mean=0.5138
+   Cross-file only (n=279): mean=0.1612
+
+CONCLUSION:
+   File co-location is the DOMINANT driver (r=0.727).
+   A gcid is independent when its clone peers are in different files.
+   A gcid is dependent when it shares a file with its clone peers.

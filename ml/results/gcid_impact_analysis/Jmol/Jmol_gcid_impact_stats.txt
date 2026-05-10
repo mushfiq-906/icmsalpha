@@ -1,0 +1,27 @@
+gcid-Level Impact Analysis - Jmol (Type3_Block)
+============================================================
+
+Total gcids: 984
+Mean dep_ratio: 0.3401
+Median dep_ratio: 0.2778
+
+1. File Co-location Impact (same_file_frac <-> dep_ratio)
+   Pearson r: 0.4926
+   p-value:   2.76e-61
+   Point-biserial r (has_sf binary): 0.2738
+   Point-biserial p: 2.20e-18
+
+2. Mann-Whitney U: dep_ratio (has same-file vs cross-file only)
+   U: 153288
+   p-value: 2.90e-20
+   Has same-file (n=614): mean=0.4012
+   Cross-file only (n=370): mean=0.2388
+
+3. ANOVA: dep_ratio ~ author
+   F-statistic: 7.51
+   p-value: 1.12e-10
+
+CONCLUSION:
+   Author identity is significant (F=7.5) but secondary.
+   The same author produces both independent and dependent gcids
+   depending on whether their gcids have same-file clone peers.

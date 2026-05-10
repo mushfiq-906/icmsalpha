@@ -1,0 +1,37 @@
+Similarity & Class Size Analysis - dnsjava (Type3_Block)
+============================================================
+
+1. Point-biserial correlations with dep_label
+   similarity: r=0.1928, p=1.12e-75
+   classSize:  r=-0.1513, p=6.12e-47
+
+2. Spearman rank correlations
+   similarity: rho=0.1605, p=1.19e-52
+   classSize:  rho=-0.1485, p=2.90e-45
+
+3. Mann-Whitney U: similarity (dep vs indep)
+   U=9209404, p=5.30e-52
+   Dep mean=87.19, median=88
+   Ind mean=81.86, median=75
+
+4. Mann-Whitney U: classSize (dep vs indep)
+   U=6142151, p=8.64e-45
+   Dep mean=16.8, median=15
+   Ind mean=24.8, median=19
+
+5. Similarity threshold analysis
+   sim >= 70: n=8,944, dep_rate=25.7%
+   sim >= 75: n=6,811, dep_rate=26.5%
+   sim >= 80: n=4,244, dep_rate=32.4%
+   sim >= 85: n=3,250, dep_rate=36.3%
+   sim >= 90: n=2,973, dep_rate=38.5%
+   sim >= 95: n=2,769, dep_rate=40.0%
+
+6. Small vs Large class comparison
+   classSize=2 (n=66): dep_rate=100.0%
+   classSize>=5 (n=8,771): dep_rate=24.7%
+
+7. Logistic Regression: dep ~ similarity + classSize
+   Accuracy: 0.7432
+   OR(similarity): 1.0269
+   OR(classSize): 0.9815

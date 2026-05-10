@@ -36,7 +36,7 @@ warnings.filterwarnings("ignore")
 # ──────────────────────────────────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────────────────────────────────
-SYSTEM = "Ctags"
+SYSTEM = "dnsjava"
 CLONE_TYPE = "Type3_Block"
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),

@@ -1,0 +1,42 @@
+COMBINED FINDINGS REPORT - Jmol (Type3_Block)
+======================================================================
+
+Analysis Execution Status:
+  [PASS] 1. Author-Based Dependency
+  [PASS] 2. File/Folder Proximity
+  [PASS] 3. Similarity & ClassSize
+  [PASS] 4. gcid-Level Impact
+
+----------------------------------------------------------------------
+KEY FINDINGS
+----------------------------------------------------------------------
+
+1. Strongest author feature triggering dependency:
+   sameAuthor (raw) (r = nan)
+
+2. Stronger spatial predictor of co-change:
+   sameFile (|r| = 0.4322)
+   >> sameFile is the stronger spatial predictor
+
+3. Stronger structural predictor of co-change:
+   classSize (|r| = 0.1539)
+   >> classSize is the stronger structural predictor
+
+----------------------------------------------------------------------
+RANKED FEATURE LIST (by |point-biserial r| with dep_label)
+----------------------------------------------------------------------
+
+Rank  Feature                       r           |r|       p-value       Direction   Sig?
+----------------------------------------------------------------------------------------------
+1     weightedCouplingStrength      0.8741      0.8741    0.00e+00      positive    Yes
+2     couplingTrend                 0.6003      0.6003    0.00e+00      positive    Yes
+3     coChangeCount                 0.5131      0.5131    0.00e+00      positive    Yes
+4     sameFile                      0.4322      0.4322    0.00e+00      positive    Yes
+5     depth                         -0.3717     0.3717    0.00e+00      negative    Yes
+6     classSize                     -0.1539     0.1539    4.18e-86      negative    Yes
+7     similarity                    -0.0205     0.0205    9.10e-03      negative    Yes
+8     sameAuthor (raw)              nan         nan       nan           negative    No
+
+======================================================================
+END OF REPORT
+======================================================================

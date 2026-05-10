@@ -1,0 +1,42 @@
+COMBINED FINDINGS REPORT - dnsjava (Type3_Block)
+======================================================================
+
+Analysis Execution Status:
+  [PASS] 1. Author-Based Dependency
+  [PASS] 2. File/Folder Proximity
+  [PASS] 3. Similarity & ClassSize
+  [PASS] 4. gcid-Level Impact
+
+----------------------------------------------------------------------
+KEY FINDINGS
+----------------------------------------------------------------------
+
+1. Strongest author feature triggering dependency:
+   sameAuthor (raw) (r = nan)
+
+2. Stronger spatial predictor of co-change:
+   sameFile (|r| = 0.5279)
+   >> sameFile is the stronger spatial predictor
+
+3. Stronger structural predictor of co-change:
+   similarity (|r| = 0.1928)
+   >> similarity is the stronger structural predictor
+
+----------------------------------------------------------------------
+RANKED FEATURE LIST (by |point-biserial r| with dep_label)
+----------------------------------------------------------------------
+
+Rank  Feature                       r           |r|       p-value       Direction   Sig?
+----------------------------------------------------------------------------------------------
+1     weightedCouplingStrength      0.8539      0.8539    0.00e+00      positive    Yes
+2     sameFile                      0.5279      0.5279    0.00e+00      positive    Yes
+3     coChangeCount                 0.5073      0.5073    0.00e+00      positive    Yes
+4     couplingTrend                 0.5041      0.5041    0.00e+00      positive    Yes
+5     similarity                    0.1928      0.1928    1.12e-75      positive    Yes
+6     classSize                     -0.1513     0.1513    6.12e-47      negative    Yes
+7     depth                         0.0121      0.0121    2.52e-01      positive    No
+8     sameAuthor (raw)              nan         nan       nan           negative    No
+
+======================================================================
+END OF REPORT
+======================================================================
