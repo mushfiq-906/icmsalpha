@@ -13,7 +13,7 @@ from collections import defaultdict
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     matthews_corrcoef, roc_auc_score, average_precision_score,
-    balanced_accuracy_score, confusion_matrix, f1_score,
+    balanced_accuracy_score, confusion_matrix, f1_score, precision_score,
 )
 try:
     from lightgbm import LGBMClassifier; HAS_LGBM = True
@@ -203,7 +203,10 @@ def compute_metrics(yt, yp, ypr=None):
     m["TP"]=int(tp); m["TN"]=int(tn); m["FP"]=int(fp); m["FN"]=int(fn)
     sens = tp/(tp+fn) if (tp+fn)>0 else 0
     spec = tn/(tn+fp) if (tn+fp)>0 else 0
+    prec = tp/(tp+fp) if (tp+fp)>0 else 0
+    npv  = tn/(tn+fn) if (tn+fn)>0 else 0
     m["sensitivity"]=round(sens,4); m["specificity"]=round(spec,4)
+    m["precision"]=round(prec,4); m["npv"]=round(npv,4)
     m["gmean"] = np.sqrt(sens*spec)
     return m
 
@@ -357,7 +360,7 @@ def run(frag_path, pair_path, output_dir=None):
         print(f"\n  {mn}:")
         print(f"    MCC={gm['mcc']:.4f}  AUC-ROC={gm['auc_roc']:.4f}  PR-AUC={gm['pr_auc']:.4f}")
         print(f"    Bal.Acc={gm['balanced_acc']:.4f}  G-mean={gm['gmean']:.4f}  F1={gm['f1']:.4f}")
-        print(f"    Sens={gm['sensitivity']}  Spec={gm['specificity']}")
+        print(f"    Precision={gm['precision']}  Recall={gm['sensitivity']}  Spec={gm['specificity']}  NPV={gm['npv']}")
         print(f"    TP={gm['TP']} TN={gm['TN']} FP={gm['FP']} FN={gm['FN']}  n={gm['total_predictions']}")
 
     # ── SAVE ──
@@ -389,9 +392,15 @@ def run(frag_path, pair_path, output_dir=None):
 
 
 if __name__ == "__main__":
+    _BASE = Path(__file__).resolve().parent.parent / "WorkFolder"
+    _SYSTEM = "tuxguitar"
+    _CLONE_TYPE = "Type3_Block"
+    _DEFAULT_FRAG = str(_BASE / _SYSTEM / "Datasets" / "CloneGenealogy" / f"{_CLONE_TYPE}_rev_fragment.csv")
+    _DEFAULT_PAIR = str(_BASE / _SYSTEM / "Datasets" / "CloneGenealogy" / f"{_CLONE_TYPE}_rev_pair.csv")
+
     p = argparse.ArgumentParser(description="Standing prediction for clone fragments")
-    p.add_argument("--frag", required=True, help="Path to rev_fragment.csv")
-    p.add_argument("--pair", required=True, help="Path to rev_pair.csv")
+    p.add_argument("--frag", default=_DEFAULT_FRAG, help="Path to rev_fragment.csv")
+    p.add_argument("--pair", default=_DEFAULT_PAIR, help="Path to rev_pair.csv")
     p.add_argument("--output", default=None, help="Output directory")
     a = p.parse_args()
     run(a.frag, a.pair, a.output)
