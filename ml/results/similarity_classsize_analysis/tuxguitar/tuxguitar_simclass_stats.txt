@@ -1,0 +1,37 @@
+Similarity & Class Size Analysis - tuxguitar (Type3_Block)
+============================================================
+
+1. Point-biserial correlations with dep_label
+   similarity: r=0.0918, p=0.00e+00
+   classSize:  r=-0.0870, p=0.00e+00
+
+2. Spearman rank correlations
+   similarity: rho=0.0992, p=0.00e+00
+   classSize:  rho=-0.0819, p=0.00e+00
+
+3. Mann-Whitney U: similarity (dep vs indep)
+   U=527895843296, p=0.00e+00
+   Dep mean=70.84, median=70
+   Ind mean=70.16, median=70
+
+4. Mann-Whitney U: classSize (dep vs indep)
+   U=448652017582, p=0.00e+00
+   Dep mean=1447.9, median=1644
+   Ind mean=1577.3, median=1644
+
+5. Similarity threshold analysis
+   sim >= 70: n=4,635,523, dep_rate=4.8%
+   sim >= 75: n=113,347, dep_rate=17.0%
+   sim >= 80: n=26,059, dep_rate=24.2%
+   sim >= 85: n=10,332, dep_rate=29.3%
+   sim >= 90: n=8,846, dep_rate=29.0%
+   sim >= 95: n=7,669, dep_rate=29.5%
+
+6. Small vs Large class comparison
+   classSize=2 (n=306): dep_rate=49.3%
+   classSize>=5 (n=4,633,674): dep_rate=4.8%
+
+7. Logistic Regression: dep ~ similarity + classSize
+   Accuracy: 0.9521
+   OR(similarity): 1.0537
+   OR(classSize): 0.9994

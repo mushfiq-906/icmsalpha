@@ -16,6 +16,7 @@ from sklearn.metrics import (
 
 def plot_rolling_mcc(metrics_df, model_names, tag, output_dir):
     """Rolling MCC over revisions, one line per model."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(14, 5))
     for mn in model_names:
         sub = metrics_df[metrics_df["model"] == mn].sort_values("revision")
@@ -36,6 +37,7 @@ def plot_rolling_mcc(metrics_df, model_names, tag, output_dir):
 
 def plot_confusion_matrices(global_data, model_names, tag, output_dir):
     """Confusion matrix heatmap for each model."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     n = len(model_names)
     fig, axes = plt.subplots(1, n, figsize=(5 * n, 4))
     if n == 1:
@@ -61,6 +63,7 @@ def plot_confusion_matrices(global_data, model_names, tag, output_dir):
 
 def plot_roc_curves(global_data, model_names, tag, output_dir):
     """ROC curves for all models on one figure."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(7, 6))
     for mn in model_names:
         d = global_data[mn]
@@ -81,6 +84,7 @@ def plot_roc_curves(global_data, model_names, tag, output_dir):
 
 def plot_pr_curves(global_data, model_names, tag, output_dir):
     """Precision-Recall curves for all models."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(7, 6))
     for mn in model_names:
         d = global_data[mn]
@@ -100,6 +104,7 @@ def plot_pr_curves(global_data, model_names, tag, output_dir):
 
 def plot_feature_importance(models, feature_cols, tag, output_dir):
     """Feature importance bar chart for each model."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     for mn, model in models.items():
         if not hasattr(model, "feature_importances_"):
             continue
@@ -122,6 +127,7 @@ def plot_feature_importance(models, feature_cols, tag, output_dir):
 
 def plot_model_comparison(global_metrics_df, tag, output_dir):
     """Bar chart comparing all models across key metrics."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     metrics = ["mcc", "balanced_acc", "gmean", "f1", "auc_roc"]
     labels = ["MCC", "Bal. Acc", "G-mean", "F1", "AUC-ROC"]
     x = np.arange(len(metrics))
@@ -142,6 +148,7 @@ def plot_model_comparison(global_metrics_df, tag, output_dir):
 
 def plot_label_distribution(y_all, tag, output_dir):
     """Pie chart of actual label distribution."""
+    output_dir = Path(output_dir); output_dir.mkdir(parents=True, exist_ok=True)
     dep = int(np.sum(np.array(y_all) == 1))
     ind = int(np.sum(np.array(y_all) == 0))
     fig, ax = plt.subplots(figsize=(6, 5))

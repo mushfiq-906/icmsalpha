@@ -41,7 +41,10 @@ public class SPCPAnalysis {
 
     private final Map<Integer, Clones> cloneInfoMap = new HashMap<>();
     private final Map<Integer, CloneHistory> historyMap = new HashMap<>();
-    private final Map<Integer, Map<Integer, Clones>> cloneInstancesByRevision = new HashMap<>();
+    private final Map<Integer, Map<Integer, CloneLocation>> cloneInstancesByRevision = new HashMap<>();
+
+    /** Compact storage for clone location per revision — avoids redundant fields and empty TreeSet. */
+    private record CloneLocation(String filePath, int startLine, int endLine) {}
 
     // Track which revisions each clone appears in
     private final Map<Integer, Set<Integer>> cloneRevisionMap = new HashMap<>();
@@ -203,10 +206,9 @@ public class SPCPAnalysis {
             // Track which revisions this clone exists in
             cloneRevisionMap.computeIfAbsent(globalCloneId, k -> new TreeSet<>()).add(revision);
 
-            // Store instance for this specific revision
+            // Store instance for this specific revision (compact record; intern filePath to share strings)
             cloneInstancesByRevision.computeIfAbsent(globalCloneId, k -> new HashMap<>())
-                    .put(revision, new Clones(globalCloneId, classId, filePath,
-                            startLine, endLine, revision, new TreeSet<>()));
+                    .put(revision, new CloneLocation(filePath.intern(), startLine, endLine));
 
         } catch (NumberFormatException e) {
             print("ERROR parsing line: " + line);
@@ -230,28 +232,26 @@ public class SPCPAnalysis {
     private class FileBasedFragmentFetcher implements FragmentFetcher {
         @Override
         public String getFragmentTextAt(int globalCloneId, int revision) throws IOException {
-            Map<Integer, Clones> revMap = cloneInstancesByRevision.get(globalCloneId);
+            Map<Integer, CloneLocation> revMap = cloneInstancesByRevision.get(globalCloneId);
             if (revMap == null) {
                 print("    Fragment fetch: No revision map for gcid=" + globalCloneId);
                 return null;
             }
 
-            Clones c = revMap.get(revision);
+            CloneLocation c = revMap.get(revision);
             if (c == null) {
                 print("    Fragment fetch: Clone not found in revision " + revision);
                 return null;
             }
 
-            // FIX 5: Construct proper path to revision files
-            String revisionFolder = "Revision_" + revision;
-            Path filePath = Paths.get(cp.getCloneDir(), c.filePath);
+            Path filePath = Paths.get(cp.getCloneDir(), c.filePath());
 
             if (!Files.exists(filePath)) {
                 print("    Fragment fetch: File does not exist: " + filePath);
                 return null;
             }
 
-            // FIX: Use ISO-8859-1 charset to handle non-UTF-8 characters in C source files
+            // Use ISO-8859-1 charset to handle non-UTF-8 characters in source files
             List<String> lines;
             try {
                 lines = Files.readAllLines(filePath, java.nio.charset.StandardCharsets.ISO_8859_1);
@@ -260,12 +260,12 @@ public class SPCPAnalysis {
                 return null;
             }
 
-            // FIX 6: Handle line indices correctly (1-based to 0-based)
-            int start = Math.max(0, c.startLine - 1);
-            int end = Math.min(lines.size() - 1, c.endLine - 1);
+            // Handle line indices correctly (1-based to 0-based)
+            int start = Math.max(0, c.startLine() - 1);
+            int end = Math.min(lines.size() - 1, c.endLine() - 1);
 
             if (start > end || start >= lines.size()) {
-                print("    Fragment fetch: Invalid line range [" + c.startLine + "," + c.endLine + "]");
+                print("    Fragment fetch: Invalid line range [" + c.startLine() + "," + c.endLine() + "]");
                 return null;
             }
 

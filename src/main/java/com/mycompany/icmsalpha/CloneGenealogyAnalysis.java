@@ -38,6 +38,9 @@ public class CloneGenealogyAnalysis {
      */
     private static final int[] HALF_LIVES = {10, 20, 30, 50, 75};
 
+    /** Compact storage for clone location per revision — avoids redundant fields. */
+    private record CloneLocation(String filePath, int startLine, int endLine) {}
+
     /** SPCP similarity threshold — loaded from config, same as SPCPAnalysis */
     private double spcpSimThreshold = 0.70; // default, overridden in constructor if config exists
 
@@ -899,23 +902,24 @@ public class CloneGenealogyAnalysis {
         Map<Integer, String> gcidToFullPath = new HashMap<>(); // gcid -> full filepath (for depth calc)
         Map<Integer, CloneHistory> historyMap = new HashMap<>(); // gcid -> CloneHistory
 
-        // Track which clones exist at each revision and their change status
-        Map<Integer, Map<Integer, String>> revisionCloneStatus = new HashMap<>(); // rev -> (gcid -> changeType)
+        // Track which gcids were modified (changeType="M") at each revision.
+        // Only revisions with >=1 modified clone have an entry; U/A/D clones are skipped.
+        // This replaces the old Map<rev, Map<gcid, status>> that stored ALL clones.
+        Map<Integer, Set<Integer>> revModifiedAtRev = new HashMap<>();
 
-        // Store per-revision clone instances for dynamic SPCP fragment fetching
-        // Structure: gcid -> (revision -> Clones instance with filePath, startLine, endLine)
-        Map<Integer, Map<Integer, Clones>> cloneInstancesByRev = new HashMap<>();
+        // Store per-revision clone locations for SPCP fragment fetching (compact record, not full Clones)
+        // Structure: gcid -> (revision -> CloneLocation with filePath, startLine, endLine)
+        Map<Integer, Map<Integer, CloneLocation>> cloneInstancesByRev = new HashMap<>();
 
         System.out.println("Loading clones from all revisions...");
 
         // Step 1: Load all clones from all revisions to build complete picture
         for (int rev = startRev; rev <= endRev; rev++) {
             List<Clones> clones = ap.getGlobalClones(rev, cChoice, granularity);
-            Map<Integer, String> revStatus = new HashMap<>();
+            Set<Integer> revModifiedSet = null; // lazy-init: only allocated if >=1 clone is "M"
 
             for (Clones c : clones) {
                 int gcid = c.globalCloneId;
-                revStatus.put(gcid, c.cloneType); // M, U, A, D
 
                 // Store latest clone info
                 cloneInfoMap.put(gcid, c);
@@ -939,14 +943,17 @@ public class CloneGenealogyAnalysis {
 
                 if ("M".equalsIgnoreCase(c.cloneType)) {
                     h.changeRevs.add(rev);
+                    if (revModifiedSet == null) revModifiedSet = new HashSet<>();
+                    revModifiedSet.add(gcid);
                 } else if ("U".equalsIgnoreCase(c.cloneType)) {
                     h.unchangedRevs.add(rev);
                 }
 
-                // Store clone instance for this revision (for SPCP fragment fetching)
-                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>()).put(rev, c);
+                // Store compact location for this revision (for SPCP fragment fetching)
+                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>())
+                        .put(rev, new CloneLocation(c.filePath.intern(), c.startLine, c.endLine));
             }
-            revisionCloneStatus.put(rev, revStatus);
+            if (revModifiedSet != null) revModifiedAtRev.put(rev, revModifiedSet);
         }
 
         System.out.println("Total unique clones found: " + cloneInfoMap.size());
@@ -964,8 +971,14 @@ public class CloneGenealogyAnalysis {
 
         System.out.println("Total clone classes: " + classToClonesMap.size());
 
-        // Step 3: Generate evolution records for each clone pair
-        List<EvolutionRecord> records = new ArrayList<>();
+        // Step 3+4: Stream to a temp file first, then sort by (revision, gcid1, gcid2) and write final output.
+        // Strings are much cheaper than EvolutionRecord objects, so the sort pass is safe.
+        String outputPath = cp.getGenealogyPath(cChoice, granularity)
+                .replace(".csv", "_evolution_dataset.csv");
+        File tempFile = new File(outputPath + ".tmp");
+        long totalRecords = 0;
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
 
         for (Map.Entry<Integer, List<Integer>> classEntry : classToClonesMap.entrySet()) {
             int classId = classEntry.getKey();
@@ -992,9 +1005,6 @@ public class CloneGenealogyAnalysis {
                     }
 
                     // Pre-compute SPCP-verified revisions for this pair (once, not per event)
-                    // This set grows as we iterate revisions — but we compute it up to pairEndRev
-                    // so it covers the entire pair lifetime. Per-event SPCP_decay uses only
-                    // the subset of spcpRevisions up to the current revision.
                     int pairEndRev = Math.min(h1.endRev, h2.endRev);
                     Set<Integer> spcpRevisions = computeSPCPRevisions(
                             gcid1, gcid2, h1, h2, pairEndRev, cloneInstancesByRev);
@@ -1004,32 +1014,30 @@ public class CloneGenealogyAnalysis {
                     int gcid1IndependentCount = 0;
                     int gcid2IndependentCount = 0;
 
+                    // Incremental decay sets — updated each revision, avoiding O(n^2) per-event rebuilds
+                    Set<Integer> coChangeRevsUpToNow = new TreeSet<>();
+                    Set<Integer> spcpRevsUpToNow = new TreeSet<>();
+
                     // Analyze each revision where at least one clone exists
                     int pairStartRev = Math.max(h1.addedInRev, h2.addedInRev);
 
                     for (int rev = pairStartRev; rev <= pairEndRev; rev++) {
-                        Map<Integer, String> revStatus = revisionCloneStatus.get(rev);
-                        if (revStatus == null)
-                            continue;
-
-                        String status1 = revStatus.get(gcid1);
-                        String status2 = revStatus.get(gcid2);
-
-                        boolean changed1 = "M".equalsIgnoreCase(status1);
-                        boolean changed2 = "M".equalsIgnoreCase(status2);
+                        Set<Integer> modifiedAtRev = revModifiedAtRev.getOrDefault(rev, Collections.emptySet());
+                        boolean changed1 = modifiedAtRev.contains(gcid1);
+                        boolean changed2 = modifiedAtRev.contains(gcid2);
+                        if (!changed1 && !changed2) continue; // no change activity at this revision
 
                         if (changed1 && changed2) {
                             coChangeCount++;
-                        } else if (changed1 && !changed2) {
+                            coChangeRevsUpToNow.add(rev);
+                        } else if (changed1) {
                             gcid1IndependentCount++;
-                        } else if (!changed1 && changed2) {
+                        } else {
                             gcid2IndependentCount++;
                         }
+                        if (spcpRevisions.contains(rev)) spcpRevsUpToNow.add(rev);
 
-                        // Only create record if there's any change activity
-                        if (coChangeCount > 0 || gcid1IndependentCount > 0 || gcid2IndependentCount > 0) {
-                            // Check if this revision has new change activity
-                            if (changed1 || changed2) {
+                        {
                                 EvolutionRecord rec = new EvolutionRecord();
                                 rec.revision = rev;
                                 rec.gcid1 = gcid1;
@@ -1116,18 +1124,8 @@ public class CloneGenealogyAnalysis {
                                 rec.will_independently_evolve = rec.wies > 0.5 ? 1 : 0;
 
                                 // --- DECAY-WEIGHTED METRICS at 5 candidate half-lives ---
-                                // Co-change revisions for this pair up to current revision
-                                Set<Integer> coChangeRevsUpToNow = new TreeSet<>();
-                                for (int r : h1.changeRevs) {
-                                    if (r <= rev && h2.changeRevs.contains(r)) {
-                                        coChangeRevsUpToNow.add(r);
-                                    }
-                                }
-                                // SPCP revisions filtered to only those up to current revision
-                                Set<Integer> spcpRevsUpToNow = new TreeSet<>();
-                                for (int r : spcpRevisions) {
-                                    if (r <= rev) spcpRevsUpToNow.add(r);
-                                }
+                                // coChangeRevsUpToNow and spcpRevsUpToNow are maintained
+                                // incrementally in the outer loop (no per-event rebuild needed)
 
                                 for (int hi = 0; hi < HALF_LIVES.length; hi++) {
                                     double lambda = lambdaFromHalfLife(HALF_LIVES[hi]);
@@ -1145,115 +1143,126 @@ public class CloneGenealogyAnalysis {
                                         && rec.irDecay[1] < 0.5;
                                 rec.willDivergeDecay = dependent ? 0 : 1;
 
-                                records.add(rec);
-                            }
+                                // Write record directly to CSV (streamed, no accumulation in RAM)
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(String.format(
+                                        "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%.4f,%d,%d," +
+                                        "%.4f,%.4f,%d," +
+                                        "%d,%d,%d,%d,%d,%d,%d,%d,%.4f,%.4f,%d,%d,%.4f,%d",
+                                        rec.revision,
+                                        rec.gcid1,
+                                        rec.gcid2,
+                                        rec.classId,
+                                        rec.coChangeCount,
+                                        rec.gcid1IndependentCount,
+                                        rec.gcid2IndependentCount,
+                                        rec.sameFile,
+                                        rec.sameAuthor,
+                                        rec.sameMethod,
+                                        rec.similarity,
+                                        rec.cloneType,
+                                        rec.nlines1,
+                                        rec.nlines2,
+                                        rec.depth,
+                                        rec.classSize,
+                                        rec.isSPCP ? 1 : 0,
+                                        rec.weightedCouplingStrength,
+                                        rec.lastCoChangeAge,
+                                        rec.lastSoloChangeAge,
+                                        // decoupling signals
+                                        rec.couplingTrend,
+                                        rec.wcsRecent,
+                                        rec.soloEventsAfterLastCoChange,
+                                        // new process metrics
+                                        rec.noc1,
+                                        rec.noc2,
+                                        rec.fileAge1,
+                                        rec.fileAge2,
+                                        rec.churn1,
+                                        rec.churn2,
+                                        // new ownership metrics
+                                        rec.distinctAuthors1,
+                                        rec.distinctAuthors2,
+                                        rec.majorAuthorProp1,
+                                        rec.majorAuthorProp2,
+                                        rec.minorAuthorCount1,
+                                        rec.minorAuthorCount2,
+                                        // WIES + target label
+                                        rec.wies,
+                                        rec.will_independently_evolve));
+                                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                    sb.append(String.format(",%.4f", rec.irDecay[hi]));
+                                }
+                                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                    sb.append(String.format(",%.4f", rec.csDecay[hi]));
+                                }
+                                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
+                                    sb.append(String.format(",%.4f", rec.spcpDecay[hi]));
+                                }
+                                sb.append(String.format(",%d\n", rec.willDivergeDecay));
+                                bw.write(sb.toString());
+                                totalRecords++;
                         }
                     }
                 }
             }
-        }
+        } // end for classEntry
+        } // end try-with-resources: temp file written and closed
 
-        System.out.println("Total evolution records generated: " + records.size());
-
-        // Sort records by revision (then by gcid1, gcid2 for consistency)
-        records.sort((a, b) -> {
-            if (a.revision != b.revision)
-                return Integer.compare(a.revision, b.revision);
-            if (a.gcid1 != b.gcid1)
-                return Integer.compare(a.gcid1, b.gcid1);
-            return Integer.compare(a.gcid2, b.gcid2);
-        });
-
-        // Step 4: Write to CSV
-        String outputPath = cp.getGenealogyPath(cChoice, granularity)
-                .replace(".csv", "_evolution_dataset.csv");
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputPath))) {
-            // Write header — 35 columns (20 original + 14 new + 1 target label)
-            bw.write("Revision,gcid1,gcid2,classid,co_change_count,gcid1_independent_change_count," +
-                    "gcid2_independent_change_count,same_file,same_author,same_method,similarity," +
-                    "clone_type,nlines1,nlines2,depth,class_size,is_spcp," +
-                    "weighted_coupling_strength,last_co_change_age,last_solo_change_age," +
-                    "coupling_trend,wcs_recent,solo_events_after_last_cochange," +
-                    "noc1,noc2,file_age1,file_age2,churn1,churn2," +
-                    "distinct_authors1,distinct_authors2," +
-                    "major_author_prop1,major_author_prop2," +
-                    "minor_author_count1,minor_author_count2," +
-                    "wies,will_independently_evolve," +
-                    "ir_decay_h10,ir_decay_h20,ir_decay_h30,ir_decay_h50,ir_decay_h75," +
-                    "cs_decay_h10,cs_decay_h20,cs_decay_h30,cs_decay_h50,cs_decay_h75," +
-                    "spcp_decay_h10,spcp_decay_h20,spcp_decay_h30,spcp_decay_h50,spcp_decay_h75," +
-                    "will_diverge_decay\n");
-
-            // Write records
-            for (EvolutionRecord rec : records) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(String.format(
-                        "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%.4f,%d,%d," +
-                        "%.4f,%.4f,%d," +
-                        "%d,%d,%d,%d,%d,%d,%d,%d,%.4f,%.4f,%d,%d,%.4f,%d",
-                        rec.revision,
-                        rec.gcid1,
-                        rec.gcid2,
-                        rec.classId,
-                        rec.coChangeCount,
-                        rec.gcid1IndependentCount,
-                        rec.gcid2IndependentCount,
-                        rec.sameFile,
-                        rec.sameAuthor,
-                        rec.sameMethod,
-                        rec.similarity,
-                        rec.cloneType,
-                        rec.nlines1,
-                        rec.nlines2,
-                        rec.depth,
-                        rec.classSize,
-                        rec.isSPCP ? 1 : 0,
-                        rec.weightedCouplingStrength,
-                        rec.lastCoChangeAge,
-                        rec.lastSoloChangeAge,
-                        // decoupling signals
-                        rec.couplingTrend,
-                        rec.wcsRecent,
-                        rec.soloEventsAfterLastCoChange,
-                        // new process metrics
-                        rec.noc1,
-                        rec.noc2,
-                        rec.fileAge1,
-                        rec.fileAge2,
-                        rec.churn1,
-                        rec.churn2,
-                        // new ownership metrics
-                        rec.distinctAuthors1,
-                        rec.distinctAuthors2,
-                        rec.majorAuthorProp1,
-                        rec.majorAuthorProp2,
-                        rec.minorAuthorCount1,
-                        rec.minorAuthorCount2,
-                        // WIES + target label
-                        rec.wies,
-                        rec.will_independently_evolve));
-
-                // Append decay-weighted metrics (15 features + 1 label)
-                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
-                    sb.append(String.format(",%.4f", rec.irDecay[hi]));
-                }
-                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
-                    sb.append(String.format(",%.4f", rec.csDecay[hi]));
-                }
-                for (int hi = 0; hi < HALF_LIVES.length; hi++) {
-                    sb.append(String.format(",%.4f", rec.spcpDecay[hi]));
-                }
-                sb.append(String.format(",%d", rec.willDivergeDecay));
-                sb.append("\n");
-
-                bw.write(sb.toString());
+        // Sort temp file lines by (revision, gcid1, gcid2) and write final output
+        System.out.println("Sorting " + totalRecords + " records by (revision, gcid1, gcid2)...");
+        List<String> lines = new ArrayList<>((int) Math.min(totalRecords, Integer.MAX_VALUE));
+        try (BufferedReader br = new BufferedReader(new FileReader(tempFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
             }
         }
+        lines.sort((a, b) -> {
+            // Parse first three comma-separated integers: revision, gcid1, gcid2
+            int ai = a.indexOf(',');
+            int bi = b.indexOf(',');
+            int rev1 = Integer.parseInt(a.substring(0, ai));
+            int rev2 = Integer.parseInt(b.substring(0, bi));
+            if (rev1 != rev2) return Integer.compare(rev1, rev2);
+            int aj = a.indexOf(',', ai + 1);
+            int bj = b.indexOf(',', bi + 1);
+            int g1a = Integer.parseInt(a.substring(ai + 1, aj));
+            int g1b = Integer.parseInt(b.substring(bi + 1, bj));
+            if (g1a != g1b) return Integer.compare(g1a, g1b);
+            int ak = a.indexOf(',', aj + 1);
+            int bk = b.indexOf(',', bj + 1);
+            int g2a = Integer.parseInt(a.substring(aj + 1, ak));
+            int g2b = Integer.parseInt(b.substring(bj + 1, bk));
+            return Integer.compare(g2a, g2b);
+        });
+        String header = "Revision,gcid1,gcid2,classid,co_change_count,gcid1_independent_change_count," +
+                "gcid2_independent_change_count,same_file,same_author,same_method,similarity," +
+                "clone_type,nlines1,nlines2,depth,class_size,is_spcp," +
+                "weighted_coupling_strength,last_co_change_age,last_solo_change_age," +
+                "coupling_trend,wcs_recent,solo_events_after_last_cochange," +
+                "noc1,noc2,file_age1,file_age2,churn1,churn2," +
+                "distinct_authors1,distinct_authors2," +
+                "major_author_prop1,major_author_prop2," +
+                "minor_author_count1,minor_author_count2," +
+                "wies,will_independently_evolve," +
+                "ir_decay_h10,ir_decay_h20,ir_decay_h30,ir_decay_h50,ir_decay_h75," +
+                "cs_decay_h10,cs_decay_h20,cs_decay_h30,cs_decay_h50,cs_decay_h75," +
+                "spcp_decay_h10,spcp_decay_h20,spcp_decay_h30,spcp_decay_h50,spcp_decay_h75," +
+                "will_diverge_decay";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputPath))) {
+            bw.write(header);
+            bw.newLine();
+            for (String line : lines) {
+                bw.write(line);
+                bw.newLine();
+            }
+        }
+        tempFile.delete();
 
         System.out.println("=== Evolution Dataset Export Complete ===");
         System.out.println("Output file: " + outputPath);
-        System.out.println("Total records: " + records.size());
+        System.out.println("Total records: " + totalRecords);
     }
 
     // ============== REVISION-WISE DATASET EXPORT ==============
@@ -1284,7 +1293,7 @@ public class CloneGenealogyAnalysis {
         Map<Integer, String>                      gcidToFilename      = new HashMap<>();
         Map<Integer, String>                      gcidToFullPath      = new HashMap<>();
         Map<Integer, CloneHistory>                historyMap          = new HashMap<>();
-        Map<Integer, Map<Integer, Clones>>        cloneInstancesByRev = new HashMap<>();
+        Map<Integer, Map<Integer, CloneLocation>>  cloneInstancesByRev = new HashMap<>();
         Map<Integer, Map<Integer, String>>        revisionCloneStatus = new HashMap<>();
 
         for (int rev = startRev; rev <= endRev; rev++) {
@@ -1305,7 +1314,8 @@ public class CloneGenealogyAnalysis {
                 h.endRev = rev;
                 if ("M".equalsIgnoreCase(c.cloneType)) h.changeRevs.add(rev);
                 else if ("U".equalsIgnoreCase(c.cloneType)) h.unchangedRevs.add(rev);
-                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>()).put(rev, c);
+                cloneInstancesByRev.computeIfAbsent(gcid, k -> new HashMap<>())
+                        .put(rev, new CloneLocation(c.filePath.intern(), c.startLine, c.endLine));
             }
             revisionCloneStatus.put(rev, revStatus);
         }
@@ -1993,7 +2003,7 @@ public class CloneGenealogyAnalysis {
      */
     private Set<Integer> computeSPCPRevisions(int gcid1, int gcid2,
             CloneHistory h1, CloneHistory h2, int maxRev,
-            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
+            Map<Integer, Map<Integer, CloneLocation>> cloneInstancesByRev) {
 
         Set<Integer> coChangeRevs = new TreeSet<>(h1.changeRevs);
         coChangeRevs.retainAll(h2.changeRevs);
@@ -2056,9 +2066,9 @@ public class CloneGenealogyAnalysis {
      * Find next revision after currentRev where BOTH clones have instance data.
      */
     private int findNextRevWithBothClones(int gcid1, int gcid2, int currentRev,
-            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
-        Map<Integer, Clones> instances1 = cloneInstancesByRev.get(gcid1);
-        Map<Integer, Clones> instances2 = cloneInstancesByRev.get(gcid2);
+            Map<Integer, Map<Integer, CloneLocation>> cloneInstancesByRev) {
+        Map<Integer, CloneLocation> instances1 = cloneInstancesByRev.get(gcid1);
+        Map<Integer, CloneLocation> instances2 = cloneInstancesByRev.get(gcid2);
         if (instances1 == null || instances2 == null) return -1;
 
         // Find sorted revisions after currentRev where both exist
@@ -2076,23 +2086,23 @@ public class CloneGenealogyAnalysis {
      * Uses the clone's filePath, startLine, endLine to read from the source files.
      */
     private String getFragmentText(int gcid, int revision,
-            Map<Integer, Map<Integer, Clones>> cloneInstancesByRev) {
-        Map<Integer, Clones> instances = cloneInstancesByRev.get(gcid);
+            Map<Integer, Map<Integer, CloneLocation>> cloneInstancesByRev) {
+        Map<Integer, CloneLocation> instances = cloneInstancesByRev.get(gcid);
         if (instances == null) return null;
-        Clones c = instances.get(revision);
+        CloneLocation c = instances.get(revision);
         if (c == null) return null;
 
         // Build the full path to the source file
         // filePath already contains "Revision_N/..." prefix
-        Path filePath = Paths.get(cp.getCloneDir(), c.filePath);
+        Path filePath = Paths.get(cp.getCloneDir(), c.filePath());
         if (!Files.exists(filePath)) return null;
 
         try {
             // Use ISO-8859-1 to handle non-UTF-8 characters in C source files
             List<String> lines = Files.readAllLines(filePath, java.nio.charset.StandardCharsets.ISO_8859_1);
 
-            int start = Math.max(0, c.startLine - 1);
-            int end = Math.min(lines.size() - 1, c.endLine - 1);
+            int start = Math.max(0, c.startLine() - 1);
+            int end = Math.min(lines.size() - 1, c.endLine() - 1);
             if (start > end || start >= lines.size()) return null;
 
             StringBuilder sb = new StringBuilder();

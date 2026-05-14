@@ -37,84 +37,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-class Clones {
-    int cloneId;
-    String filePath;
-    int startLine;
-    int endLine;
-    int nLines;
-    int globalCloneId;
-    int methodId;
-    int revision;
-    String cloneType;
-    int classId;
-    int globalClassId;
-    int similarity; // Similarity percentage from NiCad (0-100)
-}
-
-class CloneHistory {
-    int globalCloneId;
-    int startRev; // first revision where the clone appeared
-    int endRev; // last revision where the clone existed
-    List<Integer> changeRevs = new ArrayList<>();
-    List<Integer> unchangedRevs = new ArrayList<>();
-    int addedInRev; // revision where it first appeared
-    int deletedInRev; // revision where it disappeared
-
-    // Evolution Forecasting Fields (Dr. Mondal's methodology)
-    double stabilityIndex; // ratio of unchanged to total revisions (0.0 - 1.0)
-    double changeProneness; // frequency of changes (0.0 - 1.0)
-    double independentEvolutionScore; // likelihood of independent evolution (0.0 - 1.0)
-    String latePropagationStatus; // "NONE", "DETECTED", "RESOLVED"
-    List<Integer> latePropagationRevs = new ArrayList<>(); // revisions where late propagation occurred
-    int coChangeCount; // number of revisions where clone changed with peers
-    int independentChangeCount; // number of revisions where clone changed alone
-    // Process metrics (computed post-lifecycle by computeProcessAndOwnershipMetrics)
-    int noc;            // Number of Changes = changeRevs.size()
-    int fileAge;        // Lifetime in revisions = endRev - addedInRev
-    int churn;          // True lines changed in clone region (from ChangeInfo diff hunks)
-    // Ownership metrics (computed from revAuthorMap + changeRevs)
-    int distinctAuthors;             // # unique authors who committed changes to this clone
-    double majorAuthorProportion;    // TCO: fraction of commits by top author (0.0 – 1.0)
-    int minorAuthorCount;            // # authors contributing < 5% of total commits
-}
-
 class Buggy {
     String fileName;
     String filePath;
     int line;
     int severity;
-}
-
-class SingleMethod {
-    int revision;
-    String methodName;
-    String signature;
-    String filePath;
-    int startLine;
-    int endLine;
-    int methodId;
-    int globalMethodId;
-    String packageName = ""; // Java package name
-    String className = ""; // Class or file name containing the method
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        SingleMethod that = (SingleMethod) o;
-        return revision == that.revision &&
-                Objects.equals(methodName, that.methodName) &&
-                Objects.equals(signature, that.signature) &&
-                Objects.equals(filePath, that.filePath);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(revision, methodName, signature, filePath);
-    }
 }
 
 public class AccessPoint {
@@ -1030,8 +957,8 @@ public class AccessPoint {
                 // Revision | filePath | changeType | StartLine | EndLine | cloneId | classId |
                 // globalCloneId
                 clone.revision = Integer.parseInt(parts[0].trim());
-                clone.filePath = parts[1].trim();
-                clone.cloneType = parts[2].trim();
+                clone.filePath = parts[1].trim().intern();
+                clone.cloneType = parts[2].trim().intern();
 
                 clone.startLine = Integer.parseInt(parts[3].trim());
                 clone.endLine = Integer.parseInt(parts[4].trim()); // Corrected index for endLine
@@ -1982,17 +1909,6 @@ class CloneMatcherOb {
     int currEndLine; // Added for handling line ranges
 }
 
-class SVNChanges {
-    int revision;
-    String filePath;
-    String fixType;
-    String changeType;
-    String commitMessage;
-    String author;
-    String date;
-
-}
-
 class BugRevisionInfo {
     int revision;
     String path;
@@ -2043,20 +1959,6 @@ class Changes {
     public int getRevision() {
         return this.revision;
     }
-
-}
-
-class OffsetRevision {
-    public int counter;
-    public String prevPath;
-    public int prevStartLine;
-    public int prevEndLine;
-    public String changeType;
-    public String currPath;
-    public int currStartLine;
-    public int currEndLine;
-    public int offsetStart;
-    public int offsetEnd;
 
 }
 

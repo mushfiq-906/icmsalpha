@@ -276,7 +276,7 @@ public class MethodGenealogyAnalysis {
                                         String previousMethodContent = extractMethodContent(fullPrevPath,
                                                 previousMethod.startLine, previousMethod.endLine);
                                         // System.out.println("here is problem = "+ mm );
-                                        boolean flag = utility.isThisTwoCodeSimilar(currentMethodContent,
+                                        boolean flag = Utility.isThisTwoCodeSimilar(currentMethodContent,
                                                 previousMethodContent, 75);
                                         // System.out.println("here is problem = " + prevPath + " " +cPath + " " +
                                         // previousMethodContent);
@@ -357,8 +357,7 @@ public class MethodGenealogyAnalysis {
                         // startLine, endLine, methodId, globalMethodId));
                     }
                 }
-
-                writer.close();
+                // writer.close() removed — try-with-resources handles closing automatically
 
             }
         } catch (IOException e) {

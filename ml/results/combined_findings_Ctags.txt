@@ -1,0 +1,42 @@
+COMBINED FINDINGS REPORT - Ctags (Type3_Block)
+======================================================================
+
+Analysis Execution Status:
+  [PASS] 1. Author-Based Dependency
+  [PASS] 2. File/Folder Proximity
+  [PASS] 3. Similarity & ClassSize
+  [PASS] 4. gcid-Level Impact
+
+----------------------------------------------------------------------
+KEY FINDINGS
+----------------------------------------------------------------------
+
+1. Strongest author feature triggering dependency:
+   sameAuthor (raw) (r = nan)
+
+2. Stronger spatial predictor of co-change:
+   depth (|r| = 0.6068)
+   >> depth is the stronger spatial predictor
+
+3. Stronger structural predictor of co-change:
+   similarity (|r| = 0.0829)
+   >> similarity is the stronger structural predictor
+
+----------------------------------------------------------------------
+RANKED FEATURE LIST (by |point-biserial r| with dep_label)
+----------------------------------------------------------------------
+
+Rank  Feature                       r           |r|       p-value       Direction   Sig?
+----------------------------------------------------------------------------------------------
+1     weightedCouplingStrength      0.8843      0.8843    0.00e+00      positive    Yes
+2     sameFile                      0.6068      0.6068    0.00e+00      positive    Yes
+3     depth                         -0.6068     0.6068    0.00e+00      negative    Yes
+4     couplingTrend                 0.4795      0.4795    0.00e+00      positive    Yes
+5     coChangeCount                 0.4570      0.4570    0.00e+00      positive    Yes
+6     similarity                    0.0829      0.0829    1.58e-27      positive    Yes
+7     classSize                     -0.0732     0.0732    8.16e-22      negative    Yes
+8     sameAuthor (raw)              nan         nan       nan           negative    No
+
+======================================================================
+END OF REPORT
+======================================================================

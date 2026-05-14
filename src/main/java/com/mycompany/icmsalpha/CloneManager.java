@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  * @author Administrator
  */
 public class CloneManager extends javax.swing.JFrame {
+    private static final long serialVersionUID = 1L;
     private String granularity = "f";
     private int startRev = 0;
     private int endRev = 0;

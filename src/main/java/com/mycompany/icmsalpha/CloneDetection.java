@@ -770,12 +770,12 @@ public class CloneDetection {
 
                 for (Clones clone : clones) {
                     // clone.cloneType = cloneType;
-                    String cloneFilePath = ap.relevantPath(clone.filePath);
+                    String cloneFilePath = AccessPoint.relevantPath(clone.filePath);
                     int cloneStartLine = clone.startLine;
                     int cloneEndLine = clone.endLine;
 
                     for (SingleMethod method : methods) {
-                        String methodFilePath = ap.relevantPath(method.filePath);
+                        String methodFilePath = AccessPoint.relevantPath(method.filePath);
                         int methodStartLine = method.startLine;
                         int methodEndLine = method.endLine;
                         // print(cloneFilePath.equalsIgnoreCase(methodFilePath) + " "+cloneFilePath+ "

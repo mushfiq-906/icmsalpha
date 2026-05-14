@@ -1,0 +1,35 @@
+# Exclude WorkFolder contents by default (but not WorkFolder itself)
+WorkFolder/*
+
+# Keep all subfolders for Ctags
+!WorkFolder/Ctags/
+!WorkFolder/Ctags/**
+
+# Keep all subfolders for Jmol
+!WorkFolder/Jmol/
+!WorkFolder/Jmol/**
+
+# Keep all subfolders for dnsjava
+!WorkFolder/dnsjava/
+!WorkFolder/dnsjava/**
+
+# Keep all subfolders for tuxguitar
+!WorkFolder/tuxguitar/
+!WorkFolder/tuxguitar/**
+
+# Build output
+target/
+
+# Oversized generated CSVs (>100MB, exceeds GitHub limit)
+ml/results/file_folder_analysis/tuxguitar/tuxguitar_file-folder-analysis.csv
+ml/results/similarity_classsize_analysis/tuxguitar/tuxguitar_similarity_classsize.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# OS
+.DS_Store
+Thumbs.db

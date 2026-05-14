@@ -1,0 +1,42 @@
+COMBINED FINDINGS REPORT - tuxguitar (Type3_Block)
+======================================================================
+
+Analysis Execution Status:
+  [PASS] 1. Author-Based Dependency
+  [PASS] 2. File/Folder Proximity
+  [PASS] 3. Similarity & ClassSize
+  [PASS] 4. gcid-Level Impact
+
+----------------------------------------------------------------------
+KEY FINDINGS
+----------------------------------------------------------------------
+
+1. Strongest author feature triggering dependency:
+   sameAuthor (raw) (r = nan)
+
+2. Stronger spatial predictor of co-change:
+   sameFile (|r| = 0.1919)
+   >> sameFile is the stronger spatial predictor
+
+3. Stronger structural predictor of co-change:
+   similarity (|r| = 0.0918)
+   >> similarity is the stronger structural predictor
+
+----------------------------------------------------------------------
+RANKED FEATURE LIST (by |point-biserial r| with dep_label)
+----------------------------------------------------------------------
+
+Rank  Feature                       r           |r|       p-value       Direction   Sig?
+----------------------------------------------------------------------------------------------
+1     weightedCouplingStrength      0.5777      0.5777    0.00e+00      positive    Yes
+2     couplingTrend                 0.4295      0.4295    0.00e+00      positive    Yes
+3     coChangeCount                 0.2579      0.2579    0.00e+00      positive    Yes
+4     sameFile                      0.1919      0.1919    0.00e+00      positive    Yes
+5     similarity                    0.0918      0.0918    0.00e+00      positive    Yes
+6     classSize                     -0.0870     0.0870    0.00e+00      negative    Yes
+7     depth                         -0.0788     0.0788    0.00e+00      negative    Yes
+8     sameAuthor (raw)              nan         nan       nan           negative    No
+
+======================================================================
+END OF REPORT
+======================================================================

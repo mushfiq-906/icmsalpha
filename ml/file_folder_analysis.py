@@ -38,7 +38,7 @@ warnings.filterwarnings("ignore")
 # ──────────────────────────────────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────────────────────────────────
-SYSTEM = "dnsjava"
+SYSTEM = "tuxguitar"
 CLONE_TYPE = "Type3_Block"
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),

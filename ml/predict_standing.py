@@ -164,21 +164,21 @@ def actual_label(gcid, rev, pair_index):
 def get_models():
     m = {}
     m["RandomForest"] = RandomForestClassifier(
-        n_estimators=300, max_depth=10, min_samples_leaf=5,
+        n_estimators=400, max_depth=10, min_samples_leaf=5,
         class_weight="balanced", random_state=42, n_jobs=-1)
     if HAS_LGBM:
         m["LightGBM"] = LGBMClassifier(
-            n_estimators=300, max_depth=6, learning_rate=0.05,
+            n_estimators=400, max_depth=6, learning_rate=0.03,
             num_leaves=31, min_child_samples=10, is_unbalance=True,
             random_state=42, verbose=-1, n_jobs=-1)
     if HAS_XGB:
         m["XGBoost"] = XGBClassifier(
-            n_estimators=300, max_depth=6, learning_rate=0.05,
+            n_estimators=400, max_depth=6, learning_rate=0.03,
             min_child_weight=5, use_label_encoder=False,
             eval_metric="logloss", random_state=42, verbosity=0, n_jobs=-1)
     if HAS_CAT:
         m["CatBoost"] = CatBoostClassifier(
-            iterations=300, depth=6, learning_rate=0.05,
+            iterations=400, depth=6, learning_rate=0.03,
             auto_class_weights="Balanced", random_seed=42, verbose=0)
     return m
 
@@ -393,14 +393,14 @@ def run(frag_path, pair_path, output_dir=None):
 
 if __name__ == "__main__":
     _BASE = Path(__file__).resolve().parent.parent / "WorkFolder"
-    _SYSTEM = "tuxguitar"
+    _SYSTEM = "Ctags"
     _CLONE_TYPE = "Type3_Block"
     _DEFAULT_FRAG = str(_BASE / _SYSTEM / "Datasets" / "CloneGenealogy" / f"{_CLONE_TYPE}_rev_fragment.csv")
     _DEFAULT_PAIR = str(_BASE / _SYSTEM / "Datasets" / "CloneGenealogy" / f"{_CLONE_TYPE}_rev_pair.csv")
-
+    _DEFAULT_OUTPUT = Path(__file__).resolve().parent / "results" / "predict_standing" / _SYSTEM
     p = argparse.ArgumentParser(description="Standing prediction for clone fragments")
     p.add_argument("--frag", default=_DEFAULT_FRAG, help="Path to rev_fragment.csv")
     p.add_argument("--pair", default=_DEFAULT_PAIR, help="Path to rev_pair.csv")
-    p.add_argument("--output", default=None, help="Output directory")
+    p.add_argument("--output", default=_DEFAULT_OUTPUT, help="Output directory")
     a = p.parse_args()
     run(a.frag, a.pair, a.output)
