@@ -1,0 +1,39 @@
+SPCP Impact Analysis - jEdit (Type3_Block)
+============================================================
+
+1. isSpcp x Dependency (chi2 / Fisher)
+   isSpcp_chi2: 48610.5670
+   isSpcp_chi2_pvalue: 0.0000
+   isSpcp_cramersV: 0.4931
+   isSpcp_fisher_OR: 20.5118
+   isSpcp_fisher_pvalue: 0.0000
+
+   Contingency (rows=isSpcp, cols=dep_label):
+dep_label       0      1
+isSpcp                  
+0          163244  16174
+1            6752  13722
+
+2. Mann-Whitney U: weightedCouplingStrength (dep vs. indep)
+   mannwhitney_U: 4992391647.5000
+   mannwhitney_pvalue: 0.0000
+   dep_coupling_median: 1.0000
+   dep_coupling_mean: 0.9135
+   indep_coupling_median: 0.0000
+   indep_coupling_mean: 0.0178
+
+3. Point-biserial: weightedCouplingStrength <-> dep_label
+   pointbiserial_r: 0.9282
+   pointbiserial_pvalue: 0.0000
+
+4. Kruskal-Wallis across dominantChangeCategory groups
+   kruskal_H: 48867.9598
+   kruskal_pvalue: 0.0000
+   kruskal_n_groups: 3
+
+5. Logistic Regression: dep ~ isSpcp + coupling + sameFile + depth
+   Accuracy: 0.9780
+   OR(isSpcp): 1.4948
+   OR(weightedCouplingStrength): 3049.0192
+   OR(sameFile): 0.4652
+   OR(depth): 0.7463

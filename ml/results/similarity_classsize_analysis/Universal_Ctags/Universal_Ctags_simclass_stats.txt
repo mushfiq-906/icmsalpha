@@ -1,0 +1,37 @@
+Similarity & Class Size Analysis - Universal_Ctags (Type3_Block)
+============================================================
+
+1. Point-biserial correlations with dep_label
+   similarity: r=-0.0779, p=1.73e-97
+   classSize:  r=0.0846, p=1.23e-114
+
+2. Spearman rank correlations
+   similarity: rho=-0.1417, p=0.00e+00
+   classSize:  rho=0.0500, p=3.58e-41
+
+3. Mann-Whitney U: similarity (dep vs indep)
+   U=430004942, p=0.00e+00
+   Dep mean=73.57, median=71
+   Ind mean=74.71, median=75
+
+4. Mann-Whitney U: classSize (dep vs indep)
+   U=552436630, p=4.00e-41
+   Dep mean=36.3, median=48
+   Ind mean=33.2, median=36
+
+5. Similarity threshold analysis
+   sim >= 70: n=72,076, dep_rate=27.6%
+   sim >= 75: n=37,644, dep_rate=21.5%
+   sim >= 80: n=8,611, dep_rate=18.2%
+   sim >= 85: n=4,338, dep_rate=24.3%
+   sim >= 90: n=3,577, dep_rate=27.0%
+   sim >= 95: n=2,992, dep_rate=29.3%
+
+6. Small vs Large class comparison
+   classSize=2 (n=200): dep_rate=41.0%
+   classSize>=5 (n=70,685): dep_rate=27.7%
+
+7. Logistic Regression: dep ~ similarity + classSize
+   Accuracy: 0.7236
+   OR(similarity): 0.9772
+   OR(classSize): 1.0092

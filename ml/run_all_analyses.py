@@ -10,6 +10,7 @@ Analyses:
   2. File/Folder Structural Proximity    (file_folder_analysis.py)
   3. Clone Similarity & Class Size       (similarity_classsize_analysis.py)
   4. gcid-Level Impact                   (gcid_impact_analysis.py)
+  5. SPCP Impact                         (spcp_impact_analysis.py)
 
 Output:
   - ml/results/combined_findings_{SYSTEM}.txt
@@ -25,7 +26,7 @@ from scipy import stats
 
 warnings.filterwarnings("ignore")
 
-SYSTEM = "tuxguitar"
+SYSTEM = "jEdit"
 CLONE_TYPE = "Type3_Block"
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -109,6 +110,8 @@ def compute_combined_rankings():
         "weightedCouplingStrength": merged["weightedCouplingStrength"],
         "couplingTrend": merged["couplingTrend"],
     }
+    if "isSpcp" in merged.columns:
+        features["isSpcp"] = merged["isSpcp"]
 
     dep = merged["dep_label"]
     rankings = []
@@ -151,6 +154,17 @@ def compute_combined_rankings():
         else:
             findings["spatial_winner"] = "depth"
             findings["spatial_winner_r"] = float(dp_r[0])
+
+    # SPCP membership
+    spcp_r = rank_df.loc[rank_df["feature"] == "isSpcp", "abs_r"].values
+    if len(spcp_r) > 0:
+        findings["spcp_r"] = float(spcp_r[0])
+        wcs_r = rank_df.loc[rank_df["feature"] == "weightedCouplingStrength", "abs_r"].values
+        if len(wcs_r) > 0:
+            findings["spcp_vs_coupling_winner"] = (
+                "weightedCouplingStrength" if wcs_r[0] >= spcp_r[0] else "isSpcp"
+            )
+            findings["spcp_vs_coupling_wins_r"] = float(max(wcs_r[0], spcp_r[0]))
 
     # similarity vs classSize
     sim_r = rank_df.loc[rank_df["feature"] == "similarity", "abs_r"].values
@@ -214,7 +228,18 @@ def write_combined_report(rank_df, findings, results_status):
                       f"is the stronger structural predictor")
     lines.append("")
 
-    # 4. Ranked list
+    # 4. SPCP
+    if "spcp_r" in findings:
+        lines.append(f"4. SPCP impact on dependency:")
+        lines.append(f"   isSpcp |r| = {findings['spcp_r']:.4f}")
+        if "spcp_vs_coupling_winner" in findings:
+            lines.append(
+                f"   Coupling-vs-SPCP winner: {findings['spcp_vs_coupling_winner']} "
+                f"(|r| = {findings['spcp_vs_coupling_wins_r']:.4f})"
+            )
+        lines.append("")
+
+    # 5. Ranked list
     lines.append("-" * 70)
     lines.append("RANKED FEATURE LIST (by |point-biserial r| with dep_label)")
     lines.append("-" * 70)
@@ -256,6 +281,8 @@ def main():
         "Clone Similarity & Class Size", "similarity_classsize_analysis")
     status["4. gcid-Level Impact"] = run_analysis(
         "gcid-Level Impact Analysis", "gcid_impact_analysis")
+    status["5. SPCP Impact"] = run_analysis(
+        "SPCP Impact Analysis", "spcp_impact_analysis")
 
     # Combined rankings
     print(f"\n{'#' * 70}")

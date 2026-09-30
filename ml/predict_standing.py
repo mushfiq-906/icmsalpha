@@ -22,8 +22,8 @@ try:
     from xgboost import XGBClassifier; HAS_XGB = True
 except ImportError: HAS_XGB = False
 try:
-    from catboost import CatBoostClassifier; HAS_CAT = True
-except ImportError: HAS_CAT = False
+    from catboost import CatBoostClassifier; HAS_CB = True
+except ImportError: HAS_CB = False
 
 # ── CONFIG ──
 WARMUP_REVS = 5
@@ -164,22 +164,25 @@ def actual_label(gcid, rev, pair_index):
 def get_models():
     m = {}
     m["RandomForest"] = RandomForestClassifier(
-        n_estimators=400, max_depth=10, min_samples_leaf=5,
+        n_estimators=700, max_depth=15, min_samples_leaf=10,
         class_weight="balanced", random_state=42, n_jobs=-1)
     if HAS_LGBM:
         m["LightGBM"] = LGBMClassifier(
-            n_estimators=400, max_depth=6, learning_rate=0.03,
+            n_estimators=700, max_depth=8, learning_rate=0.04,
             num_leaves=31, min_child_samples=10, is_unbalance=True,
             random_state=42, verbose=-1, n_jobs=-1)
     if HAS_XGB:
         m["XGBoost"] = XGBClassifier(
-            n_estimators=400, max_depth=6, learning_rate=0.03,
+            n_estimators=700, max_depth=8, learning_rate=0.04,
             min_child_weight=5, use_label_encoder=False,
             eval_metric="logloss", random_state=42, verbosity=0, n_jobs=-1)
-    if HAS_CAT:
+    if HAS_CB:
+        import tempfile, os
         m["CatBoost"] = CatBoostClassifier(
-            iterations=400, depth=6, learning_rate=0.03,
-            auto_class_weights="Balanced", random_seed=42, verbose=0)
+            iterations=700, depth=8, learning_rate=0.04,
+            auto_class_weights="Balanced", random_seed=42,
+            verbose=0, thread_count=-1,
+            train_dir=os.path.join(tempfile.gettempdir(), "catboost_tmp"))
     return m
 
 
@@ -288,7 +291,8 @@ def run(frag_path, pair_path, output_dir=None):
 
             if fitted[mn] and idx >= WARMUP_REVS:
                 try:
-                    probas = model.predict_proba(Xr)[:, 1]
+                    Xr_df = pd.DataFrame(Xr, columns=FEATURE_COLS)
+                    probas = model.predict_proba(Xr_df)[:, 1]
                     preds = (probas >= thresholds[mn]).astype(int)
                 except: pass
 
@@ -322,6 +326,7 @@ def run(frag_path, pair_path, output_dir=None):
         # Retrain all models
         if n_lab >= MIN_TRAIN and len(np.unique(all_y)) >= 2:
             Xa, ya = np.array(all_X), np.array(all_y)
+            Xa_df = pd.DataFrame(Xa, columns=FEATURE_COLS)
             for mn in model_names:
                 if n_lab - last_refit[mn] >= REFIT_EVERY or not fitted[mn]:
                     try:
@@ -329,7 +334,7 @@ def run(frag_path, pair_path, output_dir=None):
                         if mn == "XGBoost":
                             neg=(ya==0).sum(); pos=(ya==1).sum()
                             m.set_params(scale_pos_weight=neg/pos if pos>0 else 1)
-                        m.fit(Xa, ya)
+                        m.fit(Xa_df, ya)
                         fitted[mn] = True; last_refit[mn] = n_lab
                         cy = np.array(calib[mn]["yt"][-CALIB_WINDOW:])
                         cp = np.array(calib[mn]["yp"][-CALIB_WINDOW:])

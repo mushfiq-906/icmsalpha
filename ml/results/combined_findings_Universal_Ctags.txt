@@ -1,0 +1,42 @@
+COMBINED FINDINGS REPORT - Universal_Ctags (Type3_Block)
+======================================================================
+
+Analysis Execution Status:
+  [PASS] 1. Author-Based Dependency
+  [PASS] 2. File/Folder Proximity
+  [PASS] 3. Similarity & ClassSize
+  [PASS] 4. gcid-Level Impact
+
+----------------------------------------------------------------------
+KEY FINDINGS
+----------------------------------------------------------------------
+
+1. Strongest author feature triggering dependency:
+   sameAuthor (raw) (r = nan)
+
+2. Stronger spatial predictor of co-change:
+   sameFile (|r| = 0.3549)
+   >> sameFile is the stronger spatial predictor
+
+3. Stronger structural predictor of co-change:
+   classSize (|r| = 0.0846)
+   >> classSize is the stronger structural predictor
+
+----------------------------------------------------------------------
+RANKED FEATURE LIST (by |point-biserial r| with dep_label)
+----------------------------------------------------------------------
+
+Rank  Feature                       r           |r|       p-value       Direction   Sig?
+----------------------------------------------------------------------------------------------
+1     weightedCouplingStrength      0.8846      0.8846    0.00e+00      positive    Yes
+2     couplingTrend                 0.6436      0.6436    0.00e+00      positive    Yes
+3     coChangeCount                 0.4977      0.4977    0.00e+00      positive    Yes
+4     sameFile                      0.3549      0.3549    0.00e+00      positive    Yes
+5     depth                         -0.3536     0.3536    0.00e+00      negative    Yes
+6     classSize                     0.0846      0.0846    1.23e-114     positive    Yes
+7     similarity                    -0.0779     0.0779    1.73e-97      negative    Yes
+8     sameAuthor (raw)              nan         nan       nan           negative    No
+
+======================================================================
+END OF REPORT
+======================================================================

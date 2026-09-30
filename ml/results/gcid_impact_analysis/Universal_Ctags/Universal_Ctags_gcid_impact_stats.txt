@@ -1,0 +1,27 @@
+gcid-Level Impact Analysis - Universal_Ctags (Type3_Block)
+============================================================
+
+Total gcids: 747
+Mean dep_ratio: 0.2730
+Median dep_ratio: 0.2017
+
+1. File Co-location Impact (same_file_frac <-> dep_ratio)
+   Pearson r: 0.6712
+   p-value:   6.16e-99
+   Point-biserial r (has_sf binary): 0.3401
+   Point-biserial p: 1.11e-21
+
+2. Mann-Whitney U: dep_ratio (has same-file vs cross-file only)
+   U: 100920
+   p-value: 3.20e-30
+   Has same-file (n=436): mean=0.3514
+   Cross-file only (n=311): mean=0.1631
+
+3. ANOVA: dep_ratio ~ author
+   F-statistic: 2.60
+   p-value: 5.80e-04
+
+CONCLUSION:
+   File co-location is the DOMINANT driver (r=0.671).
+   A gcid is independent when its clone peers are in different files.
+   A gcid is dependent when it shares a file with its clone peers.

@@ -13,9 +13,12 @@ WorkFolder/*
 !WorkFolder/dnsjava/
 !WorkFolder/dnsjava/**
 
-# Keep all subfolders for tuxguitar
+# Keep all subfolders for tuxguitar (excluding large CSVs that exceed GitHub 100MB limit)
 !WorkFolder/tuxguitar/
 !WorkFolder/tuxguitar/**
+WorkFolder/tuxguitar/Datasets/CloneGenealogy/Type3_Block_evolution_dataset.csv
+WorkFolder/tuxguitar/Datasets/CloneGenealogy/Type3_Block_rev_pair.csv
+WorkFolder/tuxguitar/Datasets/CloneGenealogy/Type3_Block_pairs.csv
 
 # Build output
 target/
@@ -29,6 +32,11 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .env
+
+# CatBoost & temp metadata
+catboost_info/
+**/catboost_info/
+ml/_tmp_stats.py
 
 # OS
 .DS_Store
