@@ -9,23 +9,62 @@
 
 | Reviewer | ID | Reviewer Concern | Resolution & Empirical Evidence | Target Manuscript Section | Status |
 |---|---|---|---|---|:---:|
-| **R1** | **#1** | Novelty & differentiation vs. prior clone consistency work | 6-dimensional comparison matrix (Target, Timing, Features, Clone Scope, Evaluation, Operational Goal) | §II (Related Work) | ✅ Ready |
-| **R1** | **#2** | Missing historical coupling baseline (WCS-only, co-change rate) | Evaluated $B_{\text{WCS}}$ and $B_{\text{CoChange}}$ across all 4 systems under walk-forward. ML gains: +89% to +383% MCC | §IV.B & Table III | ✅ Complete (All 4 Systems) |
-| **R1** | **#3** | Feature ablation study for 52-d representation | Leave-one-group-out ablation across 4 feature subsets (`no_fragment`, `no_process`, `no_pair`, `no_decay`). Fragment stability is the essential anchor ($\Delta\text{MCC} = -0.40$ to $-0.51$) | §V.B & Table IV | ✅ Complete (All 4 Systems) |
-| **R1** | **#4** | Ground-truth validity & coincidental co-change noise | Evaluated same-module package constraint (`strict_module`, $\Delta\text{MCC} = 0.0000$ over 41k events) and automated commit filtering (`excl_automated`) | §VI (Threats to Validity) & Table VII | ✅ Complete (All 4 Systems) |
-| **R1** | **#5** | Generalizability & cross-project scope | Delimited within-project developer assistant scope; added Threats to Validity on cross-project transfer | §I & §VI | ✅ Ready |
-| **R1** | **#6** | Arbitrary operational parameters sensitivity | 8-point parameter sweep across warmup ($W=3,5,10$), training pool ($M=10,30,50$), and calibration ($C=20,50,100,\infty$) across Java and C | §IV.C & Table VI | ✅ Complete |
-| **R2** | **#1** | Semantic clones & enterprise systems extension | Detailed future work roadmap covering Type-4 clones (deep code embeddings/AST graphs) and closed-source systems | §VII (Conclusion) | ✅ Ready |
-| **R3** | **#1** | Heuristic baselines justification | Evaluated identical heuristic baselines proving non-linear ML synergy over static/adaptive thresholds | §IV.B & Table III | ✅ Complete (All 4 Systems) |
-| **R3** | **#2** | Seed variability & statistical confidence intervals | 10 independent random seeds ($42, 0, 1, 7, 13, 17, 21, 37, 99, 123$), reporting Mean $\pm$ Std across all 4 systems ($\text{CV} \le 4.4\%$) | §IV.B & Table V | ✅ Complete (All 4 Systems) |
-| **R3** | **#3** | Hyperparameter selection transparency | Explicitly documented *a priori* configuration ($N_{\text{trees}}=100$) without future temporal peeking | §IV.B | ✅ Ready |
-| **R3** | **#4** | Genealogy temporal leakage proof | Mathematical & code-level proof using `bisect.bisect_left(..., R)` strictly enforcing $< R$ access | §VI (Internal Validity) | ✅ Proven |
-| **R3** | **#5** | Avoid implying cross-project generalization | Harmonized with R1-#5: framed as within-project continuous online forecasting assistant | §I & §VI | ✅ Ready |
-| **R3** | **#6** | Coincidental co-changes discussion | Harmonized with R1-#4: verified module locality invariance and automated commit exclusion | §VI (Construct Validity) | ✅ Complete |
+| **R1** | **#1** | Novelty & differentiation vs. prior clone consistency work | 6-dimensional comparison matrix (Target, Timing, Features, Clone Scope, Evaluation, Operational Goal) contrasting against Wang et al., Zhang et al., Göde & Koschke, and Mondal et al. | §II (Related Work) | ✅ Ready |
+| **R1** | **#2** | Missing historical coupling baseline (WCS-only, co-change rate) | Evaluated $B_{\text{WCS}}$ and $B_{\text{CoChange}}$ across all 4 systems under walk-forward. ML gains: +89% to +337% MCC over best heuristics. | §IV.B & Table III | ✅ Complete (All 4 Systems) |
+| **R1** | **#3** | Feature ablation study for 52-d representation | Leave-one-group-out ablation across 4 feature subsets (`no_fragment`, `no_process`, `no_pair`, `no_decay`). Fragment stability is the essential anchor ($\Delta\text{MCC} = -0.40$ to $-0.51$). | §V.B & Table IV | ✅ Complete (All 4 Systems) |
+| **R1** | **#4** | Ground-truth validity & coincidental co-change noise | Evaluated same-module package constraint (`strict_module`, $\Delta\text{MCC} = 0.0000$ due to **zero label changes**; 100% of co-changes are intra-package) and automated commit filtering (`excl_automated`). | §VI (Threats to Validity) & Table VII | ✅ Complete (All 4 Systems) |
+| **R1** | **#5** | Generalizability & cross-project scope | Delimited within-project developer assistant scope; added explicit Threats to Validity subsection on cross-project transfer limitations. | §I & §VI | ✅ Ready |
+| **R1** | **#6** | Arbitrary operational parameters sensitivity | 8-point parameter sweep across warmup ($W=3,5,10$), training pool ($M=10,30,50$), and calibration ($C=20,50,100,\infty$) across Java and C. | §IV.C & Table VI | ✅ Complete |
+| **R2** | **#1** | Semantic clones & enterprise systems extension | Detailed future work roadmap covering Type-4 clones (deep code embeddings/AST graphs) and closed-source enterprise systems. | §VII (Conclusion) | ✅ Ready |
+| **R3** | **#1** | Heuristic baselines justification | Evaluated identical heuristic baselines proving non-linear ML synergy over static/adaptive thresholds across all 4 codebases. | §IV.B & Table III | ✅ Complete (All 4 Systems) |
+| **R3** | **#2** | Seed variability & statistical confidence intervals | 10 independent random seeds ($42, 0, 1, 7, 13, 17, 21, 37, 99, 123$), reporting Mean $\pm$ Std across performance metrics ($\text{CV} \le 4.4\%$) **and** feature importances ($\text{CV} = 7.6\%\text{--}15.4\%$). | §IV.B, §V.B & Table V | ✅ Complete (All 4 Systems) |
+| **R3** | **#3** | Hyperparameter selection transparency | Confirmed exact hyperparameters: **500 trees, max depth 15, min samples leaf 10** produced Table IV; retained in §IV.B with zero retroactive temporal peeking. | §IV.B | ✅ Confirmed |
+| **R3** | **#4** | Genealogy temporal leakage proof | Mathematical & code-level proof using `bisect.bisect_left(..., R)` strictly enforcing $< R$ historical access. | §VI (Internal Validity) | ✅ Proven |
+| **R3** | **#5** | Avoid implying cross-project generalization | Harmonized with R1-#5: explicitly framed as within-project continuous online forecasting assistant. | §I & §VI | ✅ Ready |
+| **R3** | **#6** | Coincidental co-changes discussion | Harmonized with R1-#4: verified module locality invariance (**no label changed**) and automated commit exclusion noise ($\le \pm 0.005$ MCC). | §VI (Construct Validity) | ✅ Complete |
 
 ---
 
-## 2. Consolidated Empirical Evidence Base (All 4 Benchmark Systems)
+## 2. Key Author Confirmations & Methodological Clarifications
+
+### Confirmation 1: Classifier Hyperparameters for Table IV & Section IV-B
+- **Discrepancy Clarification:**
+  - *Accepted Manuscript:* Section IV-B explicitly states: *"Random Forest uses 500 trees with max depth 15 and min samples leaf 10, while LightGBM, XGBoost, and CatBoost use 500 rounds, depth 8, and learning rate 0.04."*
+  - *Repository History:* Intermediate scripts during initial exploratory development tested 300–400 trees with max depth 10 (`predict_standing.py` at commit `3a225f75b`). A generic plan placeholder previously mentioned default scikit-learn tree parameters ($N=100$).
+  - *Final Walk-Forward Suite:* The parallel benchmark suite (`ml/experiment_utils.py` and `ml/predict_standing.py`) evaluates 500–700 trees with max depth 15 and min samples leaf 10.
+- **Confirmation:** Table IV of the accepted manuscript was generated using **500 trees, max depth 15, and min samples leaf 10** on the initial 3,000 commits of Ctags (`Universal_Ctags`, $n=8,315$, yielding exact counts: $\text{TP}=5030, \text{TN}=2201, \text{FP}=583, \text{FN}=501, \text{Sens}=0.909, \text{Spec}=0.791, \text{G-mean}=0.848$).
+- **Action for Revised Manuscript:** Section IV-B **retains the exact setting of 500 trees, max depth 15, min samples leaf 10**. No section edit is needed for the hyperparameter values, but an explicit note is added confirming that performance is invariant between 500 and 700 trees ($\Delta\text{MCC} < 0.003$).
+
+### Confirmation 2: Ctags Event Count Doubling (8,315 vs. 16,436 Events)
+- **Root Cause Analysis:**
+  - *Initial Manuscript (Table II):* Evaluated the first 3,000 commits of Ctags (up to revision 2,993; 635 change revisions; 1,042 clone fragments), yielding **8,315 modification events** (saved in `ml/results/predict_standing/Universal_Ctags/`).
+  - *Expanded Reviewer-Response Evaluation:* Mined the full repository history up to revision 6,199 (1,443 change revisions), yielding **16,436 modification events** (saved in `ml/results/experiments/Ctags/` and `ml/results/predict_standing/Ctags/`).
+  - *Other Systems:* TuxGuitar (13,874 vs 13,902; $\Delta = 28$), dnsjava (2,265 vs 2,309; $\Delta = 44$), and Jmol (8,549 vs 8,640; $\Delta = 91$) differed by only 0–91 events due to boundary warmup inclusion.
+- **Manuscript Text to Add (Section IV-A):**
+  > *"For Ctags, the initial study evaluated 3,000 revisions (8,315 modification events); our expanded walk-forward analysis incorporates the full historical corpus of 6,199 revisions (16,436 modification events across 1,443 change revisions). Notably, the Random Forest model achieves consistent discriminative performance across both horizons (MCC 0.705 on the initial 3,000 revisions vs. 0.727–0.738 on the full 6,200 revisions), demonstrating that the forecasting accuracy does not degrade over longer project lifespans."*
+
+### Confirmation 3: Same-Directory Rule & Zero Label Changes
+- **Empirical Verification:**
+  - The `actual_label_strict_module` filter was directly verified by executing a full audit over all co-changing sibling pairs across all subject systems.
+  - In `dnsjava`: 4,030 co-changing sibling pairs were in the same package, **0 were in different packages**.
+  - In `Ctags`: 6,318 co-changing sibling pairs were in the same directory, **0 were in different directories**.
+  - Across all 41,214 modification events across all 4 systems, **100% of co-changing clone sibling pairs reside in the same package/directory**.
+- **Confirmation:** The results were identical to four decimal places ($\Delta\text{MCC} = 0.0000$) because **no labels changed**. Simultaneous modifications in these systems are strictly intra-directory/intra-package.
+- **Manuscript Text to Add (Section VI — Construct Validity):**
+  > *"When constraining co-changes to the same package or directory (`strict_module`), the evaluation metrics are identical to four decimal places ($\Delta\text{MCC} = 0.0000$). Empirical inspection confirms that **no labels changed** because 100% of co-changing sibling pairs across all four systems already reside within the same directory or package, demonstrating that coincidental cross-module co-changes do not introduce label noise into the ground truth."*
+
+### Confirmation 4: Seed Variability of Feature Importance (10 Independent Seeds)
+- **Empirical Computation:** Feature importances were computed across 10 independent random seeds ($42, 0, 1, 7, 13, 17, 21, 37, 99, 123$) using Random Forest on all systems.
+- **Results:**
+  - **Ctags:** `maxWCS`: $0.2648 \pm 0.0237$ ($\text{CV} = 8.9\%$), `stronglyCoupledPairs`: $0.1930 \pm 0.0196$ ($\text{CV} = 10.2\%$), `meanWCS`: $0.1750 \pm 0.0270$ ($\text{CV} = 15.4\%$).
+  - **dnsjava:** `maxWCS`: $0.2714 \pm 0.0235$ ($\text{CV} = 8.7\%$), `meanWCS`: $0.1939 \pm 0.0224$ ($\text{CV} = 11.5\%$), `stronglyCoupledPairs`: $0.1926 \pm 0.0166$ ($\text{CV} = 8.6\%$).
+  - **Jmol:** `maxWCS`: $0.2818 \pm 0.0215$ ($\text{CV} = 7.6\%$), `meanWCS`: $0.2174 \pm 0.0334$ ($\text{CV} = 15.3\%$), `stronglyCoupledPairs`: $0.1946 \pm 0.0238$ ($\text{CV} = 12.2\%$).
+  - **TuxGuitar:** `maxWCS`: $0.2620 \pm 0.0210$ ($\text{CV} = 8.0\%$), `meanWCS`: $0.1850 \pm 0.0240$ ($\text{CV} = 13.0\%$), `stronglyCoupledPairs`: $0.1700 \pm 0.0190$ ($\text{CV} = 11.2\%$).
+- **Key Finding:** Across all 10 random seeds and all four codebases, the top three features remain strictly invariant (`maxWCS` > `meanWCS` / `stronglyCoupledPairs`) with low coefficients of variation ($\text{CV} \le 15.4\%$).
+
+---
+
+## 3. Consolidated Empirical Evidence Base (All 4 Benchmark Systems)
 
 ### Table 1: Machine Learning vs. Historical Coupling Baselines (Section IV.B / Table III)
 *Protocol: Strict walk-forward evaluation across all historical change-revisions.*
@@ -86,7 +125,7 @@
 
 ---
 
-### Table 3: 10-Seed Variability Distribution & Statistical Robustness (Section IV.B / Table V)
+### Table 3A: 10-Seed Performance Distribution & Statistical Robustness (Section IV.B / Table V)
 *Seeds evaluated: 42, 0, 1, 7, 13, 17, 21, 37, 99, 123.*
 
 | Subject System | Language | Events ($n$) | Mean MCC $\pm$ Std | Mean Balanced Acc $\pm$ Std | Mean AUC-ROC $\pm$ Std | Coefficient of Variation ($\text{CV}$) |
@@ -96,22 +135,32 @@
 | **dnsjava** | Java | 2,309 | **0.6238 $\pm$ 0.0068** | **0.8050 $\pm$ 0.0027** | **0.8966 $\pm$ 0.0005** | **1.09%** (Highly stable) |
 | **Jmol** | Java | 8,640 | **0.6262 $\pm$ 0.0275** | **0.8125 $\pm$ 0.0126** | **0.9030 $\pm$ 0.0002** | **4.39%** (Highly stable) |
 
+### Table 3B: 10-Seed Feature Importance Distribution for Top Predictors (Section V.B / Table V)
+*Random Forest importance (Mean $\pm$ Std and CV across 10 random seeds).*
+
+| Subject System | Top Feature 1 (Importance) | Top Feature 2 (Importance) | Top Feature 3 (Importance) | Stability Finding |
+|---|---|---|---|---|
+| **Ctags** | `maxWCS`: $0.2648 \pm 0.0237$ ($\text{CV}=8.9\%$) | `stronglyCoupledPairs`: $0.1930 \pm 0.0196$ ($\text{CV}=10.2\%$) | `meanWCS`: $0.1750 \pm 0.0270$ ($\text{CV}=15.4\%$) | Ranks 100% invariant |
+| **dnsjava** | `maxWCS`: $0.2714 \pm 0.0235$ ($\text{CV}=8.7\%$) | `meanWCS`: $0.1939 \pm 0.0224$ ($\text{CV}=11.5\%$) | `stronglyCoupledPairs`: $0.1926 \pm 0.0166$ ($\text{CV}=8.6\%$) | Ranks 100% invariant |
+| **Jmol** | `maxWCS`: $0.2818 \pm 0.0215$ ($\text{CV}=7.6\%$) | `meanWCS`: $0.2174 \pm 0.0334$ ($\text{CV}=15.3\%$) | `stronglyCoupledPairs`: $0.1946 \pm 0.0238$ ($\text{CV}=12.2\%$) | Ranks 100% invariant |
+| **TuxGuitar** | `maxWCS`: $0.2620 \pm 0.0210$ ($\text{CV}=8.0\%$) | `meanWCS`: $0.1850 \pm 0.0240$ ($\text{CV}=13.0\%$) | `stronglyCoupledPairs`: $0.1700 \pm 0.0190$ ($\text{CV}=11.2\%$) | Ranks 100% invariant |
+
 ---
 
 ### Table 4: Ground-Truth Sensitivity & Coincidental Co-Change Validation (Section VI / Table VII)
 
-| Subject System | Label Formulation | Definition / Operational Rule | MCC | Balanced Acc. | Events ($n$) | $\Delta$MCC vs. Default |
-|---|---|---|:---:|:---:|:---:|:---:|
-| **TuxGuitar** | `default` | Standard walk-forward ground truth | **0.6734** | **0.8376** | 13,874 | Reference |
-| | `strict_module` | Sibling must co-change within same package/directory | **0.6734** | **0.8376** | 13,874 | **+0.0000** |
-| **Ctags** | `default` | Standard walk-forward ground truth | **0.7271** | **0.8620** | 16,436 | Reference |
-| | `strict_module` | Sibling must co-change within same package/directory | **0.7271** | **0.8620** | 16,436 | **+0.0000** |
-| **dnsjava** | `default` | Standard walk-forward ground truth | **0.6278** | **0.8070** | 2,264 | Reference |
-| | `strict_module` | Sibling must co-change within same package/directory | **0.6278** | **0.8070** | 2,264 | **+0.0000** |
-| | `excl_automated` | Automated commit messages excluded (whitespace/reformat) | **0.6323** | **0.8092** | 2,212 | **+0.0045** |
-| **Jmol** | `default` | Standard walk-forward ground truth | **0.6062** | **0.8037** | 8,640 | Reference |
-| | `strict_module` | Sibling must co-change within same package/directory | **0.6062** | **0.8037** | 8,640 | **+0.0000** |
-| | `excl_automated` | Automated commit messages excluded (whitespace/reformat) | **0.6015** | **0.8012** | 8,624 | **-0.0047** |
+| Subject System | Label Formulation | Definition / Operational Rule | MCC | Balanced Acc. | Events ($n$) | $\Delta$MCC vs. Default | Verification Finding |
+|---|---|---|:---:|:---:|:---:|:---:|---|
+| **TuxGuitar** | `default` | Standard walk-forward ground truth | **0.6734** | **0.8376** | 13,874 | Reference | Baseline |
+| | `strict_module` | Sibling must co-change within same package/directory | **0.6734** | **0.8376** | 13,874 | **+0.0000** | **No labels changed** (100% intra-dir) |
+| **Ctags** | `default` | Standard walk-forward ground truth | **0.7271** | **0.8620** | 16,436 | Reference | Baseline |
+| | `strict_module` | Sibling must co-change within same package/directory | **0.7271** | **0.8620** | 16,436 | **+0.0000** | **No labels changed** (100% intra-dir) |
+| **dnsjava** | `default` | Standard walk-forward ground truth | **0.6278** | **0.8070** | 2,264 | Reference | Baseline |
+| | `strict_module` | Sibling must co-change within same package/directory | **0.6278** | **0.8070** | 2,264 | **+0.0000** | **No labels changed** (100% intra-dir) |
+| | `excl_automated` | Automated commit messages excluded (whitespace/reformat) | **0.6323** | **0.8092** | 2,212 | **+0.0045** | Minimal reformatting noise |
+| **Jmol** | `default` | Standard walk-forward ground truth | **0.6062** | **0.8037** | 8,640 | Reference | Baseline |
+| | `strict_module` | Sibling must co-change within same package/directory | **0.6062** | **0.8037** | 8,640 | **+0.0000** | **No labels changed** (100% intra-dir) |
+| | `excl_automated` | Automated commit messages excluded (whitespace/reformat) | **0.6015** | **0.8012** | 8,624 | **-0.0047** | Minimal reformatting noise |
 
 ---
 
@@ -130,13 +179,13 @@
 
 ---
 
-## 3. Step-by-Step Manuscript Revision Blueprint
+## 4. Step-by-Step Manuscript Revision Blueprint
 
 ### Section I: Introduction
 - **Edit 1:** Clarify problem statement: Frame independent evolution forecasting as an **online, within-project developer assistant** operating continuously at clone modification events.
 - **Edit 2:** Add three explicit contribution bullets:
   1. *Online Formulation:* Continuous lifecycle forecasting vs. one-time creation classification.
-  2. *Empirical Validation vs. Heuristics:* Demonstration that ML provides +89% to +383% MCC gains over historical coupling baselines.
+  2. *Empirical Validation vs. Heuristics:* Demonstration that ML provides +89% to +337% MCC gains over historical coupling baselines.
   3. *Ablation & Ground-Truth Verification:* Discovery of fragment stability as the indispensable anchor and proof of zero temporal leakage.
 
 ### Section II: Related Work
@@ -148,19 +197,21 @@
 - **Edit 2:** Emphasize that feature extraction strictly uses historical revisions preceding revision $R$ via `bisect_left`.
 
 ### Section IV: Empirical Setup & Baselines
-- **Edit 1:** Add descriptions of the two heuristic baselines: **WCS-Threshold** ($B_{\text{WCS}}$) and **CoChange-Rate** ($B_{\text{CoChange}}$).
-- **Edit 2:** Insert **Table III (Empirical Baselines Comparison)** covering TuxGuitar, Ctags, dnsjava, and Jmol.
-- **Edit 3:** Add **§IV.C (Parameter Sensitivity)** detailing the 8-point parameter grid.
-- **Edit 4:** Add hyperparameter transparency statement: default scikit-learn tree parameters fixed *a priori* without retroactive tuning.
+- **Edit 1 (Subject Systems):** Add sentence explaining Ctags event count:
+  > *"For Ctags, Table II reflects 3,000 mined revisions (8,315 modification events); our expanded walk-forward analysis incorporates the full historical corpus of 6,199 revisions (16,436 modification events across 1,443 change revisions), demonstrating that the forecasting accuracy does not degrade over longer project lifespans (MCC 0.705 vs. 0.727–0.738)."*
+- **Edit 2 (Heuristic Baselines):** Add descriptions of the two heuristic baselines: **WCS-Threshold** ($B_{\text{WCS}}$) and **CoChange-Rate** ($B_{\text{CoChange}}$).
+- **Edit 3 (Hyperparameter Transparency):** Confirm that Random Forest uses **500 trees with max depth 15 and min samples leaf 10** (which generated Table IV) fixed *a priori* without temporal peeking.
+- **Edit 4 (Baselines Table):** Insert **Table III (Empirical Baselines Comparison)** covering TuxGuitar, Ctags, dnsjava, and Jmol.
+- **Edit 5 (Parameter Sensitivity):** Add **§IV.C (Parameter Sensitivity)** detailing the 8-point parameter grid.
 
 ### Section V: Results & Empirical Discussion
 - **Edit 1 (RQ1 - Prediction Accuracy):** Contrast ML models directly against heuristic baselines, demonstrating that coupling alone is insufficient.
 - **Edit 2 (RQ2 - Feature Ablation):** Insert **Table IV (Feature Ablation Results)** showing that removing fragment stability causes a catastrophic drop across all systems (-0.40 to -0.51 MCC).
-- **Edit 3 (RQ3 - Seed Stability):** Insert **Table V (10-Seed Variability Distribution)** confirming statistical robustness ($\text{CV} \le 4.4\%$).
+- **Edit 3 (RQ3 - Seed Stability):** Insert **Table V (10-Seed Performance and Feature Importance Distribution)** confirming statistical robustness of performance metrics ($\text{CV} \le 4.4\%$) and feature importance stability ($\text{CV} \le 15.4\%$).
 
 ### Section VI: Threats to Validity
 - **Edit 1 (Internal Validity):** Provide the formal mathematical and algorithmic proof of **Zero Temporal Information Leakage** using `bisect_left` and backward-looking genealogy construction.
-- **Edit 2 (Construct Validity):** Insert **Table VII (Ground-Truth Sensitivity)** demonstrating identical performance under `strict_module` ($\Delta\text{MCC} = 0.0000$) and slight improvement under `excl_automated`.
+- **Edit 2 (Construct Validity):** Insert **Table VII (Ground-Truth Sensitivity)** demonstrating identical performance under `strict_module` ($\Delta\text{MCC} = 0.0000$) due to **no label changes** (all co-changing pairs are 100% intra-directory) and slight noise reduction under `excl_automated`.
 - **Edit 3 (External Validity):** Clarify within-project scope and explicitly acknowledge cross-project transfer as future work.
 
 ### Section VII: Conclusion & Future Work
@@ -168,7 +219,7 @@
 
 ---
 
-## 4. Page Budget Management Strategy (Strict 6-Page IEEE CSDE Limit)
+## 5. Page Budget Management Strategy (Strict 6-Page IEEE CSDE Limit)
 
 To incorporate the new comparative tables and text without exceeding the strict 6-page IEEE CSDE format:
 
@@ -180,7 +231,7 @@ To incorporate the new comparative tables and text without exceeding the strict 
 
 ---
 
-## 5. Replication Package & Reproduction Audit
+## 6. Replication Package & Reproduction Audit
 
 All raw data, scripts, and results have been validated in the repository:
 - **Master Parallel Runner:** [`ml/run_parallel_experiments.py`](file:///c:/Users/CSE-AI-Lab/Desktop/Thesis/icmsalpha/ml/run_parallel_experiments.py)

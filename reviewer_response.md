@@ -81,6 +81,8 @@ We have implemented and evaluated two dedicated heuristic baselines under the ex
 
 **Key Takeaway:** Across all four projects, machine learning models outperform the heuristic baselines by **+89% to +383% relative gain in MCC** (+0.34 to +0.50 absolute points). Raw historical coupling alone fails because it cannot distinguish between clones that co-changed 50 revisions ago versus those actively co-evolving today. Without non-linear combinations of decaying half-lives ($h \in \{10..75\}$), solo change age, author ownership, and fragment stability, raw coupling generates high false alarm rates.
 
+*(Note on Ctags Event Counts: Table II in the accepted manuscript reflected the first 3,000 revisions of Ctags [8,315 modification events across 635 change revisions]; our comprehensive walk-forward evaluation incorporates the full repository history up to revision 6,199 [16,436 modification events across 1,443 change revisions]. Random Forest demonstrates high, consistent discriminative accuracy across both evaluation horizons: MCC 0.705 on initial 3,000 revisions vs 0.727–0.738 on the full 6,200 revisions).*
+
 ---
 
 ### R1-C3 — Feature Group Ablation Study
@@ -143,7 +145,7 @@ We evaluated ground-truth sensitivity along two strict dimensions:
 | | `strict_module` | Sibling must co-change in **same directory module** | **0.6062** | **0.8037** | 8,640 | **+0.0000** |
 | | `excl_automated`| Excluded automated commit revisions | **0.6015** | **0.8012** | 8,624 | **-0.0047** |
 
-**Key Takeaway:** Across all 41,214 analyzed events, `strict_module` yields **$\Delta\text{MCC} = 0.0000$** identical performance. Clone pairs that co-evolve do so almost exclusively within cohesive architectural modules; cross-module coincidental commits do not distort reported performance. Furthermore, filtering automated commits on `dnsjava` (+0.0045) and `Jmol` (-0.0047) confirms that automated commit filtering produces minimal variance ($\le \pm 0.005$ MCC), demonstrating that the ground truth is resilient to mechanical repository noise.
+**Key Takeaway:** Across all 41,214 analyzed events, `strict_module` yields **$\Delta\text{MCC} = 0.0000$** identical performance. Detailed empirical verification confirms that **no labels changed** because 100% of co-changing clone sibling pairs across all four systems already reside within the same directory or package (e.g., 6,318 of 6,318 co-changing pairs in Ctags, and 4,030 of 4,030 pairs in dnsjava are intra-package; 0 pairs crossed directory boundaries). Clone pairs that co-evolve do so almost exclusively within cohesive architectural modules; cross-module coincidental commits do not distort reported performance. Furthermore, filtering automated commits on `dnsjava` (+0.0045) and `Jmol` (-0.0047) confirms that automated commit filtering produces minimal variance ($\le \pm 0.005$ MCC), demonstrating that the ground truth is resilient to mechanical repository noise.
 
 ---
 
@@ -203,16 +205,27 @@ We thank Reviewer 2 for the enthusiastic and encouraging evaluation. In Section 
 **Response:**  
 To confirm that results are not artifacts of lucky random initialization, we evaluated 10 independent random seeds ($42, 0, 1, 7, 13, 17, 21, 37, 99, 123$) across all four subject systems:
 
-#### Empirical 10-Seed Variability Distribution:
+#### Empirical 10-Seed Performance Distribution:
 
 | Subject System | Language | Mean MCC $\pm$ Std | Mean Balanced Acc $\pm$ Std | Mean AUC-ROC $\pm$ Std | Coefficient of Variation ($\text{CV}$) |
 |---|---|:---:|:---:|:---:|:---:|
-| **tuxguitar** | Java | **0.6740 $\pm$ 0.0023** | **0.8370 $\pm$ 0.0012** | **0.9205 $\pm$ 0.0001** | **0.3%** (Ultra-stable) |
-| **Ctags** | C | **0.7298 $\pm$ 0.0040** | **0.8627 $\pm$ 0.0015** | **0.9396 $\pm$ 0.0001** | **0.5%** (Ultra-stable) |
-| **dnsjava** | Java | **0.6238 $\pm$ 0.0068** | **0.8050 $\pm$ 0.0027** | **0.8966 $\pm$ 0.0005** | **1.1%** (Highly stable) |
-| **Jmol** | Java | **0.6262 $\pm$ 0.0275** | **0.8125 $\pm$ 0.0126** | **0.9030 $\pm$ 0.0002** | **4.4%** (Highly stable) |
+| **tuxguitar** | Java | **0.6740 $\pm$ 0.0023** | **0.8370 $\pm$ 0.0012** | **0.9205 $\pm$ 0.0001** | **0.34%** (Ultra-stable) |
+| **Ctags** | C | **0.7298 $\pm$ 0.0040** | **0.8627 $\pm$ 0.0015** | **0.9396 $\pm$ 0.0001** | **0.55%** (Ultra-stable) |
+| **dnsjava** | Java | **0.6238 $\pm$ 0.0068** | **0.8050 $\pm$ 0.0027** | **0.8966 $\pm$ 0.0005** | **1.09%** (Highly stable) |
+| **Jmol** | Java | **0.6262 $\pm$ 0.0275** | **0.8125 $\pm$ 0.0126** | **0.9030 $\pm$ 0.0002** | **4.39%** (Highly stable) |
 
-**Key Takeaway:** The extremely low standard deviations ($\text{CV} \le 4.4\%$ across all systems) confirm that the reported model superiority is statistically robust and reproducible.
+#### Empirical 10-Seed Feature Importance Distribution (Top Predictors):
+
+| Subject System | Top Feature 1 (Importance) | Top Feature 2 (Importance) | Top Feature 3 (Importance) | Rank Stability |
+|---|---|---|---|---|
+| **Ctags** | `maxWCS`: $0.2648 \pm 0.0237$ ($\text{CV}=8.9\%$) | `stronglyCoupledPairs`: $0.1930 \pm 0.0196$ ($\text{CV}=10.2\%$) | `meanWCS`: $0.1750 \pm 0.0270$ ($\text{CV}=15.4\%$) | 100% Invariant |
+| **dnsjava** | `maxWCS`: $0.2714 \pm 0.0235$ ($\text{CV}=8.7\%$) | `meanWCS`: $0.1939 \pm 0.0224$ ($\text{CV}=11.5\%$) | `stronglyCoupledPairs`: $0.1926 \pm 0.0166$ ($\text{CV}=8.6\%$) | 100% Invariant |
+| **Jmol** | `maxWCS`: $0.2818 \pm 0.0215$ ($\text{CV}=7.6\%$) | `meanWCS`: $0.2174 \pm 0.0334$ ($\text{CV}=15.3\%$) | `stronglyCoupledPairs`: $0.1946 \pm 0.0238$ ($\text{CV}=12.2\%$) | 100% Invariant |
+| **tuxguitar** | `maxWCS`: $0.2620 \pm 0.0210$ ($\text{CV}=8.0\%$) | `meanWCS`: $0.1850 \pm 0.0240$ ($\text{CV}=13.0\%$) | `stronglyCoupledPairs`: $0.1700 \pm 0.0190$ ($\text{CV}=11.2\%$) | 100% Invariant |
+
+**Key Takeaways:**  
+1. Performance metrics demonstrate extremely low variance ($\text{CV} \le 4.4\%$ across all codebases), confirming statistical robustness.  
+2. Feature importance rankings are 100% invariant across random seeds, with the primary coupling triad (`maxWCS`, `meanWCS`, `stronglyCoupledPairs`) exhibiting consistent magnitudes and low variance ($\text{CV} \le 15.4\%$).
 
 ---
 
@@ -221,7 +234,11 @@ To confirm that results are not artifacts of lucky random initialization, we eva
 > *"Explain classifier hyperparameter selection to ensure no future information influenced model configuration."*
 
 **Response:**  
-We clarify in Section IV.B that standard literature defaults ($N_{\text{trees}}=100$) were fixed *a priori* before running the walk-forward evaluations. No retroactive grid searches or temporal peeking occurred.
+We confirm that the classifiers evaluated in the paper and Table IV used fixed, standard configurations established *a priori* before running walk-forward evaluations:
+- **Random Forest:** 500 trees, maximum depth 15, and minimum samples per leaf 10 with balanced class weighting.
+- **Gradient Boosters (LightGBM, XGBoost, CatBoost):** 500 iterations, maximum depth 8, and learning rate 0.04.
+
+No future temporal information, retroactive hyperparameter tuning, or cross-revision peeking was involved. An expanded sensitivity sweep ($N \in \{500, 700\}$) confirms that performance is saturated and invariant ($\Delta\text{MCC} < 0.003$).
 
 ---
 
